@@ -1,1 +1,585 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>KOLO — оголошення та робота</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#111827;
+    --muted:#6b7280;
+    --brand:#12b76a; /* зелений */
+    --brand-2:#0ea862;
+    --line:#e5e7eb;
+    --chip:#f0fdf4;
+    --danger:#ef4444;
+    --gold:#f59e0b;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.45 Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  *{box-sizing:border-box}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+
+  /* Header */
+  .head{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+  .head .bar{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 16px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .logo{width:40px;height:40px;border-radius:12px;background:conic-gradient(from 90deg at 50% 50%, #12b76a, #16a34a, #22c55e, #16a34a);box-shadow:0 4px 16px rgba(18,183,106,.35)}
+  .title{font:700 20px/1 "Russo One", Montserrat, sans-serif;letter-spacing:.5px}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;transition:.15s ease;user-select:none;white-space:nowrap}
+  .btn:hover{border-color:#cbd5e1;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+  .btn.brand{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.brand:hover{background:var(--brand-2)}
+  .pill{padding:8px 12px;border-radius:999px;background:var(--chip);border:1px solid #dcfce7;color:#065f46;font-weight:600}
+  .kpi{display:flex;align-items:center;gap:10px}
+  .kpi .num{font-weight:700}
+  .kpi small{color:var(--muted)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);padding:8px 16px;background:#fff}
+  .tab{padding:10px 14px;border-radius:12px;cursor:pointer;border:1px solid transparent}
+  .tab.active{border-color:var(--brand);background:#ecfdf5;color:#065f46;font-weight:700}
+
+  /* Filters */
+  .filters{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;padding:12px 16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-weight:600;font-size:12px;color:#065f46}
+  .input, select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit}
+
+  /* Top strip */
+  .top-strip{padding:12px 16px}
+  .top-row{display:grid;grid-auto-flow:column;grid-auto-columns:280px;gap:12px;overflow:auto;padding-bottom:4px}
+  .chip-top{display:flex;gap:6px;align-items:center;font-weight:700;color:#92400e;background:#fffbeb;border:1px solid #fde68a;padding:4px 8px;border-radius:999px}
+
+  /* Grid */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px 16px}
+  .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .thumb{aspect-ratio:4/3;background:#f3f4f6;position:relative}
+  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .badge-top{position:absolute;top:10px;left:10px}
+  .body{padding:12px;display:flex;flex-direction:column;gap:8px}
+  .title-2{font-weight:700}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted)}
+  .price{font-weight:800;color:#065f46}
+  .muted{color:var(--muted)}
+  .actions{display:flex;gap:8px;margin-top:auto}
+
+  /* Modal */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+  .overlay.on{display:flex}
+  .modal{width:min(720px, 96vw);max-height:92vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal .head{border-bottom:1px solid var(--line)}
+  .modal .head .bar{padding:12px 16px}
+  .modal .content{padding:16px}
+  .modal .grid{grid-template-columns:1fr 1fr}
+
+  .note{font-size:12px;color:var(--muted)}
+  .danger{color:var(--danger)}
+  .gold{color:#92400e}
+
+  /* Responsive */
+  @media (max-width:1024px){
+    .grid{grid-template-columns:repeat(3,1fr)}
+    .filters{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:720px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .top-row{grid-auto-columns:74vw}
+    .controls{gap:6px}
+  }
+  @media (max-width:460px){
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <header class="head">
+    <div class="bar wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden></div>
+        <div>
+          <div class="title">KOLO</div>
+          <div class="muted" style="font-size:12px">Оголошення • Товари • Послуги • Робота</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="kpi"><span class="pill">Відкрити телефон: 29 грн/місяць</span></div>
+        <button id="btnAdd" class="btn brand">+ Додати оголошення</button>
+        <div class="kpi" title="Кількість відвідувачів сайту (публічний лічильник)">
+          <small>Відвідувачів:</small>
+          <span class="num" id="visitorsNum">121 369</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs wrap" id="tabs">
+      <div class="tab active" data-tab="all">Усі оголошення</div>
+      <div class="tab" data-tab="jobs">Робота</div>
+      <div class="tab" data-tab="services">Послуги</div>
+      <div class="tab" data-tab="goods">Товари</div>
+      <div class="tab" data-tab="realty">Нерухомість</div>
+      <div class="tab" data-tab="auto">Авто</div>
+    </div>
+  </header>
+
+  <section class="filters wrap">
+    <div class="field">
+      <label>Категорія</label>
+      <select id="filterCategory"></select>
+    </div>
+    <div class="field">
+      <label>Місто/Регіон</label>
+      <input id="filterCity" class="input" placeholder="Одеса, Київ, Львів…" />
+    </div>
+    <div class="field">
+      <label>Пошук</label>
+      <input id="filterQ" class="input" placeholder="Що шукаєте?" />
+    </div>
+    <div class="field">
+      <label>Сортування</label>
+      <select id="filterSort">
+        <option value="new">Спочатку нові</option>
+        <option value="cheap">Спочатку дешеві</option>
+        <option value="exp">Спочатку дорожчі</option>
+        <option value="views">За переглядами</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="top-strip wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span class="chip-top">TOP 7 днів</span>
+      <span class="note">Підняття оголошення на головній — <b>299 грн</b> на 7 днів.</span>
+    </div>
+    <div id="topRow" class="top-row"></div>
+  </section>
+
+  <main class="wrap">
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <!-- Modal: Add Listing (gated by 40 UAH) -->
+  <div class="overlay" id="overlayAdd">
+    <div class="modal">
+      <div class="head"><div class="bar"><b>Додати оголошення</b><div class="muted">Розміщення — 40 грн / 30 днів</div></div></div>
+      <div class="content">
+        <div id="addGate" style="display:none">
+          <p><b>Оплатіть 40 грн</b>, щоб розмістити оголошення на 30 днів.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <a id="pay40" class="btn brand" target="_blank" rel="noopener">Оплатити 40 грн у Privat24</a>
+            <button class="btn" id="btnPaid40">Я оплатив(ла)</button>
+            <span class="note">Після оплати натисніть «Я оплатив(ла)».</span>
+          </div>
+          <p class="note">⚠️ Клієнтська версія сайту не може технічно перевірити реальний факт платежу без серверної інтеграції. У цій демо‑версії доступ надається локально. Для бойового запуску під’єднайте перевірку через API/вебхуки (наприклад, Privat24/LiqPay/Fondy) — див. коментарі в коді.</p>
+        </div>
+        <form id="formAdd" style="display:none">
+          <div class="grid">
+            <div class="field"><label>Категорія</label>
+              <select id="fCat" required></select>
+            </div>
+            <div class="field"><label>Підкатегорія</label>
+              <input id="fSub" class="input" placeholder="Напр.: Смартфони / Кухонні послуги / Вакансія" required />
+            </div>
+            <div class="field"><label>Місто</label>
+              <input id="fCity" class="input" placeholder="Одеса" required />
+            </div>
+            <div class="field"><label>Ціна (грн)</label>
+              <input id="fPrice" class="input" type="number" min="0" step="1" required />
+            </div>
+            <div class="field" style="grid-column:1/-1"><label>Заголовок</label>
+              <input id="fTitle" class="input" maxlength="120" required />
+            </div>
+            <div class="field" style="grid-column:1/-1"><label>Опис</label>
+              <textarea id="fDesc" class="input" rows="4" required></textarea>
+            </div>
+            <div class="field"><label>Номер телефону (побачать лише з підпискою)</label>
+              <input id="fPhone" class="input" placeholder="+380501234567" required />
+            </div>
+            <div class="field"><label>Фото (1–6)</label>
+              <input id="fImages" class="input" type="file" accept="image/*" multiple />
+              <div id="fPreviews" class="meta" style="margin-top:6px;gap:6px"></div>
+            </div>
+            <div class="field" style="grid-column:1/-1">
+              <label><input type="checkbox" id="fTop" /> Підняти в TOP (299 грн / 7 днів)</label>
+              <div style="display:flex;gap:10px;align-items:center;margin-top:6px" id="topPayRow">
+                <a id="pay299" class="btn" target="_blank" rel="noopener">Оплатити 299 грн у Privat24</a>
+                <button class="btn" id="btnPaid299" type="button">Я оплатив(ла) 299</button>
+                <span class="note">TOP діє 7 днів від моменту активації.</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+            <button type="button" class="btn" id="btnCloseAdd">Закрити</button>
+            <button class="btn brand" type="submit">Опублікувати</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Subscription for phones (29 UAH) -->
+  <div class="overlay" id="overlaySub">
+    <div class="modal">
+      <div class="head"><div class="bar"><b>Показати номер телефону</b><div class="muted">Потрібна підписка — 29 грн / 30 днів</div></div></div>
+      <div class="content">
+        <p>Оформіть підписку, щоб бачити телефони у всіх оголошеннях протягом 30 днів.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <a id="pay29" class="btn brand" target="_blank" rel="noopener">Оплатити 29 грн у Privat24</a>
+          <button class="btn" id="btnPaid29">Я оплатив(ла)</button>
+          <span class="note">Після оплати натисніть «Я оплатив(ла)».</span>
+        </div>
+        <p class="note">⚠️ Для реальної автоматичної активації потрібна серверна перевірка платежу. У демо активується локально (на цьому пристрої).</p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn" id="btnCloseSub">Закрити</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/**
+ * KOLO — Фронтенд лише клієнтський (GitHub Pages‑сумісний) прототип.
+ * — Платежі відкривають доступ локально (без справжньої верифікації).
+ * — Для продакшн запровадьте простий бекенд або сервіс (Supabase/Firestore/Sheets) і
+ *   вебхуки/SDK провайдера платежів (Privat24/LiqPay/Fondy) — див. позначку TODO.
+ */
+
+const PRIVAT_LINK = 'https://www.privat24.ua/send/3g9dp'; // ваш публічний лінк отримувача
+
+/** Відвідувачі: однакові для всіх, зростають детерміновано */
+const visitorsEl = document.getElementById('visitorsNum');
+const VISITORS_ANCHOR = Date.UTC(2025,8,1,0,0,0); // 2025‑09‑01 UTC
+const VISITORS_BASE = 121369; // показник на старт
+function visitorsNow(){
+  const now = Date.now();
+  const sec = Math.floor((now - VISITORS_ANCHOR)/1000);
+  // +1 кожні ~20 секунд (≈3/хв), стабільно для всіх користувачів
+  return VISITORS_BASE + Math.max(0, Math.floor(sec/20));
+}
+function tickVisitors(){ visitorsEl.textContent = visitorsNow().toLocaleString('uk-UA'); }
+setInterval(tickVisitors, 5000); tickVisitors();
+
+/** Утиліти */
+const $ = (sel, root=document)=>root.querySelector(sel);
+const $$ = (sel, root=document)=>Array.from(root.querySelectorAll(sel));
+function uuid(){ return 'ad-'+Math.random().toString(36).slice(2)+Date.now().toString(36); }
+function hash32(str){ let h=2166136261>>>0; for(let i=0;i<str.length;i++){h^=str.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function rngSeeded(seed){ let a = (seed>>>0)||1; return ()=>{ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a>>>15, 1 | a); t ^= t + Math.imul(t ^ t>>>7, 61 | t); return ((t ^ t>>>14) >>> 0) / 4294967296; } }
+function fmtPrice(n){ return new Intl.NumberFormat('uk-UA').format(n) + ' грн'; }
+function daysSince(ts){ return (Date.now()-ts)/(1000*60*60*24); }
+
+/** Локальна «підписка» / «пости» / «ТОП» стан (тільки для цього пристрою) */
+const LS = {
+  subUntil: 'kolo_sub_until',
+  postUntil: 'kolo_post_until',
+  topUntil: 'kolo_top_until'
+};
+function getUntil(key){ const v = +localStorage.getItem(key)||0; return v; }
+function setUntil(key, days){ const t = Date.now() + days*24*60*60*1000; localStorage.setItem(key, String(t)); return t; }
+function isActive(key){ return getUntil(key) > Date.now(); }
+
+/** Категорії */
+const CATS = [
+  'Товари', 'Послуги', 'Робота', 'Авто', 'Нерухомість', 'Електроніка', 'Дім і сад', 'Мода', 'Хобі та спорт', 'Дитячі товари', 'Тварини', 'Бізнес', 'Інше'
+];
+
+/** Початкові демо‑оголошення (без персональних даних) */
+const DEMO = seedDemo(100);
+
+function seedDemo(n){
+  const cities = ['Одеса','Київ','Львів','Дніпро','Харків','Запоріжжя','Чернігів','Полтава','Чернівці','Тернопіль','Івано‑Франківськ','Миколаїв','Херсон','Рівне','Житомир','Суми','Вінниця','Ужгород','Луцьк','Камʼянець‑Подільський'];
+  const rng = rngSeeded(42);
+  const pick = arr => arr[Math.floor(rng()*arr.length)];
+  const words = (arr)=> pick(arr);
+  const autos = ['Volkswagen Golf 1.6 TDI 2012','Toyota Corolla 1.6 2015','Skoda Octavia A7 2016','Mazda 3 2014','BMW 320d 2013','Audi A4 2012','Renault Megane 2013','Hyundai i30 2015','Kia Ceed 2016','Nissan Qashqai 2012','Ford Focus 2011','Opel Astra J 2012'];
+  const electronics = ['iPhone 12 128GB','iPhone 11 64GB','Samsung Galaxy S21','Xiaomi Redmi Note 10','MacBook Air M1 8/256','Asus TUF F15 i7/16/512','Lenovo ThinkPad T480','iPad 9 gen 64GB','Sony WH‑1000XM4','Canon EOS 80D'];
+  const services = ['Клінінг 24/7','Ремонт ноутбуків','Майстер на годину','Вантажні перевезення','Ремонт кондиціонерів','Манікюр / Педикюр','Перукар на виїзд','Ремонт побутової техніки','Швидкий СТО','Монтаж дверей'];
+  const jobs = ['Курʼєр з авто','Менеджер з продажу','Оператор call‑центру','Бариста','Кухар','Водій категорії B','SMM‑спеціаліст','Маркетолог','Касир','Прибиральник'];
+  const realty = ['1‑к квартира новобуд','2‑к квартира центр','Будинок з ділянкою','Офіс у БЦ','Гараж у кооперативі','Ділянка під забудову'];
+  const goods = ['Деревʼяний стіл','Диван розкладний','Велосипед MTB 29"','Дитяча коляска','Спальний мішок','Гантелі 2×10 кг','Смарт‑лампа','Блендер кухонний','Електросамокат','Пилосос робот'];
+
+  function imgUrl(cat,i){
+    const sig = i+1;
+    if(cat==='Авто') return `https://source.unsplash.com/800x600/?car,vehicle&sig=${sig}`;
+    if(cat==='Нерухомість') return `https://source.unsplash.com/800x600/?apartment,interior&sig=${sig}`;
+    if(cat==='Робота') return `https://source.unsplash.com/800x600/?office,worker&sig=${sig}`;
+    if(cat==='Послуги') return `https://source.unsplash.com/800x600/?cleaning,repair,service&sig=${sig}`;
+    if(cat==='Електроніка' || cat==='Товари') return `https://source.unsplash.com/800x600/?electronics,gadget&sig=${sig}`;
+    return `https://source.unsplash.com/800x600/?shopping,product&sig=${sig}`;
+  }
+  function catPick(){
+    const bucket = [
+      'Авто','Авто','Авто','Нерухомість','Нерухомість',
+      'Електроніка','Електроніка','Товари','Послуги','Робота',
+      'Дім і сад','Мода','Хобі та спорт','Дитячі товари','Інше'
+    ];
+    return pick(bucket);
+  }
+  const arr = [];
+  for(let i=0;i<n;i++){
+    const cat = catPick();
+    const city = pick(cities);
+    let title = '';
+    let price = 0;
+    let sub = '';
+    if(cat==='Авто'){
+      title = pick(autos);
+      sub = 'Легкові';
+      price = 150000 + Math.floor(rng()*600000);
+    } else if(cat==='Нерухомість'){
+      title = pick(realty);
+      sub = /квартира/.test(title)?'Оренда':'Продаж';
+      price = /Офіс|квартира/.test(title)?(10000+Math.floor(rng()*35000)):(450000+Math.floor(rng()*2500000));
+    } else if(cat==='Електроніка'){
+      title = pick(electronics);
+      sub = 'Електроніка';
+      price = 1000 + Math.floor(rng()*39000);
+    } else if(cat==='Робота'){
+      title = pick(jobs);
+      sub = 'Вакансія';
+      price = 12000 + Math.floor(rng()*48000); // зарплата
+    } else if(cat==='Послуги'){
+      title = pick(services);
+      sub = 'Послуги';
+      price = 300 + Math.floor(rng()*4700);
+    } else if(cat==='Товари'){
+      title = pick(goods);
+      sub = 'Товари';
+      price = 200 + Math.floor(rng()*19800);
+    } else {
+      title = words(['Продам','Куплю','Обміняю'][Math.floor(rng()*3)]) + ' ' + words(['річ','набір','аксесуар']);
+      sub = 'Інше';
+      price = 100 + Math.floor(rng()*5000);
+    }
+    const created = Date.now() - Math.floor(rng()*30*24*60*60*1000) - Math.floor(rng()*60*60*1000);
+    const imgs = [imgUrl(cat,i), imgUrl(cat,i+100), imgUrl(cat,i+200)];
+    const topActive = i < 12; // перші 12 — у TOP
+    arr.push({
+      id: uuid(),
+      cat, sub, city, title,
+      price, desc: `${title}. ${city}. Відмінний стан / чесний опис. Можлива доставка або самовивіз.`,
+      phone: 'ДЕМО: +380 00 000 00 00',
+      imgs, created,
+      topUntil: topActive ? (Date.now() + (1+Math.floor(rng()*6))*24*60*60*1000) : 0
+    });
+  }
+  return arr;
+}
+
+/** Збережені користувацькі оголошення */
+function loadMyAds(){ try { return JSON.parse(localStorage.getItem('kolo_ads')||'[]'); } catch(e){ return []; } }
+function saveMyAds(list){ localStorage.setItem('kolo_ads', JSON.stringify(list)); }
+
+/** Вирахувані перегляди: детерміновані для всіх (без сервера) */
+const VIEWS_ANCHOR = Date.UTC(2025,8,1,0,0,0); // 2025‑09‑01
+function calcViews(ad){
+  const seed = hash32(ad.id + ad.title);
+  const rng = rngSeeded(seed);
+  const base = 300 + Math.floor(rng()*900); // 300..1199
+  const mins = Math.max(0, Math.floor((Date.now()-VIEWS_ANCHOR)/60000));
+  const perMin = 0.35 + rng()*0.7; // 0.35..1.05 / хв
+  return base + Math.floor(mins * perMin);
+}
+
+/** Фільтри */
+const filterCategory = $('#filterCategory');
+const filterCity = $('#filterCity');
+const filterQ = $('#filterQ');
+const filterSort = $('#filterSort');
+function fillCategories(){
+  filterCategory.innerHTML = '<option value="">Усі категорії</option>' + CATS.map(c=>`<option>${c}</option>`).join('');
+  $('#fCat').innerHTML = CATS.map(c=>`<option>${c}</option>`).join('');
+}
+
+/** Рендер карток */
+const grid = $('#grid');
+const topRow = $('#topRow');
+let TAB = 'all';
+function getAllAds(){
+  const my = loadMyAds();
+  return [...my, ...DEMO];
+}
+function isTop(ad){ return ad.topUntil && ad.topUntil > Date.now(); }
+function matchesTab(ad){
+  if(TAB==='all') return true;
+  if(TAB==='jobs') return ad.cat==='Робота';
+  if(TAB==='services') return ad.cat==='Послуги';
+  if(TAB==='goods') return ad.cat==='Товари' || ad.cat==='Електроніка' || ad.cat==='Дім і сад' || ad.cat==='Мода' || ad.cat==='Хобі та спорт' || ad.cat==='Дитячі товари';
+  if(TAB==='realty') return ad.cat==='Нерухомість';
+  if(TAB==='auto') return ad.cat==='Авто';
+  return true;
+}
+function render(){
+  const q = filterQ.value.trim().toLowerCase();
+  const cat = filterCategory.value;
+  const city = filterCity.value.trim().toLowerCase();
+  let list = getAllAds().filter(a=>matchesTab(a));
+  if(cat) list = list.filter(a=>a.cat===cat);
+  if(city) list = list.filter(a=>a.city.toLowerCase().includes(city));
+  if(q) list = list.filter(a=> (a.title+' '+a.desc+' '+a.sub).toLowerCase().includes(q));
+  // sort
+  if(filterSort.value==='new') list.sort((a,b)=>b.created-a.created);
+  else if(filterSort.value==='cheap') list.sort((a,b)=>a.price-b.price);
+  else if(filterSort.value==='exp') list.sort((a,b)=>b.price-a.price);
+  else if(filterSort.value==='views') list.sort((a,b)=>calcViews(b)-calcViews(a));
+
+  // TOP row
+  const tops = list.filter(isTop).slice(0,24);
+  topRow.innerHTML = tops.map(cardHTML).join('') || '<div class="muted">Поки що немає TOP оголошень.</div>';
+
+  // grid
+  grid.innerHTML = list.map(cardHTML).join('') || '<div class="muted">Нічого не знайдено. Змініть фільтри.</div>';
+  // attach actions
+  $$('.btnShowPhone').forEach(btn=>btn.addEventListener('click', ()=>showPhone(btn.dataset.id)));
+}
+function cardHTML(ad){
+  const img = (ad.imgs && ad.imgs[0]) || '';
+  const v = calcViews(ad);
+  return `<div class="card">
+    <div class="thumb">${img?`<img src="${img}" alt="${escapeHtml(ad.title)}" loading="lazy">`:''}
+      ${isTop(ad)?`<span class="badge-top pill">TOP</span>`:''}
+    </div>
+    <div class="body">
+      <div class="title-2">${escapeHtml(ad.title)}</div>
+      <div class="meta">
+        <span>${escapeHtml(ad.city)}</span>
+        <span>•</span>
+        <span class="muted">${escapeHtml(ad.sub||ad.cat)}</span>
+      </div>
+      <div class="price">${fmtPrice(ad.price)}</div>
+      <div class="meta"><span title="Перегляди цього оголошення">👁️ ${v.toLocaleString('uk-UA')}</span></div>
+      <div class="actions">
+        <button class="btn brand btnShowPhone" data-id="${ad.id}">Показати телефон</button>
+      </div>
+    </div>
+  </div>`;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m])); }
+
+/** Показ номера */
+const overlaySub = $('#overlaySub');
+$('#btnCloseSub').addEventListener('click', ()=>overlaySub.classList.remove('on'));
+$('#pay29').href = PRIVAT_LINK + '?amount=29';
+$('#btnPaid29').addEventListener('click', ()=>{ setUntil(LS.subUntil, 30); overlaySub.classList.remove('on'); alert('Підписку активовано на 30 днів (локально).'); });
+
+function showPhone(id){
+  if(!isActive(LS.subUntil)) { overlaySub.classList.add('on'); return; }
+  // reveal phone in a toast
+  const ad = getAllAds().find(a=>a.id===id);
+  if(!ad) return;
+  const phone = ad.phone || '+380';
+  alert('Телефон продавця: ' + phone + '\nМожете натиснути OK та зателефонувати.');
+}
+
+/** Додати оголошення (гейт 40 грн, TOP — 299) */
+const overlayAdd = $('#overlayAdd');
+const formAdd = $('#formAdd');
+const addGate = $('#addGate');
+$('#btnAdd').addEventListener('click', ()=>{
+  overlayAdd.classList.add('on');
+  updateAddGate();
+});
+$('#btnCloseAdd').addEventListener('click', ()=>overlayAdd.classList.remove('on'));
+$('#pay40').href = PRIVAT_LINK + '?amount=40';
+$('#btnPaid40').addEventListener('click', ()=>{ setUntil(LS.postUntil, 30); updateAddGate(); alert('Доступ до розміщення активовано на 30 днів (локально).'); });
+$('#pay299').href = PRIVAT_LINK + '?amount=299';
+$('#btnPaid299').addEventListener('click', ()=>{ setUntil(LS.topUntil, 7); alert('TOP активовано на 7 днів (локально).'); });
+
+function updateAddGate(){
+  const canPost = isActive(LS.postUntil);
+  addGate.style.display = canPost ? 'none' : 'block';
+  formAdd.style.display = canPost ? 'block' : 'none';
+  $('#topPayRow').style.display = $('#fTop').checked ? 'flex' : 'none';
+}
+$('#fTop').addEventListener('change', updateAddGate);
+
+/** Прев’ю зображень */
+$('#fImages').addEventListener('change', (e)=>{
+  const box = $('#fPreviews');
+  box.innerHTML = '';
+  const files = Array.from(e.target.files||[]).slice(0,6);
+  for(const f of files){
+    const img = document.createElement('img');
+    img.style.width='64px'; img.style.height='64px'; img.style.objectFit='cover'; img.style.borderRadius='8px';
+    box.appendChild(img);
+    const fr = new FileReader(); fr.onload = ()=> img.src = fr.result; fr.readAsDataURL(f);
+  }
+});
+
+/** Submit */
+formAdd.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const canPost = isActive(LS.postUntil);
+  if(!canPost){ alert('Потрібна оплата 40 грн для розміщення.'); return; }
+  const topWanted = $('#fTop').checked;
+  const topOK = !topWanted || isActive(LS.topUntil);
+  if(topWanted && !topOK){ alert('Для TOP потрібна оплата 299 грн.'); return; }
+
+  const files = Array.from($('#fImages').files||[]).slice(0,6);
+  const imgsP = Promise.all(files.map(f=> new Promise(res=>{ const fr = new FileReader(); fr.onload = ()=>res(fr.result); fr.readAsDataURL(f); })));
+  imgsP.then(imgs=>{
+    const ad = {
+      id: uuid(),
+      cat: $('#fCat').value,
+      sub: $('#fSub').value.trim(),
+      city: $('#fCity').value.trim(),
+      title: $('#fTitle').value.trim(),
+      price: Math.max(0, +$('#fPrice').value||0),
+      desc: $('#fDesc').value.trim(),
+      phone: $('#fPhone').value.trim(),
+      imgs,
+      created: Date.now(),
+      topUntil: (topWanted && isActive(LS.topUntil)) ? getUntil(LS.topUntil) : 0
+    };
+    const mine = loadMyAds(); mine.unshift(ad); saveMyAds(mine);
+    overlayAdd.classList.remove('on');
+    clearAddForm();
+    render();
+    alert('Оголошення опубліковано локально на цьому пристрої. Для загального доступу потрібне підключення до хмарного сховища/серверу (див. TODO в коді).');
+  });
+});
+
+function clearAddForm(){
+  $('#fSub').value = $('#fCity').value = $('#fTitle').value = $('#fDesc').value = $('#fPhone').value = '';
+  $('#fPrice').value = '';
+  $('#fImages').value = '';
+  $('#fPreviews').innerHTML = '';
+  $('#fTop').checked = false; updateAddGate();
+}
+
+/** Tabs */
+$('#tabs').addEventListener('click', (e)=>{
+  const t = e.target.closest('.tab'); if(!t) return;
+  $$('.tab').forEach(x=>x.classList.toggle('active', x===t));
+  TAB = t.dataset.tab;
+  render();
+});
+
+/** Інпут слухачі */
+[filterCategory, filterCity, filterQ, filterSort].forEach(el=>el.addEventListener('input', render));
+
+/** Заповнення */
+fillCategories();
+render();
+setInterval(()=>{ // легке підкручування переглядів
+  $$('.card .meta').forEach((_,i)=>{}); // тригер ререндеру
+  render();
+}, 20000);
+
+/**
+ * TODO (для бойового запуску, без зміни UI):
+ * 1) StorageAdapter:
+ *    - Реалізуйте заміну loadMyAds/saveMyAds на звернення до хмари (Supabase/Firestore/Sheets API).
+ *      У кожного оголошення: id, поля як у моделі, topUntil, created.
+ * 2) Payment webhooks:
+ *    - Після кліку «Оплатити» перенаправляйте на сторінку вашого бекенду, яка генерує платіж і має callback.
+ *      Після підтвердженого платежу бекенд виставляє у сховищі:
+ *        userId (анонімний токен/кука) → subUntil/postUntil/topUntil.
+ *    - На фронті періодично опитуйте /me/status і вмикайте функції без «локальної» активації.
+ */
+</script>
+</body>
+</html>
 
