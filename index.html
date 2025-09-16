@@ -73,15 +73,14 @@
     @media (max-width:640px){ .grid{grid-template-columns:1fr;} }
 
     .card{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; cursor:pointer; transition:box-shadow .08s ease; box-shadow:var(--shadow-sm)}
-    /* прибрав transform, щоб сторінка не "сіпалась" при кліку */
-    .card:active{box-shadow:var(--shadow-lg)}
+    .card:active{box-shadow:var(--shadow-lg)} /* без transform — сайт не «сіпається»*/
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
     .badge{position:absolute; left:8px; top:8px; background:var(--brand); color:#fff; border-radius:10px; padding:6px 10px; font:800 14px/1 "Russo One"; z-index:2}
     .views{position:absolute; right:8px; bottom:8px; background:#0f172a; color:#fff; border:0; border-radius:10px; padding:5px 8px; font-weight:700; font-size:12px}
     .likeBtn{
-      position:absolute; right:8px; top:8px; height:38px; min-width:48px; padding:0 10px;
-      border-radius:12px; border:0; background:var(--brand); color:#fff; font:900 16px/38px 'Russo One',sans-serif;
+      position:absolute; right:8px; top:8px; height:32px; min-width:40px; padding:0 8px;
+      border-radius:10px; border:0; background:var(--brand); color:#fff; font:900 14px/32px 'Russo One',sans-serif;
       cursor:pointer; box-shadow:var(--shadow-sm); outline:none; z-index:2
     }
     .likeBtn span{font-weight:800; margin-left:6px}
@@ -157,7 +156,7 @@
       border:10px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite;
     }
     .pl-logo{font:700 42px "Russo One"; color:#10b981; letter-spacing:2px}
-    .pl-txt{position:absolute; bottom:18px; font-weight:700; color:#065f46}
+    .pl-txt{position:absolute; top:86%; font-weight:700; color:#065f46} /* опустив нижче кола */
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
@@ -183,7 +182,6 @@
     <section class="panel hotWrap" id="hotPanel" style="display:none">
       <div class="hotHead">
         <div class="tag">🔥 HOT — ТОП-10</div>
-        <!-- примітка прибрано за вимогою -->
       </div>
       <div class="hotGrid" id="hotGrid"></div>
     </section>
@@ -191,7 +189,7 @@
 
     <!-- РЕЗУЛЬТАТИ -->
     <section class="topline">
-      <div id="resCount" style="display:none">0</div> <!-- лічильник прихований -->
+      <div id="resCount" style="display:none">0</div>
       <div class="grow"></div>
     </section>
     <section class="grid" id="grid"></section>
@@ -204,8 +202,8 @@
       <div class="modalHead">
         <div class="logo">KOLO</div>
         <div class="grow"></div>
-        <!-- одна зелена кнопка лайка з лічильником -->
-        <button title="Лайк" aria-label="Лайк" class="pill green" id="dLike" style="display:inline-flex;gap:8px">♥ <span id="dLikeCnt">0</span></button>
+        <!-- одна маленькая зелёная кнопка лайка -->
+        <button title="Лайк" aria-label="Лайк" class="pill green" id="dLike" style="height:34px;line-height:34px;padding:0 12px;gap:8px">♥ <span id="dLikeCnt">0</span></button>
         <button class="closeX" id="dClose">Закрити</button>
       </div>
       <div id="dHeader" style="display:flex; align-items:center; gap:10px; margin-bottom:8px"></div>
@@ -229,19 +227,18 @@
         <button class="closeX" id="sellClose">Закрити</button>
       </div>
       <div class="filters" style="grid-template-columns:repeat(3,1fr)">
-        <div><label>Місто / Село</label><input class="input" id="sCity" placeholder="Напр., Київ • Дарницький" list="cityList" autocomplete="off"></div>
+        <div><label>Область</label><input class="input" id="sRegion"></div>
+        <div><label>Місто</label><input class="input" id="sCity"></div>
         <div><label>Категорія</label><select class="select" id="sCat"></select></div>
+
+        <div style="grid-column:1/-1"><label>Заголовок</label><input class="input" id="sTitle"></div>
+
         <div><label>Стан</label><select class="select" id="sCond"></select></div>
+        <div><label>Ціна, ₴</label><input class="input" id="sPrice"></div>
+        <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380 (..) ...-..-.."></div>
 
-        <div style="grid-column:1/-1"><label>Заголовок</label><input class="input" id="sTitle" placeholder="Напр., iPhone 13, 128GB, стан 9/10"></div>
-
-        <div><label>Тип продавця</label><select class="select" id="sSeller"></select></div>
-        <div><label>Ціна, ₴</label><input class="input" id="sPrice" placeholder="15000"></div>
-        <div><label>Телефон (публічний)</label><input class="input" id="sPhone" placeholder="+380 (..) ...-..-.."></div>
-
-        <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px" placeholder="Стан, комплектація, самовивіз/доставка... (мін. 20 символів)"></textarea></div>
-        <div style="grid-column:1/-1"><label>URL фото (через |)</label><input class="input" id="sImages" placeholder="https://...jpg|https://...jpg"></div>
-        <datalist id="cityList"></datalist>
+        <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
+        <div style="grid-column:1/-1"><label>URL фото (через |)</label><input class="input" id="sImages"></div>
       </div>
       <div class="actions">
         <button class="btn" id="sSave">Опублікувати</button>
@@ -259,16 +256,13 @@
         <button class="closeX" id="searchClose">Закрити</button>
       </div>
       <div class="filters" id="filters">
-        <div>
-          <label>Місто / Область / Село</label>
-          <input class="input" id="fltCity" placeholder="Почніть вводити…" list="cityList" autocomplete="off">
-        </div>
+        <div><label>Область</label><input class="input" id="fltRegion"></div>
+        <div><label>Місто</label><input class="input" id="fltCity"></div>
         <div><label>Категорія</label><select class="select" id="fltCat" data-placeholder="Категорія"></select></div>
         <div><label>Стан</label><select class="select" id="fltCond" data-placeholder="Стан"></select></div>
-        <div><label>Тип продавця</label><select class="select" id="fltSeller" data-placeholder="Тип"></select></div>
-        <div><label>Ціна від, ₴</label><input class="input" id="fltPriceMin" placeholder="0"></div>
-        <div><label>Ціна до, ₴</label><input class="input" id="fltPriceMax" placeholder="∞"></div>
-        <div style="grid-column:1/-1"><label>Пошук</label><input class="input" id="fltQuery" placeholder="Назва, бренд, ключові слова"></div>
+        <div><label>Ціна від, ₴</label><input class="input" id="fltPriceMin"></div>
+        <div><label>Ціна до, ₴</label><input class="input" id="fltPriceMax"></div>
+        <div style="grid-column:1/-1"><label>Пошук</label><input class="input" id="fltQuery"></div>
         <div class="check"><input type="checkbox" id="fltRecent"> <label for="fltRecent">За 30 днів</label></div>
         <div style="grid-column:1/-1; display:flex; gap:10px; align-items:center">
           <button class="btn" id="btnApply">Знайти</button>
@@ -287,12 +281,10 @@
 
   <script>
   const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
-  const DB_KEY = "kolo_listings_v2";
-  const CTRL_KEY = "kolo_ctrl_v2";
+  const DB_KEY = "kolo_listings_v3";
+  const CTRL_KEY = "kolo_ctrl_v3";
 
-  /* ===== Україна: регіони + базові міста (fallback) =====
-     Повний довідник (усі міста/села) завантажується з файлу ua-places.min.json (покладіть поруч із HTML).
-     Формат файлу: масив об'єктів { "region":"Одеська", "name":"Сарата" } */
+  /* ===== Місця (для генерації БД; ввод користувачем тепер ручний) ===== */
   const UA_REGIONS = {
     "Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],
     "Львівська":["Львів","Дрогобич","Червоноград","Стрий"],
@@ -319,20 +311,19 @@
   };
   let PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
 
-  /* ===== Категорії (без підкатегорій, розширений список) ===== */
+  /* ===== Категорії (без підкатегорій). Забрав «Коти/Собаки», лишив «Тварини». У «Робота» — без підрозділів. ===== */
   const ALL_CATS = [
     "Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка",
     "Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт",
     "Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти",
     "Мода та стиль","Одяг","Взуття","Аксесуари",
     "Дитячий світ","Іграшки","Візочки","Одяг для дітей",
-    "Тварини","Коти","Собаки","Зоотовари",
+    "Тварини", /* тільки загальна категорія */
     "Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика",
-    "Робота","Вакансії","Підробіток","Віддалено",
+    "Робота", /* без Вакансії/Підробіток/Віддалено */
     "Бізнес та обладнання","Сільське господарство","Краса та здоров’я"
   ];
   const CONDS=["Нове","Вживане","Після ремонту"];
-  const SELLERS=["Приватний","Бізнес"];
 
   /* ===== Фото ===== */
   const IMG = {
@@ -345,12 +336,6 @@
       "https://upload.wikimedia.org/wikipedia/commons/1/1e/2018_Volvo_XC60_Momentum_D4_AWD_2.0_Front.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/7/7f/2018_Kia_Sportage_3_CRDi_ISG_1.7_Front.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/4/4e/2017_Hyundai_Tucson_Premium_SE_2.0.jpg"
-    ],
-    moto:[
-      "https://upload.wikimedia.org/wikipedia/commons/1/19/Honda_CB500F.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/0/0b/Yamaha_YZF-R6.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/7/7a/Kawasaki_Ninja_650.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/8/88/Suzuki_SV650S_2003.jpg"
     ],
     phone:[
       "https://upload.wikimedia.org/wikipedia/commons/9/94/Samsung_Galaxy_S21_5G.jpg",
@@ -401,29 +386,18 @@
     return c.toDataURL('image/png');
   }
 
-  /* ===== Побудова списків ===== */
-  const fltCity=$("#fltCity"), fltCat=$("#fltCat"), fltCond=$("#fltCond"),
-        fltSeller=$("#fltSeller"), fltPriceMin=$("#fltPriceMin"), fltPriceMax=$("#fltPriceMax"),
+  /* ===== UI selects ===== */
+  const fltRegion=$("#fltRegion"), fltCity=$("#fltCity"), fltCat=$("#fltCat"), fltCond=$("#fltCond"),
+        fltPriceMin=$("#fltPriceMin"), fltPriceMax=$("#fltPriceMax"),
         fltQuery=$("#fltQuery"), fltRecent=$("#fltRecent");
 
   function fillSelect(el, arr, withAll=true, txt="Будь-що"){
     el.innerHTML=(withAll?`<option value="">${txt}</option>`:'')+arr.map(x=>`<option value="${x}">${x}</option>`).join('');
   }
-  function buildCityDatalist(list){
-    const dl=$("#cityList");
-    dl.innerHTML = (list||PLACES).map(p => `<option value="${p.region} • ${p.name}">`).join('');
-  }
-  buildCityDatalist(); // fallback
-  // Ліниве завантаження повного списку (якщо файл існує поруч)
-  fetch('ua-places.min.json').then(r=>r.ok?r.json():Promise.reject())
-    .then(arr=>{ if(Array.isArray(arr)&&arr.length>1000){ PLACES=arr; buildCityDatalist(arr);} })
-    .catch(()=>{}); // тихий fallback
-
   fillSelect(fltCat, ALL_CATS);
   fillSelect(fltCond, CONDS);
-  fillSelect(fltSeller, SELLERS);
 
-  /* ===== Nice Select ===== */
+  /* Nice Select */
   let activeList=null, activeWrap=null;
   function closeAll(e){
     if(activeList){
@@ -444,8 +418,7 @@
     const wrap=document.createElement('div'); wrap.className='nice';
     const btn=document.createElement('button'); btn.type='button'; btn.className='nice-btn';
     const list=document.createElement('div'); list.className='nice-list';
-    const opts=[...sel.options];
-    function refreshBtn(){ btn.textContent = opts[sel.selectedIndex]?.text || (sel.getAttribute('data-placeholder')||'Виберіть'); }
+    function refreshBtn(){ btn.textContent = sel.options[sel.selectedIndex]?.text || (sel.getAttribute('data-placeholder')||'Виберіть'); }
     function rebuild(){
       list.innerHTML="";
       [...sel.options].forEach((o, idx)=>{
@@ -461,7 +434,7 @@
   }
   $$('.select').forEach(enhanceSelect);
 
-  /* ===== Генерація 1000 оголошень (без підкатегорій) ===== */
+  /* ===== Генерація 1000 оголошень ===== */
   const FIRSTNAMES=["Олег","Ірина","Сергій","Анна","Віктор","Максим","Марія","Юрій","Олексій","Наталія","Дмитро","Олена","Микита","Андрій","Світлана"];
   const LASTNAMES=["Шевченко","Коваленко","Бондаренко","Ткаченко","Кравченко","Мельник","Ковальчук","Петренко","Поліщук","Гриценко","Савченко","Гнатюк","Яковенко"];
   const OPERATORS=["50","63","66","67","68","73","93","95","96","97","98","99"];
@@ -473,8 +446,7 @@
     if(cat==="Електроніка") return [...IMG.phone, ...IMG.laptop, ...IMG.tv];
     if(cat==="Побутова техніка") return [...IMG.washer];
     if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor];
-    if(cat==="Тварини"||cat==="Собаки") return IMG.dog;
-    if(cat==="Коти") return IMG.cat;
+    if(cat==="Тварини") return [...IMG.dog, ...IMG.cat];
     if(cat==="Нерухомість") return IMG.flat;
     if(cat==="Послуги") return IMG.service;
     if(cat==="Робота") return IMG.job;
@@ -497,7 +469,6 @@
       "Побутова техніка":[ "Пральна машина Bosch • як нова","Холодильник Samsung • NoFrost" ],
       "Велосипеди":[ "Шосейний велосипед • алюміній","MTB з амортизацією" ],
       "Тварини":[ "Щеня голден ретрівер • прививки","Лабрадор дорослий • добрий" ],
-      "Коти":[ "Кошеня британське • документи","Мейн-кун дорослий" ],
       "Послуги":[ "Ремонт техніки — виїзд","Майстер на годину" ],
       "Робота":[ "Кур'єр по місту — щоденні виплати","Менеджер з продажів — ставка + %","Бариста — зміни 2/2" ],
       "Дім і сад":[ "Набір інструментів • як новий","Декор сканди" ]
@@ -507,7 +478,6 @@
       const plc = PLACES[out.length % PLACES.length] || {region:"",name:""};
       const cat = pick(ALL_CATS);
       const cond = pick(CONDS);
-      const seller = pick(SELLERS);
       const base =
         (cat==="Нерухомість") ? rand(12000,180000) :
         (cat==="Транспорт") ? rand(20000,1200000) :
@@ -537,10 +507,8 @@
         id: uid(),
         region: plc.region,
         city: plc.name,
-        cat,
-        title,
+        cat, cond, title,
         price, currency:"₴",
-        cond, seller,
         created, views, likes,
         desc: pick(descPool),
         images,
@@ -598,32 +566,30 @@
   function initSellForm(){
     $("#sCat").innerHTML=ALL_CATS.map(x=>`<option value="${x}">${x}</option>`).join('');
     $("#sCond").innerHTML=CONDS.map(x=>`<option value="${x}">${x}</option>`).join('');
-    $("#sSeller").innerHTML=SELLERS.map(x=>`<option value="${x}">${x}</option>`).join('');
   }
   initSellForm();
 
   $("#sSave").onclick=()=>{
     const ctrl=getCtrl(); const now=Date.now();
     if(ctrl.lastPost && now-ctrl.lastPost<60000){ alert("Публікувати можна не частіше 1 разу на 60 сек."); return; }
-    const city=$("#sCity").value.trim(), cat=$("#sCat").value, title=$("#sTitle").value.trim();
-    if(!city||!cat||!title) return alert("Заповніть місто/категорію/заголовок.");
+    const region=$("#sRegion").value.trim(), city=$("#sCity").value.trim(), cat=$("#sCat").value, title=$("#sTitle").value.trim();
+    if(!region||!city||!cat||!title) return alert("Заповніть область/місто/категорію/заголовок.");
     const priceRaw=+(($("#sPrice").value||0)); if(!(priceRaw>=0 && priceRaw<=100000000)) return alert("Перевірте ціну.");
     const price = round100(priceRaw);
     const phone=$("#sPhone").value.trim(); if(phone && !/^\+?\d[\d\s\-\(\)]{8,}$/.test(phone)) return alert("Телефон некоректний.");
     const desc=$("#sDesc").value.trim(); if(desc.length<20) return alert("Опис ≥ 20 символів.");
-    const cond=$("#sCond").value, seller=$("#sSeller").value;
+    const cond=$("#sCond").value;
     const imgs=($("#sImages").value||"").split("|").map(x=>x.trim()).filter(Boolean);
     const db=getDB();
-    const [maybeRegion, maybePlace] = city.includes("•") ? city.split("•").map(s=>s.trim()) : ["", city];
     db.unshift({
-      id: uid(), region: maybeRegion || (PLACES.find(p=>p.name===maybePlace)?.region || ""), city: maybePlace,
-      cat, title, price, currency:"₴", cond, seller, created:now, views: rand(120,480), likes:0,
+      id: uid(), region, city,
+      cat, title, price, currency:"₴", cond, created:now, views: rand(120,480), likes:0,
       desc, images: imgs.length? imgs : imgSetBy(cat, 3),
       contact:{name:"Продавець", phone: phone||genPhone()}
     });
     setDB(db); ctrl.lastPost=now; setCtrl(ctrl);
     alert("Оголошення опубліковано.");
-    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#sCity").value="";
+    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#sRegion").value=""; $("#sCity").value="";
     $("#sellOverlay").classList.remove('on'); lockScroll(false); applyFilters(); ensureHot();
   };
 
@@ -631,30 +597,18 @@
   const grid=$("#grid"), btnMore=$("#btnMore"), sortBy=$("#sortBy");
   let page=0, pageSize=24, lastResults=[];
 
-  function parseCityInput(val){
-    val=(val||"").trim();
-    if(!val) return {region:"", city:""};
-    if(val.includes("•")){
-      const [region,city] = val.split("•").map(x=>x.trim());
-      return {region, city};
-    }
-    // якщо просто назва — шукаємо у PLACES
-    const hit = PLACES.find(p=>p.name.toLowerCase()===val.toLowerCase());
-    return hit? {region:hit.region, city:hit.name} : {region:"", city:val};
-  }
-
   function applyFilters(){
     const q=(fltQuery.value||"").trim().toLowerCase();
     const pmin= +(fltPriceMin.value||0);
     const pmax= +(fltPriceMax.value||0);
-    const place = parseCityInput(fltCity.value);
+    const region=(fltRegion.value||"").trim();
+    const city=(fltCity.value||"").trim();
 
     let arr=getDB().filter(it=>
-      (!place.region || it.region===place.region) &&
-      (!place.city || it.city===place.city) &&
+      (!region || it.region.toLowerCase()===region.toLowerCase()) &&
+      (!city || it.city.toLowerCase()===city.toLowerCase()) &&
       (!fltCat.value || it.cat===fltCat.value) &&
       (!fltCond.value || it.cond===fltCond.value) &&
-      (!fltSeller.value || it.seller===fltSeller.value) &&
       (!pmin || it.price>=pmin) &&
       (!pmax || it.price<=pmax) &&
       (!q || (it.title+' '+it.cat).toLowerCase().includes(q)) &&
@@ -699,12 +653,11 @@
       </div>
       <div class="body">
         <div class="title">${it.title}</div>
-        <div class="meta" style="color:var(--muted)">${it.cat}</div>
+        <div class="meta" style="color:var(--muted)">${it.cat} • ${it.cond}</div>
         <div class="meta" style="color:var(--muted)">${it.region} • ${it.city}</div>
       </div>`;
     const likeButton = el.querySelector(".likeBtn");
-    // не даємо фокусу, щоб не було стрибка
-    likeButton.addEventListener('mousedown', e=>e.preventDefault());
+    likeButton.addEventListener('mousedown', e=>e.preventDefault()); // без фокуса — без стрибка
     likeButton.onclick=(e)=>{
       e.stopPropagation();
       if(like(it.id)){ 
@@ -747,10 +700,9 @@
 
     $("#dSpecs").innerHTML=
       `<div class="spec"><div class="h">Категорія</div>${currentItem.cat}</div>`+
-      `<div class="spec"><div class="h">Область</div>${currentItem.region}</div>`+
-      `<div class="spec"><div class="h">Місто/Село</div>${currentItem.city}</div>`+
       `<div class="spec"><div class="h">Стан</div>${currentItem.cond}</div>`+
-      `<div class="spec"><div class="h">Тип продавця</div>${currentItem.seller}</div>`+
+      `<div class="spec"><div class="h">Область</div>${currentItem.region}</div>`+
+      `<div class="spec"><div class="h">Місто</div>${currentItem.city}</div>`+
       `<div class="spec"><div class="h">Опубліковано</div>${fmtUA(currentItem.created)}</div>`;
 
     $("#dDesc").textContent = currentItem.desc||"";
