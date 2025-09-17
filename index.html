@@ -38,7 +38,7 @@
     .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; z-index:9999}
     .pl-ring{width:180px; height:180px; border-radius:50%; border:12px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite; position:relative}
     .pl-logo{position:absolute; inset:0; display:grid; place-items:center; font:700 36px "Russo One"; color:#10b981; letter-spacing:2px}
-    .pl-sub{font-size:13px; opacity:.9}
+    .pl-sub{font:700 13px/1.2 "Montserrat"; color:#0b3b2d; opacity:.95}
     @keyframes spin{to{transform:rotate(360deg)}}
 
     /* Topbar */
@@ -71,8 +71,7 @@
     @media (max-width:640px){ .hotGrid{grid-template-columns:repeat(2,1fr);} }
     .hotCard{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; cursor:pointer; box-shadow:var(--shadow-sm)}
     .hotCard .thumb{position:relative; padding-top:56%; background:var(--thumb-ph); overflow:hidden;}
-    .hotBadge{position:absolute; left:8px; top:8px; display:inline-flex; align-items:center; gap:6px; background:var(--hotRed); padding:4px 8px; border-radius:999px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
-    .hotBadge img{width:12px; height:12px; filter:brightness(0) invert(1)}
+    .hotBadge{position:absolute; left:8px; top:8px; background:var(--hotRed); padding:4px 8px; border-radius:999px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
     .hotPrice{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border:0; padding:6px 8px; border-radius:10px; font-weight:800; font-size:12px; z-index:2}
     .hotBody{padding:8px; font-size:13px}
     .hotTTL{font:700 14px/1.2 "Russo One"; color:#0f172a}
@@ -91,17 +90,6 @@
 
     /* price */
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:4px 8px; font:800 12px/1 "Russo One"; z-index:2}
-
-    /* аккуратные маленькие чипы ♥ и 👁 */
-    .chip{
-      position:absolute; top:6px;
-      height:24px; padding:0 8px; display:inline-flex; align-items:center; gap:6px;
-      border-radius:999px; border:0; background:var(--brand); color:#fff;
-      font:900 12px/24px 'Russo One',sans-serif; box-shadow:var(--shadow-sm); outline:none; z-index:2
-    }
-    .chip img{width:12px; height:12px; object-fit:contain; filter:brightness(0) invert(1)}
-    .chip.view{left:6px}
-    .chip.like{right:6px}
 
     .body{padding:10px; display:flex; flex-direction:column; gap:6px}
     .title{font:700 16px/1.2 "Russo One"; letter-spacing:.4px; color:#0f172a}
@@ -179,7 +167,7 @@
     <div class="adWrap">
       <div class="adBar">
         <a id="adLink" href="https://t.me/podorozhuy_zi_mnoyu" target="_blank" rel="noopener">
-          <img id="adImg" alt="реклама" referrerpolicy="no-referrer">
+          <img id="adImg" alt="реклама" referrerpolicy="no-referrer" crossOrigin="anonymous">
         </a>
       </div>
       <div class="adNote">Замовити рекламу</div>
@@ -429,8 +417,8 @@
         const fallback=itemPNG(it.title,(it.price+it.created)%7);
         const thumb=document.createElement('div'); thumb.className='thumb';
 
-        const badge=document.createElement('div'); badge.className='hotBadge';
-        badge.appendChild(safeIcon(ICONS.flame,'flame')); badge.appendChild(document.createTextNode('HOT'));
+        // HOT бейдж — только текст без иконки
+        const badge=document.createElement('div'); badge.className='hotBadge'; badge.textContent='HOT';
 
         const price=document.createElement('button'); price.className='hotPrice'; price.textContent=`${it.price.toLocaleString('uk-UA')} ${it.currency}`;
         thumb.appendChild(createImg((it.images&&it.images[0])||"", it.title, fallback));
@@ -438,8 +426,7 @@
 
         const body=document.createElement('div'); body.className='hotBody';
         body.innerHTML=`<div class="hotTTL">${it.title}</div>
-                        <div style="opacity:.85">${it.city} • ${it.cat}</div>
-                        <div style="opacity:.85">♥ ${it.likes||0} • 👁 ${it.views||0}</div>`;
+                        <div style="opacity:.85">${it.city} • ${it.cat}</div>`;
         card.appendChild(thumb); card.appendChild(body);
         grid.appendChild(card);
       });
@@ -501,40 +488,16 @@
   function updateMoreUI(){ btnMore.style.display = remainingCount()>0 ? "inline-flex" : "none"; }
   function renderMore(){ const slice=lastResults.slice(page*pageSize,(page+1)*pageSize); slice.forEach(renderCard); page++; updateMoreUI(); }
 
-  function like(id){
-    const db=getDB(); const idx=db.findIndex(x=>x.id===id); if(idx<0) return false;
-    const ctrl=JSON.parse(localStorage.getItem(CTRL_KEY)||"{}"); ctrl.liked = ctrl.liked||{};
-    if(ctrl.liked[id]){ return false; }
-    db[idx].likes = (db[idx].likes||0) + 1;
-    setDB(db); ctrl.liked[id]=true; localStorage.setItem(CTRL_KEY, JSON.stringify(ctrl));
-    return true;
-  }
-
   function renderCard(it){
     const el=document.createElement('article'); el.className="card"; el.setAttribute('role','button'); el.title="Дивитися";
     const fallback=itemPNG(it.title, (it.price+it.created)%7);
     const firstImg=(Array.isArray(it.images)&&it.images.length)?it.images[0]:null;
 
     const thumb=document.createElement('div'); thumb.className="thumb";
-
-    // маленькі чипи
-    const vChip=document.createElement('div'); vChip.className="chip view";
-    vChip.appendChild(safeIcon(ICONS.eye,"eye"));
-    const vs=document.createElement('span'); vs.textContent = (it.views||0); vChip.appendChild(vs);
-
-    const lChip=document.createElement('button'); lChip.className="chip like"; lChip.title="Лайк";
-    lChip.appendChild(safeIcon(ICONS.like,"like"));
-    const lk=document.createElement('span'); lk.textContent = (it.likes||0); lChip.appendChild(lk);
-    lChip.addEventListener('mousedown', e=>e.preventDefault());
-    lChip.onclick=(e)=>{
-      e.stopPropagation();
-      if(like(it.id)){ it.likes=(it.likes||0)+1; lk.textContent = it.likes; lChip.disabled=true; ensureHot(); }
-    };
-
     const badge=document.createElement('div'); badge.className="badge"; badge.textContent=`${it.price.toLocaleString('uk-UA')} ${it.currency||"₴"}`;
 
     thumb.appendChild(createImg(firstImg, it.title, fallback));
-    thumb.appendChild(vChip); thumb.appendChild(lChip); thumb.appendChild(badge);
+    thumb.appendChild(badge);
 
     const body=document.createElement('div'); body.className='body';
     body.innerHTML=`<div class="title">${it.title}</div>
@@ -602,12 +565,13 @@
     dLikeCnt.textContent = currentItem.likes||0;
     dLikeBtn.onclick=(e)=>{
       e.preventDefault(); e.stopPropagation();
-      if(like(currentId)){
-        currentItem.likes=(currentItem.likes||0)+1;
-        dLikeCnt.textContent = currentItem.likes;
-        dLikeBtn.setAttribute('disabled','disabled');
-        applyFilters(); ensureHot();
-      }
+      const ctrl=JSON.parse(localStorage.getItem("${CTRL_KEY}")||"{}");
+      if(ctrl?.liked?.[currentId]) return;
+      const db2=getDB(); const ix=db2.findIndex(x=>x.id===currentId); if(ix<0) return;
+      db2[ix].likes=(db2[ix].likes||0)+1; setDB(db2);
+      currentItem.likes=db2[ix].likes; dLikeCnt.textContent=currentItem.likes;
+      const c=JSON.parse(localStorage.getItem("${CTRL_KEY}")||"{}"); c.liked=c.liked||{}; c.liked[currentId]=true; localStorage.setItem("${CTRL_KEY}", JSON.stringify(c));
+      applyFilters(); ensureHot();
     };
     dShareBtn.onclick=()=>shareItem(currentItem);
   }
@@ -633,8 +597,8 @@
     setIcon($("#shareIcon"), ICONS.share, "share");
     setIcon($("#uIcon"), ICONS.user, "user");
     setIcon($("#hotHeadIcon"), ICONS.flame, "flame");
-    // баннер из запроса
-    setIcon($("#adImg"), "https://ibb.co/v4L9nsq4", "share"); // если ibb не отдаст картинку, будет аккуратный fallback
+    // баннер по новой ссылке
+    setIcon($("#adImg"), "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png", "share");
 
     // visitors
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
