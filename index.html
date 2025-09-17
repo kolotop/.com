@@ -7,6 +7,7 @@
   <meta name="format-detection" content="telephone=no"/>
   <meta name="theme-color" content="#10b981"/>
 
+  <!-- Share preview -->
   <meta property="og:title" content="KOLO — барахолка оголошень">
   <meta property="og:description" content="KOLO: додай оголошення за хвилину. HOT, галерея, лайки та перегляди.">
   <meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%2310b981'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial Black,Arial' font-size='96' fill='white'>KOLO</text></svg>">
@@ -22,7 +23,7 @@
       --line:#d6e8de;
       --field-bg:#edf7f1; --field-br:#cfe8da;
       --top:60px;
-      --hotRed:#ff4d4f;                /* чистый красный для HOT */
+      --hotRed:#ff4d4f;
       --thumb-ph:#e7f4ee;
       --shadow-sm: 0 4px 12px rgba(2, 44, 34, .08);
       --shadow-lg: 0 14px 40px rgba(2, 44, 34, .14);
@@ -48,14 +49,16 @@
     .pill.green:active{transform:translateY(1px); background:var(--brand-press)}
     .grow{flex:1}
     .visitors{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:800; color:#0b3b2d}
-    .visitors img{width:18px; height:18px; aspect-ratio:1/1; object-fit:contain; display:block} /* не сплющивается */
+    .visitors img{width:18px; height:18px; aspect-ratio:1/1; object-fit:contain; display:block}
 
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* Реклама — просто место */
+    /* Реклама */
     .adWrap{margin:8px 0 6px}
-    .adBar{height:80px; border:1px solid var(--line); border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden}
+    .adBar{height:80px; border:1px solid var(--line); border-radius:12px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
+    .adBar a{display:block; width:100%; height:100%}
+    .adBar img{width:100%; height:100%; object-fit:cover; display:block}
     .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px}
 
     /* HOT strip */
@@ -68,7 +71,7 @@
     @media (max-width:640px){ .hotGrid{grid-template-columns:repeat(2,1fr);} }
     .hotCard{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; cursor:pointer; box-shadow:var(--shadow-sm)}
     .hotCard .thumb{position:relative; padding-top:56%; background:var(--thumb-ph); overflow:hidden;}
-    .hotBadge{position:absolute; left:8px; top:8px; display:inline-flex; align-items:center; gap:6px; background:var(--hotRed); padding:4px 8px; border-radius:10px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
+    .hotBadge{position:absolute; left:8px; top:8px; display:inline-flex; align-items:center; gap:6px; background:var(--hotRed); padding:4px 8px; border-radius:999px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
     .hotBadge img{width:12px; height:12px; filter:brightness(0) invert(1)}
     .hotPrice{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border:0; padding:6px 8px; border-radius:10px; font-weight:800; font-size:12px; z-index:2}
     .hotBody{padding:8px; font-size:13px}
@@ -85,23 +88,25 @@
     .card:active{box-shadow:var(--shadow-lg)}
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-    .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:5px 8px; font:800 12px/1 "Russo One"; z-index:2}
 
-    /* маленькие зелёные чипы с иконкой и числом */
+    /* price */
+    .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:4px 8px; font:800 12px/1 "Russo One"; z-index:2}
+
+    /* аккуратные маленькие чипы ♥ и 👁 */
     .chip{
-      position:absolute; top:8px; height:26px; min-width:44px;
-      padding:0 8px; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-      border-radius:9px; border:0; background:var(--brand); color:#fff;
-      font:900 12px/26px 'Russo One',sans-serif; box-shadow:var(--shadow-sm); outline:none; z-index:2
+      position:absolute; top:6px;
+      height:24px; padding:0 8px; display:inline-flex; align-items:center; gap:6px;
+      border-radius:999px; border:0; background:var(--brand); color:#fff;
+      font:900 12px/24px 'Russo One',sans-serif; box-shadow:var(--shadow-sm); outline:none; z-index:2
     }
-    .chip img{width:14px; height:14px; object-fit:contain; filter:brightness(0) invert(1)}
-    .chip.view{left:8px}
-    .chip.like{right:8px}
+    .chip img{width:12px; height:12px; object-fit:contain; filter:brightness(0) invert(1)}
+    .chip.view{left:6px}
+    .chip.like{right:6px}
 
     .body{padding:10px; display:flex; flex-direction:column; gap:6px}
     .title{font:700 16px/1.2 "Russo One"; letter-spacing:.4px; color:#0f172a}
 
-    /* Detail modal */
+    /* Detail */
     .detail{position:fixed; inset:0; z-index:120; display:none; background:rgba(0,0,0,.35);}
     .detail.active{display:block;}
     .sheet{position:absolute; left:50%; top:6vh; transform:translateX(-50%); width:min(1080px,96vw); max-height:88vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-lg);}
@@ -114,10 +119,8 @@
       position:absolute; top:50%; transform:translateY(-50%);
       height:48px; min-width:48px; padding:0 12px;
       border-radius:14px; border:1px solid var(--line);
-      background:#ffffffdd;
-      color:#065f46; font-weight:900; font-size:26px; line-height:46px;
-      cursor:pointer; box-shadow:var(--shadow-sm);
-      backdrop-filter:saturate(110%) blur(3px);
+      background:#ffffffdd; color:#065f46; font-weight:900; font-size:26px; line-height:46px;
+      cursor:pointer; box-shadow:var(--shadow-sm); backdrop-filter:saturate(110%) blur(3px);
     }
     .navPrev{left:8px} .navNext{right:8px}
 
@@ -132,7 +135,7 @@
     .pager{display:flex; justify-content:center; margin:16px 0 12px}
     #dAttribution{display:none}
 
-    /* SELL / SEARCH */
+    /* overlays */
     .overlay{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:150}
     .overlay.on{display:flex}
     .modal{width:min(960px,96vw); max-height:88vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-lg);}
@@ -174,7 +177,11 @@
   <main class="container">
     <!-- РЕКЛАМА -->
     <div class="adWrap">
-      <div class="adBar"><img id="adImg" alt="" referrerpolicy="no-referrer" style="display:none"></div>
+      <div class="adBar">
+        <a id="adLink" href="https://t.me/podorozhuy_zi_mnoyu" target="_blank" rel="noopener">
+          <img id="adImg" alt="реклама" referrerpolicy="no-referrer">
+        </a>
+      </div>
       <div class="adNote">Замовити рекламу</div>
     </div>
 
@@ -187,7 +194,7 @@
     </section>
     <div class="hotSplit" id="hotSplit" style="display:none"></div>
 
-    <!-- РЕЗУЛЬТАТИ -->
+    <!-- СПИСОК -->
     <section class="topline"><div class="grow"></div></section>
     <section class="grid" id="grid"></section>
     <div class="pager"><button class="btn btnMore" id="btnMore" style="display:none">Показати ще</button></div>
@@ -199,12 +206,10 @@
       <div class="modalHead">
         <div class="logo">KOLO</div>
         <div class="grow"></div>
-        <!-- зелёная кнопка «Поділитися» -->
         <button class="pill green" id="dShare" title="Поділитися" style="gap:8px;height:34px;line-height:34px">
           <img class="pillIcon" id="shareIcon" alt="share" referrerpolicy="no-referrer" style="width:16px;height:16px;filter:brightness(0) invert(1)">
           Поділитися
         </button>
-        <!-- лайк -->
         <button title="Лайк" aria-label="Лайк" class="pill green" id="dLike" style="height:34px;line-height:34px;padding:0 12px;gap:8px">
           <img class="pillIcon" id="likeIconHeader" alt="like" referrerpolicy="no-referrer" style="width:16px;height:16px;filter:brightness(0) invert(1)">
           <span id="dLikeCnt">0</span>
@@ -297,7 +302,7 @@
   const CTRL_KEY = "kolo_ctrl_v3";
   const VER_KEY = "kolo_ver_v2";
 
-  /* Иконки (с фоллбеком) */
+  /* Иконки */
   const ICONS = {
     like: "https://ibb.co/4wsFcDjh",
     share: "https://ibb.co/fVMpJz36",
@@ -315,27 +320,24 @@
   function setIcon(el, url, fbKey){ el.src=url; el.onerror=()=>{el.onerror=null; el.src=SVG_FALLBACK[fbKey]||''}; }
   function safeIcon(url, fbKey, cls=""){ const img=document.createElement("img"); if(cls) img.className=cls; img.alt=fbKey; img.referrerPolicy="no-referrer"; setIcon(img,url,fbKey); return img; }
 
-  /* Відвідувачі */
+  /* Visitors */
   const VIS_START = 17369;
-  const STEP_MS = 3*60*1000; // +1 кожні 3 хвилини
-  const now = new Date();
-  const EPOCH = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const LOCAL_KEY = "kolo_vis_local";
+  const STEP_MS = 3*60*1000;
   (function bumpLocal(){
     try{
-      const raw = JSON.parse(localStorage.getItem(LOCAL_KEY)||'{"d":0,"c":0}');
-      const day = Math.floor(Date.now()/86400000);
-      if(raw.d!==day){ localStorage.setItem(LOCAL_KEY, JSON.stringify({d:day, c:1})); }
-      else{ raw.c+=1; localStorage.setItem(LOCAL_KEY, JSON.stringify(raw)); }
-    }catch{ localStorage.setItem(LOCAL_KEY, JSON.stringify({d:Math.floor(Date.now()/86400000), c:1})) }
+      const k="kolo_vis_local"; const day=Math.floor(Date.now()/86400000);
+      let r=JSON.parse(localStorage.getItem(k)||'{"d":0,"c":0}');
+      if(r.d!==day) r={d:day,c:1}; else r.c+=1;
+      localStorage.setItem(k, JSON.stringify(r));
+    }catch{}
   })();
-  function getLocalInc(){ try{ const r=JSON.parse(localStorage.getItem(LOCAL_KEY)||'{"c":0}'); return r.c||0; }catch{return 0;} }
+  function getLocalInc(){ try{ return (JSON.parse(localStorage.getItem("kolo_vis_local")||'{"c":0}').c)||0; }catch{return 0;} }
   function visitorsNow(){
-    const base = VIS_START + Math.floor((Date.now()-EPOCH)/STEP_MS);
-    return base + getLocalInc();
+    const now=new Date(); const epoch=Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    return VIS_START + Math.floor((Date.now()-epoch)/STEP_MS) + getLocalInc();
   }
 
-  /* ===== довідники/данные ===== */
+  /* Data */
   const UA_REGIONS={"Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],"Львівська":["Львів","Дрогобич","Червоноград","Стрий"],"Одеська":["Одеса","Чорноморськ","Южне","Ізмаїл","Білгород-Дністровський"],"Харківська":["Харків","Лозова","Ізюм"],"Дніпропетровська":["Дніпро","Кривий Ріг","Кам'янське","Нікополь","Павлоград"],"Запорізька":["Запоріжжя","Мелітополь","Бердянськ"],"Миколаївська":["Миколаїв","Первомайськ","Южноукраїнськ"],"Херсонська":["Херсон","Нова Каховка","Каховка"],"Вінницька":["Вінниця","Жмеринка","Могилів-Подільський"],"Полтавська":["Полтава","Кременчук","Миргород"],"Черкаська":["Черкаси","Умань","Сміла"],"Чернігівська":["Чернігів","Ніжин","Прилуки"],"Сумська":["Суми","Шостка","Конотоп","Охтирка"],"Житомирська":["Житомир","Бердичів","Коростень"],"Хмельницька":["Хмельницький","Кам'янець-Подільський","Шепетівка"],"Чернівецька":["Чернівці","Хотин"],"Рівненська":["Рівне","Дубно","Вараш"],"Івано-Франківська":["Івано-Франківськ","Калуш","Коломия","Яремче"],"Тернопільська":["Тернопіль","Чортків","Кременець"],"Волинська":["Луцьк","Ковель","Володимир"],"Закарпатська":["Ужгород","Мукачево","Хуст"],"Кіровоградська":["Кропивницький","Олександрія","Світловодськ"]};
   const PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
   const ALL_CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти","Мода та стиль","Одяг","Взуття","Аксесуари","Дитячий світ","Іграшки","Візочки","Одяг для дітей","Тварини","Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика","Бізнес та обладнання","Сільське господарство","Краса та здоров’я"];
@@ -352,15 +354,7 @@
   function fmtUA(date){ return new Date(date).toLocaleDateString('uk-UA'); }
   function lockScroll(on){ document.body.classList.toggle('modal-open', !!on); }
   function createImg(src, alt, fallback){ const img=document.createElement("img"); img.loading="lazy"; img.alt=alt; img.referrerPolicy="no-referrer"; img.src = src || fallback; img.onerror=()=>{ img.onerror=null; img.src=fallback; }; return img; }
-  function itemPNG(title, seed=0){
-    const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d');
-    const pal=["#e9f7f1","#cdeee1","#a0dcc8"]; const grad=g.createLinearGradient(0,0,800,500);
-    grad.addColorStop(0,pal[0]); grad.addColorStop(1,pal[1]); g.fillStyle=grad; g.fillRect(0,0,800,500);
-    g.fillStyle=pal[2]; g.fillRect(0,420,800,80);
-    g.fillStyle='#0f172a'; g.font="bold 42px 'Russo One', Arial"; g.textAlign="center"; g.fillText(title.slice(0,22), 400, 100);
-    g.fillStyle="#00000022"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,120); }
-    return c.toDataURL('image/png');
-  }
+  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d'); const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500); g.fillStyle="#a0dcc8"; g.fillRect(0,420,800,80); g.fillStyle='#0f172a'; g.font="bold 42px 'Russo One', Arial"; g.textAlign="center"; g.fillText(title.slice(0,22), 400, 100); g.fillStyle="#00000022"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,120); } return c.toDataURL('image/png'); }
   function imgPool(cat){ if(cat==="Транспорт") return IMG.car; if(cat==="Велосипеди") return IMG.bike; if(cat==="Електроніка") return [...IMG.phone, ...IMG.laptop, ...IMG.tv]; if(cat==="Побутова техніка") return [...IMG.washer]; if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor]; if(cat==="Тварини") return [...IMG.dog, ...IMG.cat]; if(cat==="Нерухомість") return IMG.flat; if(cat==="Послуги") return IMG.service; return [...IMG.phone, ...IMG.tools, ...IMG.sofa]; }
   function imgSetBy(cat,n=3){ const pool=imgPool(cat); const out=[]; for(let i=0;i<n;i++) out.push(pool[(i+Math.floor(Math.random()*pool.length))%pool.length]); return out; }
   function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 (${op}) ${Math.floor(100+Math.random()*900)}-${Math.floor(10+Math.random()*90)}-${Math.floor(10+Math.random()*90)}`; }
@@ -493,7 +487,7 @@
     $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
-  /* SEARCH: только ключевое слово */
+  /* SEARCH: тільки ключове слово */
   const grid=$("#grid"), btnMore=$("#btnMore"), fltQuery=$("#fltQuery");
   let page=0, pageSize=24, lastResults=[];
   function applyFilters(){
@@ -523,7 +517,7 @@
 
     const thumb=document.createElement('div'); thumb.className="thumb";
 
-    // маленькие чипы: просмотры слева, лайк справа
+    // маленькі чипи
     const vChip=document.createElement('div'); vChip.className="chip view";
     vChip.appendChild(safeIcon(ICONS.eye,"eye"));
     const vs=document.createElement('span'); vs.textContent = (it.views||0); vChip.appendChild(vs);
@@ -634,11 +628,13 @@
 
   /* ===== INIT ===== */
   (function init(){
-    // иконки
+    // иконки + баннер
     setIcon($("#likeIconHeader"), ICONS.like, "like");
     setIcon($("#shareIcon"), ICONS.share, "share");
     setIcon($("#uIcon"), ICONS.user, "user");
     setIcon($("#hotHeadIcon"), ICONS.flame, "flame");
+    // баннер из запроса
+    setIcon($("#adImg"), "https://ibb.co/v4L9nsq4", "share"); // если ibb не отдаст картинку, будет аккуратный fallback
 
     // visitors
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
