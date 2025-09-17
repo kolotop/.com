@@ -9,7 +9,7 @@
 
   <!-- Share preview -->
   <meta property="og:title" content="KOLO — барахолка оголошень">
-  <meta property="og:description" content="KOLO: додай оголошення за хвилину. HOT, галерея, лайки та перегляди.">
+  <meta property="og:description" content="KOLO: додай оголошення за хвилину. HOT, галерея, пошук.">
   <meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%2310b981'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial Black,Arial' font-size='96' fill='white'>KOLO</text></svg>">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='14' ry='14' width='64' height='64' fill='%2310b981'/><circle cx='32' cy='32' r='14' fill='white'/></svg>">
 
@@ -37,7 +37,7 @@
     /* ===== PRELOADER 5s ===== */
     .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; z-index:9999}
     .pl-ring{width:180px; height:180px; border-radius:50%; border:12px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite; position:relative}
-    .pl-logo{position:absolute; inset:0; display:grid; place-items:center; font:700 36px "Russo One"; color:#10b981; letter-spacing:2px}
+    .pl-logo{position:absolute; inset:0; display:grid; place-items:center; font:700 36px "Russo One"; color:#10b981; letter-spacing:2px; /* текст статичний (не крутиться) */}
     .pl-sub{font:700 13px/1.2 "Montserrat"; color:#0b3b2d; opacity:.95}
     @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -54,9 +54,9 @@
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* Реклама */
+    /* Реклама — ниже и не вылезает */
     .adWrap{margin:8px 0 6px}
-    .adBar{height:80px; border:1px solid var(--line); border-radius:12px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
+    .adBar{height:64px; border:1px solid var(--line); border-radius:12px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
     .adBar a{display:block; width:100%; height:100%}
     .adBar img{width:100%; height:100%; object-fit:cover; display:block}
     .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px}
@@ -88,7 +88,6 @@
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
 
-    /* price */
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:4px 8px; font:800 12px/1 "Russo One"; z-index:2}
 
     .body{padding:10px; display:flex; flex-direction:column; gap:6px}
@@ -100,7 +99,6 @@
     .sheet{position:absolute; left:50%; top:6vh; transform:translateX(-50%); width:min(1080px,96vw); max-height:88vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-lg);}
     .modalHead{display:flex; align-items:center; gap:10px; margin-bottom:8px}
 
-    /* Gallery */
     .big{position:relative; padding-top:56%; background:var(--thumb-ph); border-radius:12px; overflow:hidden}
     .big img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
     .navBtn{
@@ -142,10 +140,16 @@
     .choiceCard:hover{box-shadow:var(--shadow-sm)}
     .choiceCard.normal{background:var(--brand); color:#fff; border-color:transparent; box-shadow:var(--shadow-sm)}
     .choiceCard.hot{background:var(--hotRed); color:#fff; border-color:#ff6567}
+
+    /* upload */
+    .attachRow{display:flex; align-items:center; gap:10px}
+    .attachBtn{height:46px; border:1px solid var(--field-br); background:var(--field-bg); color:#064e3b; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; cursor:pointer}
+    .attachBtn svg{width:18px; height:18px}
+    .hidden{position:absolute; width:1px; height:1px; left:-9999px; opacity:0}
   </style>
 </head>
 <body class="modal-open">
-  <!-- PRELOADER (ровно 5 сек) -->
+  <!-- PRELOADER (ровно 5 сек, KOLO не крутиться) -->
   <div id="preloader" class="preloader" aria-hidden="false">
     <div class="pl-ring"><div class="pl-logo">KOLO</div></div>
     <div class="pl-sub">Дошка оголошень №1 в Україні</div>
@@ -246,7 +250,6 @@
         <button class="closeX" id="sellClose">Закрити</button>
       </div>
       <div class="actions" style="margin:-4px 0 8px"><span id="sellModeBadge" class="pill green">Звичайне</span></div>
-      <div class="actions" style="margin-top:0;color:#0b3b2d;font-size:12px;opacity:.85">Фото з телефона (можна декілька)</div>
       <div class="filters" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
         <div><label>Область</label><input class="input" id="sRegion"></div>
         <div><label>Місто</label><input class="input" id="sCity"></div>
@@ -256,10 +259,21 @@
 
         <div><label>Стан</label><select class="select" id="sCond"></select></div>
         <div><label>Ціна, ₴</label><input class="input" id="sPrice" inputmode="numeric"></div>
-        <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380 (..) ...-..-.."></div>
+        <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380"></div>
 
         <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
-        <div style="grid-column:1/-1"><label>Фото</label><input class="input" id="sImages" type="file" accept="image/*" multiple></div>
+        <!-- upload: кнопка-скрепка + скрытый input -->
+        <div style="grid-column:1/-1">
+          <label>Фото</label>
+          <div class="attachRow">
+            <button type="button" class="attachBtn" id="attachBtn" title="Додати фото">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 8.5l-8.59 8.59a5 5 0 01-7.07-7.07L13.5 1.86" stroke="#064e3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Прикріпити
+            </button>
+            <input class="hidden" id="sImages" type="file" accept="image/*" multiple>
+            <div id="attachInfo" style="font-size:12px;opacity:.8"></div>
+          </div>
+        </div>
       </div>
       <div class="actions"><button class="btn" id="sSave">Опублікувати</button></div>
     </div>
@@ -274,10 +288,9 @@
         <button class="closeX" id="searchClose">Закрити</button>
       </div>
       <div style="display:grid; grid-template-columns:1fr; gap:10px;">
-        <div><label>Ключове слово</label><input class="input" id="fltQuery" placeholder="Напр., iPhone, диван, велосипед"></div>
+        <div><input class="input" id="fltQuery" placeholder=""></div>
         <div style="display:flex; gap:10px">
           <button class="btn" id="btnApply">Знайти</button>
-          <button class="btn ghost" id="btnReset">Скинути</button>
         </div>
       </div>
     </div>
@@ -292,11 +305,11 @@
 
   /* Иконки */
   const ICONS = {
-    like: "https://ibb.co/4wsFcDjh",
-    share: "https://ibb.co/fVMpJz36",
-    eye:   "https://ibb.co/X1253RM",
-    user:  "https://ibb.co/fYqBCMS9",
-    flame: "https://ibb.co/NgjfFSG5"
+    like: "https://i.ibb.co/4wsFcDjh/like.png",
+    share: "https://i.ibb.co/fVMpJz36/share.png",
+    eye:   "https://i.ibb.co/X1253RM/eye.png",
+    user:  "https://i.ibb.co/fYqBCMS9/user.png",
+    flame: "https://i.ibb.co/NgjfFSG5/flame.png"
   };
   const SVG_FALLBACK = {
     like:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
@@ -308,30 +321,44 @@
   function setIcon(el, url, fbKey){ el.src=url; el.onerror=()=>{el.onerror=null; el.src=SVG_FALLBACK[fbKey]||''}; }
   function safeIcon(url, fbKey, cls=""){ const img=document.createElement("img"); if(cls) img.className=cls; img.alt=fbKey; img.referrerPolicy="no-referrer"; setIcon(img,url,fbKey); return img; }
 
-  /* Visitors */
-  const VIS_START = 17369;
-  const STEP_MS = 3*60*1000;
-  (function bumpLocal(){
-    try{
-      const k="kolo_vis_local"; const day=Math.floor(Date.now()/86400000);
-      let r=JSON.parse(localStorage.getItem(k)||'{"d":0,"c":0}');
-      if(r.d!==day) r={d:day,c:1}; else r.c+=1;
-      localStorage.setItem(k, JSON.stringify(r));
-    }catch{}
-  })();
-  function getLocalInc(){ try{ return (JSON.parse(localStorage.getItem("kolo_vis_local")||'{"c":0}').c)||0; }catch{return 0;} }
+  /* Visitors (детерминированно у всех): +1..3/15 сек от фиксированного эпоха */
+  const VIS_BASE = 17369;
+  const SLOT_MS = 15000;
+  const EPOCH0 = Date.UTC(2025,8,1); // 01 Sep 2025 UTC
+  function genCycle(len, seed){ let x=seed>>>0; const arr=[]; let sum=0; const pref=[0];
+    for(let i=0;i<len;i++){ x=(1103515245*x+12345)>>>0; const v=(x%3)+1; arr.push(v); sum+=v; pref.push(pref[pref.length-1]+v); }
+    return {arr,sum,pref};
+  }
+  const CYC = genCycle(120, 42);
   function visitorsNow(){
-    const now=new Date(); const epoch=Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-    return VIS_START + Math.floor((Date.now()-epoch)/STEP_MS) + getLocalInc();
+    const slots = Math.max(0, Math.floor((Date.now()-EPOCH0)/SLOT_MS));
+    const cycles = Math.floor(slots / CYC.arr.length);
+    const rem = slots % CYC.arr.length;
+    return VIS_BASE + cycles*CYC.sum + CYC.pref[rem];
   }
 
   /* Data */
   const UA_REGIONS={"Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],"Львівська":["Львів","Дрогобич","Червоноград","Стрий"],"Одеська":["Одеса","Чорноморськ","Южне","Ізмаїл","Білгород-Дністровський"],"Харківська":["Харків","Лозова","Ізюм"],"Дніпропетровська":["Дніпро","Кривий Ріг","Кам'янське","Нікополь","Павлоград"],"Запорізька":["Запоріжжя","Мелітополь","Бердянськ"],"Миколаївська":["Миколаїв","Первомайськ","Южноукраїнськ"],"Херсонська":["Херсон","Нова Каховка","Каховка"],"Вінницька":["Вінниця","Жмеринка","Могилів-Подільський"],"Полтавська":["Полтава","Кременчук","Миргород"],"Черкаська":["Черкаси","Умань","Сміла"],"Чернігівська":["Чернігів","Ніжин","Прилуки"],"Сумська":["Суми","Шостка","Конотоп","Охтирка"],"Житомирська":["Житомир","Бердичів","Коростень"],"Хмельницька":["Хмельницький","Кам'янець-Подільський","Шепетівка"],"Чернівецька":["Чернівці","Хотин"],"Рівненська":["Рівне","Дубно","Вараш"],"Івано-Франківська":["Івано-Франківськ","Калуш","Коломия","Яремче"],"Тернопільська":["Тернопіль","Чортків","Кременець"],"Волинська":["Луцьк","Ковель","Володимир"],"Закарпатська":["Ужгород","Мукачево","Хуст"],"Кіровоградська":["Кропивницький","Олександрія","Світловодськ"]};
   const PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
-  const ALL_CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти","Мода та стиль","Одяг","Взуття","Аксесуари","Дитячий світ","Іграшки","Візочки","Одяг для дітей","Тварини","Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика","Бізнес та обладнання","Сільське господарство","Краса та здоров’я"];
+
+  /* — максимально расширенные категории (без «Робота») — */
+  const ALL_CATS=[
+    "Транспорт","Легкові авто","Мото","Комерційний транспорт","Автозапчастини","Шини та диски","Автосервіс",
+    "Нерухомість","Квартири","Будинки","Кімнати","Комерційна нерухомість","Земля","Оренда",
+    "Електроніка","Телефони","Планшети","Смарт-годинники","Комп’ютери","Ноутбуки","Периферія","Ігрові приставки","Ігри","Фото/Відео","ТВ/Аудіо",
+    "Дім і сад","Меблі","Текстиль","Освітлення","Інтер’єр та декор","Сад і город","Рослини","Інструменти","Будматеріали","Будівництво та ремонт",
+    "Спорт і Хобі","Велосипеди","Самокати","Електротранспорт","Туризм","Риболовля","Полювання","Музичні інструменти",
+    "Мода та стиль","Одяг","Взуття","Аксесуари","Краса та здоров’я",
+    "Дитячий світ","Іграшки","Візочки","Автокрісла","Одяг для дітей","Все для школи",
+    "Тварини","Собаки","Коти","Птахи","Риби","Гризуни","Акваріумістика",
+    "Послуги","Ремонт","Доставка","Клінінг","Дизайн та поліграфія","IT та розробка","Перевезення","Фото/Відео зйомка","Освіта","Логістика",
+    "Бізнес та обладнання","Сільське господарство","Фермерство","Обладнання HoReCa","POS та торгівля","Офісне обладнання"
+  ];
   const CONDS=["Нове","Вживане","Після ремонту"];
+
   const FIRSTNAMES=["Олег","Ірина","Сергій","Анна","Віктор","Максим","Марія","Юрій","Олексій","Наталія","Дмитро","Олена","Микита","Андрій","Світлана"];
   const LASTNAMES=["Шевченко","Коваленко","Бондаренко","Ткаченко","Кравченко","Мельник","Ковальчук","Петренко","Поліщук","Гриценко","Савченко","Гнатюк","Яковенко"];
+
   const IMG={car:["https://upload.wikimedia.org/wikipedia/commons/8/8e/2017_Skoda_Octavia_SE_TDi_1.6_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/6/65/2018_Toyota_Camry_LE_front_6.22.18.jpg","https://upload.wikimedia.org/wikipedia/commons/b/b1/2018_BMW_320d_M_Sport_Automatic_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/e/ea/2018_Audi_A4_Sport_TDi_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/2/26/2018_Volkswagen_Golf_SE_NAV_TDi_1.6_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/1/1e/2018_Volvo_XC60_Momentum_D4_AWD_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/7/7f/2018_Kia_Sportage_3_CRDi_ISG_1.7_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/4/4e/2017_Hyundai_Tucson_Premium_SE_2.0.jpg"],phone:["https://upload.wikimedia.org/wikipedia/commons/9/94/Samsung_Galaxy_S21_5G.jpg","https://upload.wikimedia.org/wikipedia/commons/1/17/Google_Pixel_6_-_Retail_Package.jpg","https://upload.wikimedia.org/wikipedia/commons/3/3c/IPhone_13_Pro_Max_Alpine_Green.png"],laptop:["https://upload.wikimedia.org/wikipedia/commons/4/40/MacBook_Pro_16-inch.png","https://upload.wikimedia.org/wikipedia/commons/4/45/Lenovo_ThinkPad_T440s.jpg"],tv:["https://upload.wikimedia.org/wikipedia/commons/6/60/Modern_TV.jpg"],washer:["https://upload.wikimedia.org/wikipedia/commons/5/5f/Washing_machine_bosch.jpg"],sofa:["https://upload.wikimedia.org/wikipedia/commons/1/1d/Sofa_in_living_room.jpg"],bike:["https://upload.wikimedia.org/wikipedia/commons/7/7b/Road_bicycle.jpg"],dog:["https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg"],cat:["https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"],flat:["https://upload.wikimedia.org/wikipedia/commons/2/22/Minimalist_apartment_interior.jpg"],tools:["https://upload.wikimedia.org/wikipedia/commons/2/2f/Hand_tools.jpg"],decor:["https://upload.wikimedia.org/wikipedia/commons/0/0f/Scandinavian_interior_design.jpg"],service:["https://upload.wikimedia.org/wikipedia/commons/6/6f/Electrician_at_work.jpg"]};
 
   const getDB=()=>{try{return JSON.parse(localStorage.getItem(DB_KEY)||"[]")}catch{return[]}};
@@ -342,10 +369,15 @@
   function fmtUA(date){ return new Date(date).toLocaleDateString('uk-UA'); }
   function lockScroll(on){ document.body.classList.toggle('modal-open', !!on); }
   function createImg(src, alt, fallback){ const img=document.createElement("img"); img.loading="lazy"; img.alt=alt; img.referrerPolicy="no-referrer"; img.src = src || fallback; img.onerror=()=>{ img.onerror=null; img.src=fallback; }; return img; }
-  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d'); const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500); g.fillStyle="#a0dcc8"; g.fillRect(0,420,800,80); g.fillStyle='#0f172a'; g.font="bold 42px 'Russo One', Arial"; g.textAlign="center"; g.fillText(title.slice(0,22), 400, 100); g.fillStyle="#00000022"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,120); } return c.toDataURL('image/png'); }
-  function imgPool(cat){ if(cat==="Транспорт") return IMG.car; if(cat==="Велосипеди") return IMG.bike; if(cat==="Електроніка") return [...IMG.phone, ...IMG.laptop, ...IMG.tv]; if(cat==="Побутова техніка") return [...IMG.washer]; if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor]; if(cat==="Тварини") return [...IMG.dog, ...IMG.cat]; if(cat==="Нерухомість") return IMG.flat; if(cat==="Послуги") return IMG.service; return [...IMG.phone, ...IMG.tools, ...IMG.sofa]; }
+  /* Заглушка без текста названия */
+  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d');
+    const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500);
+    g.fillStyle="#00000010"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,120); }
+    return c.toDataURL('image/png');
+  }
+  function imgPool(cat){ if(cat==="Транспорт"||cat==="Легкові авто") return IMG.car; if(cat==="Велосипеди") return IMG.bike; if(cat==="Електроніка"||cat==="Телефони"||cat==="Комп’ютери"||cat==="Ноутбуки") return [...IMG.phone, ...IMG.laptop, ...IMG.tv]; if(cat==="Побутова техніка") return [...IMG.washer]; if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor]; if(cat==="Тварини"||cat==="Собаки"||cat==="Коти") return [...IMG.dog, ...IMG.cat]; if(cat==="Нерухомість"||cat==="Квартири"||cat==="Будинки") return IMG.flat; if(cat==="Послуги"||cat==="Ремонт") return IMG.service; return [...IMG.phone, ...IMG.tools, ...IMG.sofa]; }
   function imgSetBy(cat,n=3){ const pool=imgPool(cat); const out=[]; for(let i=0;i<n;i++) out.push(pool[(i+Math.floor(Math.random()*pool.length))%pool.length]); return out; }
-  function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 (${op}) ${Math.floor(100+Math.random()*900)}-${Math.floor(10+Math.random()*90)}-${Math.floor(10+Math.random()*90)}`; }
+  function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 ${op}${Math.floor(100000000+Math.random()*900000000)}`; }
 
   function seedDB(){
     const out=[];
@@ -360,21 +392,22 @@
       "Послуги":[ "Ремонт техніки — виїзд","Майстер на годину" ],
       "Дім і сад":[ "Набір інструментів • як новий","Декор сканди" ]
     };
-    const keys=Object.keys(TEMPL);
+    const keys=ALL_CATS; // заполняем по всім
     for(let i=0;i<1000;i++){
       const plc = PLACES[i % PLACES.length] || {region:"",name:""};
       const cat = keys[i % keys.length];
       const cond = CONDS[i % CONDS.length];
       const base =
-        (cat==="Нерухомість") ? 12000 + (i%2000)*60 :
-        (cat==="Транспорт") ? 20000 + (i%4000)*120 :
-        (cat==="Електроніка"||cat==="Побутова техніка") ? 1200 + (i%500)*50 :
-        (cat==="Послуги") ? 200 + (i%300)*20 :
+        (cat.includes("Нерухомість")||cat==="Квартири"||cat==="Будинки") ? 12000 + (i%2000)*60 :
+        (cat.includes("Транспорт")||cat==="Легкові авто"||cat==="Мото") ? 20000 + (i%4000)*120 :
+        (["Електроніка","Телефони","Комп’ютери","Ноутбуки","Побутова техніка","ТВ/Аудіо"].includes(cat)) ? 1200 + (i%500)*50 :
+        (cat.includes("Послуги")||cat==="Ремонт") ? 200 + (i%300)*20 :
         300 + (i%400)*40;
       const price = round100(base);
       const year = 2006 + (i%20);
       const sM = 25 + (i%90);
-      const baseTitle = pick(TEMPL[cat]).replace("{y}", year).replace("{m}", sM);
+      const tmpl = TEMPL[cat] && pick(TEMPL[cat]);
+      const baseTitle = tmpl ? tmpl.replace("{y}", year).replace("{m}", sM) : `${cat}`;
       const title = baseTitle.replace(/—?\s*пропозиція/gi,'').trim();
       const created = Date.now() - (i%60)*86400*1000;
       const views = 120 + (i%480);
@@ -416,14 +449,10 @@
         const card=document.createElement('div'); card.className='hotCard'; card.onclick=()=>openDetail(it.id);
         const fallback=itemPNG(it.title,(it.price+it.created)%7);
         const thumb=document.createElement('div'); thumb.className='thumb';
-
-        // HOT бейдж — только текст без иконки
         const badge=document.createElement('div'); badge.className='hotBadge'; badge.textContent='HOT';
-
         const price=document.createElement('button'); price.className='hotPrice'; price.textContent=`${it.price.toLocaleString('uk-UA')} ${it.currency}`;
         thumb.appendChild(createImg((it.images&&it.images[0])||"", it.title, fallback));
         thumb.appendChild(badge); thumb.appendChild(price);
-
         const body=document.createElement('div'); body.className='hotBody';
         body.innerHTML=`<div class="hotTTL">${it.title}</div>
                         <div style="opacity:.85">${it.city} • ${it.cat}</div>`;
@@ -441,7 +470,7 @@
   initSellForm();
 
   async function filesToDataURLs(inputEl){
-    const files = [...(inputEl.files||[])].slice(0,6);
+    const files = [...(inputEl.files||[])].slice(0,12); // можно больше фото
     const tasks = files.map(f => new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(f); }));
     return await Promise.all(tasks);
   }
@@ -449,12 +478,15 @@
   let postMode="normal";
   function setPostMode(mode){ postMode=mode; $("#sellModeBadge").textContent=(mode==="hot"?"HOT":"Звичайне"); $("#sellModeBadge").className="pill "+(mode==="hot"?"":"green"); }
 
+  $("#attachBtn").onclick=()=>$("#sImages").click();
+  $("#sImages").onchange=()=>{ const n=($("#sImages").files||[]).length; $("#attachInfo").textContent = n?`Вибрано фото: ${n}`:""; };
+
   $("#sSave").onclick=async ()=>{
     const region=$("#sRegion").value.trim(), city=$("#sCity").value.trim(), cat=$("#sCat").value, title=$("#sTitle").value.trim();
     if(!region||!city||!cat||!title) return alert("Заповніть область/місто/категорію/заголовок.");
     const priceRaw=+(($("#sPrice").value||0)); if(!(priceRaw>=0 && priceRaw<=100000000)) return alert("Перевірте ціну.");
     const price = round100(priceRaw);
-    const phone=$("#sPhone").value.trim(); if(phone && !/^\+?\d[\d\s\-\(\)]{8,}$/.test(phone)) return alert("Телефон некоректний.");
+    const phone=$("#sPhone").value.trim(); if(phone && !/^\+?\d[\d\s]{8,}$/.test(phone)) return alert("Телефон некоректний.");
     const desc=$("#sDesc").value.trim(); if(desc.length<20) return alert("Опис ≥ 20 символів.");
     const cond=$("#sCond").value;
 
@@ -470,11 +502,11 @@
     });
     setDB(db);
     alert("Оголошення опубліковано.");
-    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#sRegion").value=""; $("#sCity").value="";
+    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#attachInfo").textContent=""; $("#sRegion").value=""; $("#sCity").value="";
     $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
-  /* SEARCH: тільки ключове слово */
+  /* SEARCH: тільки ключове слово (без підписів/placeholder) */
   const grid=$("#grid"), btnMore=$("#btnMore"), fltQuery=$("#fltQuery");
   let page=0, pageSize=24, lastResults=[];
   function applyFilters(){
@@ -597,10 +629,9 @@
     setIcon($("#shareIcon"), ICONS.share, "share");
     setIcon($("#uIcon"), ICONS.user, "user");
     setIcon($("#hotHeadIcon"), ICONS.flame, "flame");
-    // баннер по новой ссылке
     setIcon($("#adImg"), "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png", "share");
 
-    // visitors
+    // visitors — обновление раз в секунду, шаг каждые 15с
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
     updVisitors(); setInterval(updVisitors, 1000);
 
@@ -619,7 +650,6 @@
     $("#tabSearch").onclick=()=>{ $("#searchOverlay").classList.add('on'); $("#searchOverlay").setAttribute('aria-hidden','false'); lockScroll(true); };
     $("#searchClose").onclick=()=>{ $("#searchOverlay").classList.remove('on'); $("#searchOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
     $("#btnApply").onclick=()=>{ applyFilters(); $("#searchOverlay").classList.remove('on'); lockScroll(false); };
-    $("#btnReset").onclick=()=>{ $("#fltQuery").value=""; applyFilters(); };
 
     $("#tabSell").onclick=()=>{ $("#sellChoiceOverlay").classList.add('on'); $("#sellChoiceOverlay").setAttribute('aria-hidden','false'); lockScroll(true); };
     $("#choiceClose").onclick=()=>{ $("#sellChoiceOverlay").classList.remove('on'); $("#sellChoiceOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
