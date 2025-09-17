@@ -54,14 +54,8 @@
 
     /* ===== TICKER над HOT ===== */
     .tickerWrap{position:relative; margin:8px 0 6px}
-    .ticker{
-      overflow:hidden; border:1px solid var(--line); border-radius:12px; background:#fff;
-    }
-    .ticker-track{
-      display:flex; align-items:center; gap:16px; padding:8px 12px;
-      animation:marquee 28s linear infinite;
-      will-change:transform;
-    }
+    .ticker{overflow:hidden; border:1px solid var(--line); border-radius:12px; background:#fff;}
+    .ticker-track{display:flex; align-items:center; gap:16px; padding:8px 12px; animation:marquee 28s linear infinite; will-change:transform;}
     .ticker img{height:42px; width:auto; border-radius:10px; box-shadow:var(--shadow-sm); object-fit:cover}
     @keyframes marquee{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
     .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px}
@@ -92,7 +86,7 @@
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:5px 8px; font:800 12px/1 "Russo One"; z-index:2}
-    /* like + views: одинаково на ДЕСК/МОБ, фиксированная ширина */
+    /* like + views одинаково на всех девайсах */
     .likeBtn,.viewPill{
       position:absolute; top:8px; height:32px; min-width:58px;
       padding:0 8px; display:flex; align-items:center; justify-content:center; gap:6px;
@@ -151,7 +145,7 @@
     .btn:active{transform:translateY(2px); background:var(--brand-press)}
     .btn.ghost{background:#fff; color:#0f172a; border:1px solid var(--line); box-shadow:none; text-shadow:none}
 
-    /* Preloader (5s) */
+    /* Preloader (надёжное скрытие) */
     .preloader{position:fixed; inset:0; background:#ffffff; display:flex; align-items:center; justify-content:center; z-index:9999}
     .pl-wrap{position:relative; width:220px; height:220px; display:grid; place-items:center}
     .pl-ring{position:absolute; inset:0; border-radius:50%; border:10px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite;}
@@ -206,17 +200,13 @@
 
     <!-- HOT -->
     <section class="panel hotWrap" id="hotPanel" style="display:none">
-      <div class="hotHead">
-        <div class="tag">🔥 HOT</div>
-      </div>
+      <div class="hotHead"><div class="tag">🔥 HOT</div></div>
       <div class="hotGrid" id="hotGrid"></div>
     </section>
     <div class="hotSplit" id="hotSplit" style="display:none"></div>
 
     <!-- RESULTS -->
-    <section class="topline">
-      <div class="grow"></div>
-    </section>
+    <section class="topline"><div class="grow"></div></section>
     <section class="grid" id="grid"></section>
     <div class="pager"><button class="btn" id="btnMore" style="display:none">Показати ще</button></div>
   </main>
@@ -283,12 +273,9 @@
         <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380 (..) ...-..-.."></div>
 
         <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
-        <!-- багатофото -->
         <div style="grid-column:1/-1"><label>Фото</label><input class="input" id="sImages" type="file" accept="image/*" multiple></div>
       </div>
-      <div class="actions">
-        <button class="btn" id="sSave">Опублікувати</button>
-      </div>
+      <div class="actions"><button class="btn" id="sSave">Опублікувати</button></div>
     </div>
   </div>
 
@@ -311,11 +298,19 @@
   </div>
 
   <script>
-  // ===== OPTIONAL: додайте файл env.js поруч і задайте window.KOLO_REMOTE = {owner,repo,branch:'main',path:'db.json',token:'ghp_...'}; та window.KOLO_ADS=[url1,...];
+  // ===== опционально: window.KOLO_REMOTE = {owner,repo,branch:'main',path:'db.json',token:'ghp_...'}; window.KOLO_ADS=[url1,...];
   // <script src="env.js"></script>
 
   const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
-  const DB_KEY = "kolo_listings_v3";          // НЕ міняти — щоб локально зберігалось між оновленнями
+
+  /* --- ГАРАНТИРОВАННО скрыть прелоадер --- */
+  function hidePreloader(){ const pl=$("#preloader"); if(pl) pl.remove(); document.body.classList.remove('modal-open'); }
+  document.addEventListener('DOMContentLoaded', ()=> setTimeout(hidePreloader, 1200));
+  window.addEventListener('load', ()=> setTimeout(hidePreloader, 150));
+  window.addEventListener('error', hidePreloader, true);
+  setTimeout(hidePreloader, 8000); // запасной таймер
+
+  const DB_KEY = "kolo_listings_v3";
   const CTRL_KEY = "kolo_ctrl_v3";
 
   /* ===== Місця ===== */
@@ -417,8 +412,7 @@
     return c.toDataURL('image/png');
   }
 
-  /* ===== SELECTS (прокачані на десктопі) ===== */
-  function fillSelect(el, arr){ el.innerHTML=arr.map(x=>`<option value="${x}">${x}</option>`).join(''); }
+  /* ===== Nice Select (только на десктопе) ===== */
   function enhanceSelect(sel){
     if (matchMedia('(hover: none)').matches) return;
     const wrap=document.createElement('div'); wrap.className='nice';
@@ -453,6 +447,7 @@
   const OPERATORS=["50","63","66","67","68","73","93","95","96","97","98","99"];
   function genPhone(){ const op=pick(OPERATORS); return `+380 (${op}) ${rand(100,999)}-${rand(10,99)}-${rand(10,99)}`; }
 
+  function fillSelect(el, arr){ el.innerHTML=arr.map(x=>`<option value="${x}">${x}</option>`).join(''); }
   function imgPool(cat){
     if(cat==="Транспорт") return IMG.car;
     if(cat==="Велосипеди") return IMG.bike;
@@ -510,7 +505,7 @@
       const name = `${pick(FIRSTNAMES)} ${pick(LASTNAMES)}`;
 
       out.push({
-        id: uid(),
+        id: Math.random().toString(16).slice(2)+out.length.toString(16), // детерминированно+стабильно
         region: plc.region,
         city: plc.name,
         cat, cond, title,
@@ -524,7 +519,7 @@
     setDB(out);
   }
 
-  /* ===== HOT (динамічний перерахунок щораз) ===== */
+  /* ===== HOT ===== */
   function ensureHot(){
     const db = getDB();
     if(!db.length){ $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; return; }
@@ -564,7 +559,7 @@
     }
   }
 
-  /* ===== Реклама (5 картинок у бігу́чій плашці) ===== */
+  /* ===== Реклама (5 картинок, бегущая) ===== */
   const ADS = (window.KOLO_ADS && Array.isArray(window.KOLO_ADS) && window.KOLO_ADS.length)
     ? window.KOLO_ADS.slice(0,5)
     : [
@@ -578,17 +573,14 @@
     if(!ADS.length) return;
     $("#tickerWrap").style.display="block";
     const track=$("#adTrack");
-    const dup=[...ADS, ...ADS]; // для безшовного скролу
-    dup.forEach(url=>{
-      const img=new Image(); img.src=url; img.alt="ad";
-      track.appendChild(img);
-    });
+    const dup=[...ADS, ...ADS];
+    dup.forEach(url=>{ const img=new Image(); img.src=url; img.alt="ad"; track.appendChild(img); });
   }
 
   /* ===== Додавання ===== */
   function initSellForm(){
-    $("#sCat").innerHTML=ALL_CATS.map(x=>`<option value="${x}">${x}</option>`).join('');
-    $("#sCond").innerHTML=CONDS.map(x=>`<option value="${x}">${x}</option>`).join('');
+    fillSelect($("#sCat"), ALL_CATS);
+    fillSelect($("#sCond"), CONDS);
     $$('.select').forEach(enhanceSelect);
   }
   initSellForm();
@@ -615,12 +607,11 @@
     db.unshift({
       id: uid(), region, city,
       cat, title: title.replace(/—?\s*пропозиція/gi,'').trim(), price, currency:"₴", cond, created:Date.now(),
-      views: 0, likes:0,                         // старт з 0 переглядів
+      views: 0, likes:0,
       desc, images: imgs.length? imgs : imgSetBy(cat, 3),
       contact:{name:"Продавець", phone: phone||genPhone()}
     });
     setDB(db);
-    await remoteSaveSafe();                       // спробувати синхронізувати для всіх
     alert("Оголошення опубліковано.");
     $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#sRegion").value=""; $("#sCity").value="";
     $("#sellOverlay").classList.remove('on'); lockScroll(false); applyFilters(); ensureHot();
@@ -667,7 +658,7 @@
         <div class="meta" style="color:var(--muted)">${it.region} • ${it.city}</div>
       </div>`;
     const likeButton = el.querySelector(".likeBtn");
-    likeButton.addEventListener('mousedown', e=>e.preventDefault()); // стабільно на моб.
+    likeButton.addEventListener('mousedown', e=>e.preventDefault()); // стабильно на моб.
     likeButton.onclick=(e)=>{
       e.stopPropagation();
       if(like(it.id)){
@@ -737,10 +728,10 @@
     if(changed){ setDB(filtered); }
   }
 
-  /* ===== Повільне зростання переглядів (єдине збільшення раз на 6 год) ===== */
-  async function dripViews(){
+  /* ===== Повільне зростання переглядів (раз/6 год) ===== */
+  function dripViews(){
     const ctrl=getCtrl(); const now=Date.now();
-    if(ctrl.lastDrip && now-ctrl.lastDrip<6*3600*1000) return; // раз на 6 год
+    if(ctrl.lastDrip && now-ctrl.lastDrip<6*3600*1000) return;
     let db=getDB(); if(!db.length) return;
     const n=Math.min(25, Math.ceil(db.length*0.02));
     for(let i=0;i<n;i++){
@@ -748,10 +739,9 @@
       db[idx].views=(db[idx].views||0)+rand(1,3);
     }
     setDB(db); ctrl.lastDrip=now; setCtrl(ctrl);
-    await remoteSaveSafe();
   }
 
-  /* ===== Remote sync (опціонально для «щоб у всіх однаково») ===== */
+  /* ===== Remote sync (опционально; не мешает, можно не настраивать) ===== */
   const REM = window.KOLO_REMOTE || null; // {owner,repo,branch,path,token}
   async function remoteLoad(){
     if(!REM) return false;
@@ -766,45 +756,24 @@
     }catch(e){}
     return false;
   }
-  async function remoteSaveSafe(){
-    if(!REM || !REM.token) return false; // тільки якщо в env.js задано
-    try{
-      const api=`https://api.github.com/repos/${REM.owner}/${REM.repo}/contents/${REM.path}`;
-      // get sha
-      const cur=await fetch(api, {headers:{'Accept':'application/vnd.github+json'}});
-      const meta=cur.ok? await cur.json(): null;
-      const sha=meta?.sha;
-      const body={
-        message:"KOLO sync",
-        content:btoa(unescape(encodeURIComponent(JSON.stringify(getDB())))),
-        branch: REM.branch||'main'
-      };
-      if(sha) body.sha=sha;
-      const res=await fetch(api, {method:'PUT', headers:{
-        'Accept':'application/vnd.github+json',
-        'Authorization':`Bearer ${REM.token}`
-      }, body: JSON.stringify(body)});
-      return res.ok;
-    }catch(e){ return false; }
-  }
 
   /* ===== Перший старт ===== */
   (async function init(){
     lockScroll(true);
-    setTimeout(()=>{ const pl=$("#preloader"); pl.style.display='none'; lockScroll(false); }, 5000);
 
     // Реклама-плашка
     renderTicker();
 
     // БД
-    let loaded=false;
-    try{ loaded = await remoteLoad(); }catch(e){}
+    try{ await remoteLoad(); }catch(e){}
     if(!getDB().length){ seedDB(); } else { sanitizeDB(); }
     applyFilters();
     ensureHot();
-
-    // Повільне авто-зростання переглядів
     dripViews();
+
+    // убрать прелоадер, даже если что-то долго грузится
+    setTimeout(hidePreloader, 1500);
+    lockScroll(false);
   })();
 
   /* Вкладки + модалі */
