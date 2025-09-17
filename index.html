@@ -24,7 +24,8 @@
       --ph:#7aa896;
       --menu-bg:#ffffff; --menu-br:#cfe8da; --menu-hover:#eefaf3;
       --top:60px;
-      --hotGrad: linear-gradient(90deg,#ff7a70,#ffbdb7);
+      /* темніший до червоного для контрасту */
+      --hotGrad: linear-gradient(90deg,#ff4d4f,#ff8a8f);
       --thumb-ph:#e7f4ee;
       --shadow-sm: 0 4px 12px rgba(2, 44, 34, .08);
       --shadow-lg: 0 14px 40px rgba(2, 44, 34, .14);
@@ -47,28 +48,31 @@
     .pill.green{background:var(--brand); color:#fff; border-color:transparent; font-family:"Russo One"; text-transform:uppercase; box-shadow:var(--shadow-sm); text-shadow:0 1px 0 rgba(0,0,0,.35)}
     .pill.green:active{transform:translateY(1px); background:var(--brand-press)}
     .grow{flex:1}
+    .visitors{display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:800; color:#0b3b2d}
 
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* ===== TICKER над HOT ===== */
-    .tickerWrap{position:relative; margin:8px 0 6px}
-    .ticker{overflow:hidden; border:1px solid var(--line); border-radius:12px; background:#fff;}
-    .ticker-track{display:flex; align-items:center; gap:16px; padding:8px 12px; animation:marquee 28s linear infinite; will-change:transform;}
-    .ticker img{height:42px; width:auto; border-radius:10px; box-shadow:var(--shadow-sm); object-fit:cover}
-    @keyframes marquee{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+    /* ===== РЕКЛАМНИЙ БЛОК (не біжить) ===== */
+    .adWrap{margin:8px 0 6px}
+    .adBar{
+      position:relative; height:84px; border:1px solid var(--line); border-radius:12px;
+      background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .adBar img{height:100%; width:auto; object-fit:cover}
+    .adAdd{position:absolute; right:8px; top:8px; height:30px; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:#fff; font-weight:800; cursor:pointer}
     .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px}
 
     /* HOT strip */
     .hotWrap{margin:10px 0 6px}
     .hotHead{display:flex; align-items:center; gap:12px; margin-bottom:8px; color:#0e3a2a}
-    .hotHead .tag{background:var(--hotGrad); padding:8px 12px; border-radius:12px; font:700 14px/1 "Russo One"; color:#fff}
+    .hotHead .tag{background:var(--hotGrad); padding:8px 12px; border-radius:12px; font:700 14px/1 "Russo One"; color:#fff; box-shadow:0 0 0 1px #ff6567 inset}
     .hotGrid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px}
     @media (max-width:1024px){ .hotGrid{grid-template-columns:repeat(3,1fr);} }
     @media (max-width:640px){ .hotGrid{grid-template-columns:repeat(2,1fr);} }
     .hotCard{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; cursor:pointer; box-shadow:var(--shadow-sm)}
     .hotCard .thumb{position:relative; padding-top:56%; background:var(--thumb-ph); overflow:hidden;}
-    .hotBadge{position:absolute; left:8px; top:8px; background:var(--hotGrad); padding:4px 8px; border-radius:10px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ffe0dc; z-index:2}
+    .hotBadge{position:absolute; left:8px; top:8px; background:var(--hotGrad); padding:4px 8px; border-radius:10px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
     .hotPrice{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border:0; padding:6px 8px; border-radius:10px; font-weight:800; font-size:12px; z-index:2}
     .hotBody{padding:8px; font-size:13px}
     .hotTTL{font:700 14px/1.2 "Russo One"; color:#0f172a}
@@ -85,7 +89,7 @@
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:5px 8px; font:800 12px/1 "Russo One"; z-index:2}
-    /* like + views одинаково на всех девайсах */
+    /* like + views одинаково на всіх девайсах */
     .likeBtn,.viewPill{
       position:absolute; top:8px; height:32px; min-width:58px;
       padding:0 8px; display:flex; align-items:center; justify-content:center; gap:6px;
@@ -150,34 +154,24 @@
     .choiceCard{border:1px solid var(--line); border-radius:14px; padding:16px; cursor:pointer}
     .choiceCard:hover{box-shadow:var(--shadow-sm)}
     .choiceCard.normal{background:var(--brand); color:#fff; border-color:transparent; box-shadow:var(--shadow-sm)}
-    .choiceCard.hot{background:var(--hotGrad); color:#fff; border-color:#ffc9c4}
-
-    /* Nice Select (desktop) */
-    @media (hover:hover){
-      .select.nice-hidden{position:absolute; inset:0; opacity:0; pointer-events:none}
-      .nice{position:relative}
-      .nice-btn{ width:100%; height:46px; border-radius:12px; border:1px solid var(--field-br); background:var(--field-bg); color:#064e3b; padding:0 38px 0 12px; text-align:left; font-size:14px; font-weight:600; cursor:pointer; }
-      .nice-btn:after{content:"▾"; position:absolute; right:12px; top:50%; transform:translateY(-50%); opacity:.8; pointer-events:none}
-      .nice-list{ position:fixed; left:0; top:0; width:260px; background:var(--menu-bg); border:1px solid var(--menu-br); border-radius:12px; padding:6px; box-shadow:var(--shadow-lg); display:none; max-height:300px; overflow:auto; z-index:2147483647; }
-      .nice-item{padding:10px 12px; border-radius:10px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-      .nice-item:hover{background:var(--menu-hover)}
-      .nice-item.active{background:#e7f7ef}
-    }
+    .choiceCard.hot{background:var(--hotGrad); color:#fff; border-color:#ff6567}
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="logo">KOLO</div>
     <div class="pill" id="tabSearch">Пошук</div>
+    <div class="visitors" id="visitors">👥 0</div>
     <div class="grow"></div>
     <div class="pill green" id="tabSell">Додати оголошення</div>
   </header>
 
   <main class="container">
-    <!-- TICKER -->
-    <div class="tickerWrap" id="tickerWrap" style="display:none">
-      <div class="ticker">
-        <div class="ticker-track" id="adTrack"></div>
+    <!-- РЕКЛАМА (статичний блок, можна додавати URL) -->
+    <div class="adWrap">
+      <div class="adBar">
+        <img id="adImg" alt="ad">
+        <button class="adAdd" id="adAdd">＋</button>
       </div>
       <div class="adNote">Замовити рекламу</div>
     </div>
@@ -245,6 +239,7 @@
         <div class="grow"></div>
         <button class="closeX" id="sellClose">Закрити</button>
       </div>
+      <div class="actions" style="margin:-4px 0 8px"><span id="sellModeBadge" class="pill green">Звичайне</span></div>
       <div class="filters" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
         <div><label>Область</label><input class="input" id="sRegion"></div>
         <div><label>Місто</label><input class="input" id="sCity"></div>
@@ -286,7 +281,12 @@
 
   const DB_KEY = "kolo_listings_v3";
   const CTRL_KEY = "kolo_ctrl_v3";
-  const VER_KEY = "kolo_ver_v1";
+  const VER_KEY = "kolo_ver_v2";  // bump
+
+  const ADS_KEY = "kolo_ads_v1";
+  const VIS_START = 17369;
+  const VIS_EPOCH = Date.UTC(2025,0,1,0,0,0); // однаково у всіх
+  const VIS_STEP_MS = 90000; // +1 кожні ~90 сек (повільно)
 
   /* ===== Місця ===== */
   const UA_REGIONS = {
@@ -417,10 +417,7 @@
 
   /* ===== Стабильная генерация: одинаково у всех ===== */
   let SEED = 123456789;
-  function rnd(){ // xorshift32
-    SEED ^= (SEED << 13); SEED ^= (SEED >>> 17); SEED ^= (SEED << 5);
-    return (SEED>>>0)/4294967296;
-  }
+  function rnd(){ SEED ^= (SEED << 13); SEED ^= (SEED >>> 17); SEED ^= (SEED << 5); return (SEED>>>0)/4294967296; }
   function sRand(a,b){ return Math.floor(rnd()*(b-a+1))+a; }
   function sPick(a){ return a[Math.floor(rnd()*a.length)] }
 
@@ -494,21 +491,22 @@
         created, views, likes,
         desc: "Реальне оголошення. Перевірка вітається. Відправлю Новою поштою або зустріч у центрі.",
         images,
-        contact: {name, phone: genPhone()}
+        contact: {name, phone: genPhone()},
+        hot: (sRand(1,100)<=15) // тільки частина — у HOT
       });
     }
     setDB(out);
     localStorage.setItem(VER_KEY, "1");
   }
 
-  /* ===== HOT ===== */
+  /* ===== HOT (тільки з позначкою hot) ===== */
   function ensureHot(){
-    const db = getDB();
+    const db = getDB().filter(x=>x.hot===true);
     if(!db.length){ $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; return; }
     const now = Date.now();
     const scored = db.map(x => ({
       id: x.id,
-      score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 5000 - (now - x.created)/1000)
+      score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 2000 - (now - x.created)/1000) // легкий бонус свіжим
     })).sort((a,b)=>b.score-a.score);
     const topIds = scored.slice(0, Math.min(10, scored.length)).map(s=>s.id);
     renderHot(topIds);
@@ -541,19 +539,37 @@
     }
   }
 
-  /* ===== Реклама (5 картинок, бегущая) ===== */
-  const ADS = [
+  /* ===== РЕКЛАМА (кілька URL, авто-ротація 5с) ===== */
+  function getAds(){ try{ const a=JSON.parse(localStorage.getItem(ADS_KEY)||"[]"); return Array.isArray(a)&&a.length?a:null; }catch{return null} }
+  function setAds(a){ localStorage.setItem(ADS_KEY, JSON.stringify(a.slice(0,20))); }
+  const DEFAULT_ADS = [
     "https://upload.wikimedia.org/wikipedia/commons/3/3c/IPhone_13_Pro_Max_Alpine_Green.png",
     "https://upload.wikimedia.org/wikipedia/commons/4/40/MacBook_Pro_16-inch.png",
     "https://upload.wikimedia.org/wikipedia/commons/7/7b/Road_bicycle.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/1/1d/Sofa_in_living_room.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/6/6f/Electrician_at_work.jpg"
   ];
-  function renderTicker(){
-    $("#tickerWrap").style.display="block";
-    const track=$("#adTrack");
-    [...ADS, ...ADS].forEach(url=>{ const img=new Image(); img.src=url; img.alt="ad"; track.appendChild(img); });
+  let adList = getAds() || DEFAULT_ADS.slice();
+  let adIndex=0, adTimer=null;
+  function showAd(){
+    const img=$("#adImg");
+    const url = adList[adIndex%adList.length];
+    img.src=url; img.onerror=()=>{ img.onerror=null; img.src=""; };
   }
+  function startAdRotation(){
+    if(adTimer) clearInterval(adTimer);
+    showAd();
+    adTimer=setInterval(()=>{ adIndex=(adIndex+1)%adList.length; showAd(); }, 5000);
+  }
+  $("#adAdd").onclick=()=>{
+    const urls = prompt("Вставте посилання на зображення (можна кілька, через кому):","");
+    if(!urls) return;
+    const parts = urls.split(",").map(s=>s.trim()).filter(Boolean);
+    if(!parts.length) return;
+    adList = parts;
+    setAds(adList);
+    adIndex=0; startAdRotation();
+  };
 
   /* ===== Додавання ===== */
   function initSellForm(){
@@ -569,6 +585,13 @@
       const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(f);
     }));
     return await Promise.all(tasks);
+  }
+
+  let postMode="normal"; // "normal" | "hot"
+  function setPostMode(mode){
+    postMode=mode;
+    $("#sellModeBadge").textContent = (mode==="hot"?"HOT":"Звичайне");
+    $("#sellModeBadge").className = "pill " + (mode==="hot"?"":"green");
   }
 
   $("#sSave").onclick=async ()=>{
@@ -587,12 +610,13 @@
       cat, title: title.replace(/—?\s*пропозиція/gi,'').trim(), price, currency:"₴", cond, created:Date.now(),
       views: 0, likes:0,
       desc, images: imgs.length? imgs : imgSetBy(cat, 3),
-      contact:{name:"Продавець", phone: phone||genPhone()}
+      contact:{name:"Продавець", phone: phone||genPhone()},
+      hot: (postMode==="hot")
     });
     setDB(db);
     alert("Оголошення опубліковано.");
     $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; $("#sRegion").value=""; $("#sCity").value="";
-    $("#sellOverlay").classList.remove('on'); lockScroll(false); applyFilters(); ensureHot();
+    $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
   /* ===== Пошук (тільки ключове слово у заголовку) ===== */
@@ -701,31 +725,32 @@
       const nt=t.replace(/—?\s*пропозиція/gi,'').trim();
       if(nt!==t){ it.title=nt; changed=true; }
       if(typeof it.views!=='number') { it.views = 0; changed=true; }
+      if(typeof it.hot!=='boolean'){ it.hot=false; changed=true; }
       return it;
     });
     if(changed){ setDB(filtered); }
   }
 
-  /* ===== Повільне зростання переглядів (раз/6 год) ===== */
-  function dripViews(){
-    const ctrl=getCtrl(); const now=Date.now();
-    if(ctrl.lastDrip && now-ctrl.lastDrip<6*3600*1000) return;
-    let db=getDB(); if(!db.length) return;
-    const n=Math.min(25, Math.ceil(db.length*0.02));
-    for(let i=0;i<n;i++){
-      const idx=Math.floor(Math.random()*db.length);
-      db[idx].views=(db[idx].views||0)+Math.floor(Math.random()*3+1);
-    }
-    setDB(db); ctrl.lastDrip=now; setCtrl(ctrl);
+  /* ===== Відвідувачі (однаково у всіх) ===== */
+  function visitorsNow(){
+    const inc = Math.max(0, Math.floor((Date.now()-VIS_EPOCH)/VIS_STEP_MS));
+    return VIS_START + inc;
   }
+  function renderVisitors(){
+    $("#visitors").textContent = "👥 " + visitorsNow().toLocaleString('uk-UA');
+  }
+  setInterval(renderVisitors, 15000);
 
   /* ===== INIT ===== */
   (function init(){
-    renderTicker();
+    // інтерактиви
+    renderVisitors();
+
     if(!localStorage.getItem(VER_KEY) || !getDB().length){ seedDB(); } else { sanitizeDB(); }
     applyFilters();
     ensureHot();
-    dripViews();
+
+    startAdRotation();
   })();
 
   /* Вкладки + модалі */
@@ -734,18 +759,17 @@
 
   $("#tabSell").onclick=()=>{ $("#sellChoiceOverlay").classList.add('on'); $("#sellChoiceOverlay").setAttribute('aria-hidden','false'); lockScroll(true); };
   $("#choiceClose").onclick=()=>{ $("#sellChoiceOverlay").classList.remove('on'); $("#sellChoiceOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
-  const openSellForm=()=>{ $("#sellChoiceOverlay").classList.remove('on'); $("#sellOverlay").classList.add('on'); $("#sellOverlay").setAttribute('aria-hidden','false'); };
-  $("#chooseNormal").onclick=openSellForm;
-  $("#chooseHot").onclick=openSellForm;
+  const openSellForm=(mode)=>{ setPostMode(mode); $("#sellChoiceOverlay").classList.remove('on'); $("#sellOverlay").classList.add('on'); $("#sellOverlay").setAttribute('aria-hidden','false'); };
+  $("#chooseNormal").onclick=()=>openSellForm("normal");
+  $("#chooseHot").onclick=()=>openSellForm("hot");
 
-  $("#sellClose").onclick=()=>{ $("#sellOverlay").classList.remove('on'); $("#sellOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
+  $("#sellClose").onclick=()=>{ $("#sellOverlay").classList.remove('on'); $("#sellOverlay").setAttribute('aria-hidden','true'); setPostMode("normal"); lockScroll(false); };
 
   $("#btnApply").onclick=()=>{ applyFilters(); $("#searchOverlay").classList.remove('on'); lockScroll(false); };
   $("#btnReset").onclick=()=>{ $("#fltQuery").value=""; applyFilters(); };
 
   btnMore.onclick=renderMore;
 
-  // ESC закрытие
   document.addEventListener('keydown', (e)=>{ 
     if(e.key==='Escape'){
       $("#detail").classList.remove('active');
