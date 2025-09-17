@@ -34,7 +34,7 @@
     body{margin:0; background:var(--bg); color:var(--ink); font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;}
     body.modal-open{overflow:hidden}
 
-    /* ===== PRELOADER (5s). KOLO не крутится. Круг больше. ===== */
+    /* ===== PRELOADER (5s). KOLO фикс, крутится только кольцо ===== */
     .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:9999}
     .pl-wrap{position:relative; width:240px; height:240px; display:grid; place-items:center}
     .pl-ring{position:absolute; inset:0; border-radius:50%; border:14px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite}
@@ -45,7 +45,7 @@
 
     /* Topbar */
     .topbar{position:sticky; top:0; z-index:100; height:var(--top); display:flex; align-items:center; gap:10px; padding:10px 12px; background:#ffffffcc; backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line)}
-    .logo{background:var(--brand); color:#fff; border-radius:12px; padding:8px 12px; font:700 16px/1 "Russo One",sans-serif; box-shadow:var(--shadow-sm)}
+    .logoBox{width:44px; height:44px; display:block}
     .pill{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:700; color:#0f172a}
     .pill.green{background:var(--brand); color:#fff; border-color:transparent; font-family:"Russo One"; text-transform:uppercase; box-shadow:var(--shadow-sm); text-shadow:0 1px 0 rgba(0,0,0,.35)}
     .pill.green:active{transform:translateY(1px); background:var(--brand-press)}
@@ -56,8 +56,9 @@
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* Реклама — чуть меньше и contain */
+    /* Реклама: две панели в ряд, одинаковая высота */
     .adWrap{margin:8px 0 6px}
+    .adRow{display:grid; grid-template-columns:1fr 1fr; gap:12px}
     .adBar{height:64px; border:1px solid var(--line); border-radius:12px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
     .adBar a{display:block; width:100%; height:100%}
     .adBar img{width:100%; height:100%; object-fit:contain; display:block}
@@ -146,7 +147,7 @@
   </style>
 </head>
 <body class="modal-open">
-  <!-- PRELOADER (ровно 5 сек) -->
+  <!-- PRELOADER -->
   <div id="preloader" class="preloader" aria-hidden="false">
     <div class="pl-wrap">
       <div class="pl-ring"></div>
@@ -156,7 +157,7 @@
   </div>
 
   <header class="topbar">
-    <div class="logo">KOLO</div>
+    <img id="logoImg" class="logoBox" alt="KOLO">
     <div class="pill" id="tabSearch">Пошук</div>
     <div class="visitors" id="visitors">
       <span id="visCount">17369</span> корисувачів
@@ -166,12 +167,19 @@
   </header>
 
   <main class="container">
-    <!-- РЕКЛАМА -->
+    <!-- РЕКЛАМА: два блока -->
     <div class="adWrap">
-      <div class="adBar">
-        <a id="adLink" href="https://t.me/podorozhuy_zi_mnoyu" target="_blank" rel="noopener">
-          <img id="adImg" alt="реклама" referrerpolicy="no-referrer" crossOrigin="anonymous">
-        </a>
+      <div class="adRow">
+        <div class="adBar">
+          <a id="adLink1" href="https://t.me/podorozhuy_zi_mnoyu" target="_blank" rel="noopener">
+            <img id="adImg1" alt="реклама 1" referrerpolicy="no-referrer">
+          </a>
+        </div>
+        <div class="adBar">
+          <a id="adLink2" href="https://t.me/podorozhuy_zi_mnoyu" target="_blank" rel="noopener">
+            <img id="adImg2" alt="реклама 2" referrerpolicy="no-referrer">
+          </a>
+        </div>
       </div>
       <div class="adNote">Замовити рекламу</div>
     </div>
@@ -195,7 +203,7 @@
   <div id="detail" class="detail" aria-hidden="true">
     <div class="sheet" role="dialog" aria-modal="true">
       <div class="modalHead">
-        <div class="logo">KOLO</div>
+        <img id="logoImg2" class="logoBox" alt="KOLO">
         <div class="grow"></div>
         <button class="pill green" id="dShare" title="Поділитися" style="gap:8px;height:34px;line-height:34px">
           <img class="pillIcon" id="shareIcon" alt="share" style="width:16px;height:16px;filter:brightness(0) invert(1)">
@@ -262,7 +270,7 @@
 
         <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
 
-        <!-- Фото: максимум 5. Кнопка "Додати" -->
+        <!-- Фото: максимум 5. Кнопка "Додати". Поддержка дозагрузки. -->
         <div style="grid-column:1/-1">
           <label>Фото</label>
           <input id="sImages" type="file" accept="image/*" multiple style="display:none">
@@ -299,7 +307,7 @@
   const CTRL_KEY = "kolo_ctrl_v3";
   const VER_KEY = "kolo_ver_v2";
 
-  /* Встроенные SVG — больше никаких внешних URL */
+  /* Встроенные SVG */
   const ICON = {
     like:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
     share:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7-4.11A2.99 2.99 0 0018 7a3 3 0 10-3-3c0 .24.04.47.09.7l-7 4.11A3 3 0 006 9a3 3 0 100 6c.66 0 1.27-.21 1.77-.57l7.19 4.23c.05.21.04.44.04.67a3 3 0 103-3z"/></svg>',
@@ -307,7 +315,17 @@
     flame:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M13.5 0s1.5 3-1.5 6-3 6 0 9c3 3 9 0 9-6 0-6-6-9-6-9s.5 3-1.5 6c-2 3-5 3-5 6s3 4 3 4-6-1-6-7C5 5 9 3 13.5 0z"/></svg>'
   };
 
-  function setIcon(el, dataURI){ el.src=dataURI; }
+  /* ЛОГО (круг, как в прелоадере) */
+  const LOGO_CIRCLE = encodeURI(
+    `data:image/svg+xml;utf8,
+     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'>
+       <circle cx='60' cy='60' r='56' fill='%2310b981'/>
+       <circle cx='60' cy='60' r='46' fill='none' stroke='white' stroke-width='8'/>
+       <circle cx='60' cy='60' r='28' fill='%2310b981' stroke='white' stroke-width='8'/>
+       <text x='50%' y='50%' text-anchor='middle' dominant-baseline='central'
+             font-family='Russo One, Arial Black' font-size='30' fill='white'>KOLO</text>
+     </svg>`
+  );
 
   /* Посетители */
   const VIS_START = 17369;
@@ -322,12 +340,12 @@
   function getLocalInc(){ try{ return (JSON.parse(localStorage.getItem("kolo_vis_local")||'{"c":0}').c)||0; }catch{return 0;} }
   function visitorsNow(){
     const epoch = new Date(); const start=Date.UTC(epoch.getUTCFullYear(), epoch.getUTCMonth(), epoch.getUTCDate());
-    const ticks = Math.floor((Date.now()-start)/(15*1000)); // каждые 15 сек
-    let bonus=0; for(let i=0;i<ticks;i++){ bonus += (i%3)+1; }
+    const ticks = Math.floor((Date.now()-start)/(15*1000)); // шаг 15 сек
+    let bonus=0; for(let i=0;i<ticks;i++){ bonus += (i%3)+1; } // +1..3
     return VIS_START + bonus + getLocalInc();
   }
 
-  /* Данные */
+  /* Данные (укорочено до сути — как было) */
   const UA_REGIONS={"Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],"Львівська":["Львів","Дрогобич","Червоноград","Стрий"],"Одеська":["Одеса","Чорноморськ","Южне","Ізмаїл","Білгород-Дністровський"],"Харківська":["Харків","Лозова","Ізюм"],"Дніпропетровська":["Дніпро","Кривий Ріг","Кам'янське","Нікополь","Павлоград"],"Запорізька":["Запоріжжя","Мелітополь","Бердянськ"],"Миколаївська":["Миколаїв","Первомайськ","Южноукраїнськ"],"Херсонська":["Херсон","Нова Каховка","Каховка"],"Вінницька":["Вінниця","Жмеринка","Могилів-Подільський"],"Полтавська":["Полтава","Кременчук","Миргород"],"Черкаська":["Черкаси","Умань","Сміла"],"Чернігівська":["Чернігів","Ніжин","Прилуки"],"Сумська":["Суми","Шостка","Конотоп","Охтирка"],"Житомирська":["Житомир","Бердичів","Коростень"],"Хмельницька":["Хмельницький","Кам'янець-Подільський","Шепетівка"],"Чернівецька":["Чернівці","Хотин"],"Рівненська":["Рівне","Дубно","Вараш"],"Івано-Франківська":["Івано-Франківськ","Калуш","Коломия","Яремче"],"Тернопільська":["Тернопіль","Чортків","Кременець"],"Волинська":["Луцьк","Ковель","Володимир"],"Закарпатська":["Ужгород","Мукачево","Хуст"],"Кіровоградська":["Кропивницький","Олександрія","Світловодськ"]};
   const PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
   const ALL_CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти","Мода та стиль","Одяг","Взуття","Аксесуари","Дитячий світ","Іграшки","Візочки","Одяг для дітей","Тварини","Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика","Бізнес та обладнання","Сільське господарство","Краса та здоров’я"];
@@ -345,17 +363,8 @@
   function lockScroll(on){ document.body.classList.toggle('modal-open', !!on); }
   function createImg(src, alt, fallback){ const img=document.createElement("img"); img.loading="lazy"; img.alt=alt; img.referrerPolicy="no-referrer"; img.src = src || fallback; img.onerror=()=>{ img.onerror=null; img.src=fallback; }; return img; }
 
-  /* Плейсхолдер БЕЗ текста заголовка */
-  function itemPNG(title, seed=0){ 
-    const c=document.createElement('canvas'); c.width=800; c.height=500; 
-    const g=c.getContext('2d'); 
-    const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); 
-    g.fillStyle=grad; g.fillRect(0,0,800,500); 
-    g.fillStyle="#00000010"; 
-    for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,140); } 
-    return c.toDataURL('image/png'); 
-  }
-
+  /* placeholder без текста */
+  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d'); const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500); g.fillStyle="#00000010"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,140); } return c.toDataURL('image/png'); }
   function imgPool(cat){ if(cat==="Транспорт") return IMG.car; if(cat==="Велосипеди") return IMG.bike; if(cat==="Електроніка") return [...IMG.phone, ...IMG.laptop, ...IMG.tv]; if(cat==="Побутова техніка") return [...IMG.washer]; if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor]; if(cat==="Тварини") return [...IMG.dog, ...IMG.cat]; if(cat==="Нерухомість") return IMG.flat; if(cat==="Послуги") return IMG.service; return [...IMG.phone, ...IMG.tools, ...IMG.sofa]; }
   function imgSetBy(cat,n=3){ const pool=imgPool(cat); const out=[]; for(let i=0;i<n;i++) out.push(pool[(i+Math.floor(Math.random()*pool.length))%pool.length]); return out; }
   function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 ${op} ${Math.floor(100+Math.random()*900)}-${Math.floor(10+Math.random()*90)}-${Math.floor(10+Math.random()*90)}`; }
@@ -407,15 +416,12 @@
     localStorage.setItem(VER_KEY, "1");
   }
 
-  /* HOT */
+  /* HOT блоки */
   function ensureHot(){
     const db = getDB().filter(x=>x.hot===true);
     if(!db.length){ $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; return; }
     const now = Date.now();
-    const scored = db.map(x => ({
-      id: x.id,
-      score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 2000 - (now - x.created)/1000)
-    })).sort((a,b)=>b.score-a.score);
+    const scored = db.map(x => ({ id: x.id, score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 2000 - (now - x.created)/1000) })).sort((a,b)=>b.score-a.score);
     renderHot(scored.slice(0, Math.min(10, scored.length)).map(s=>s.id));
   }
   function renderHot(ids){
@@ -429,44 +435,56 @@
         const card=document.createElement('div'); card.className='hotCard'; card.onclick=()=>openDetail(it.id);
         const fallback=itemPNG(it.title,(it.price+it.created)%7);
         const thumb=document.createElement('div'); thumb.className='thumb';
-
         const badge=document.createElement('div'); badge.className='hotBadge'; badge.textContent='HOT';
         const price=document.createElement('button'); price.className='hotPrice'; price.textContent=`${it.price.toLocaleString('uk-UA')} ${it.currency}`;
         thumb.appendChild(createImg((it.images&&it.images[0])||"", it.title, fallback));
         thumb.appendChild(badge); thumb.appendChild(price);
-
         const body=document.createElement('div'); body.className='hotBody';
-        body.innerHTML=`<div class="hotTTL">${it.title}</div>
-                        <div style="opacity:.85">${it.city} • ${it.cat}</div>`;
+        body.innerHTML=`<div class="hotTTL">${it.title}</div><div style="opacity:.85">${it.city} • ${it.cat}</div>`;
         card.appendChild(thumb); card.appendChild(body);
         grid.appendChild(card);
       });
     } else { $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; }
   }
 
-  /* SELL */
+  /* SELL FORM INIT */
   function initSellForm(){
     $("#sCat").innerHTML=ALL_CATS.map(x=>`<option value="${x}">${x}</option>`).join('');
     $("#sCond").innerHTML=CONDS.map(x=>`<option value="${x}">${x}</option>`).join('');
   }
   initSellForm();
 
-  // Фото: максимум 5, кнопка "Додати"
+  /* Фото: накапливаем до 5 штук через несколько выборов */
   const inputImages = $("#sImages"), btnPick = $("#btnPickImages"), thumbs=$("#thumbs"), imgCount=$("#imgCount");
+  let pickedImgs = []; // массив dataURL
   btnPick.onclick=()=> inputImages.click();
+
   inputImages.onchange=()=>{
-    const files=[...(inputImages.files||[])].slice(0,5);
-    imgCount.textContent = files.length ? `(${files.length}/5)` : "";
-    thumbs.innerHTML="";
-    files.forEach(f=>{
-      const r=new FileReader();
-      r.onload=()=>{ const im=document.createElement("img"); im.src=r.result; im.style.cssText="width:72px;height:52px;object-fit:cover;border-radius:10px;border:1px solid var(--line)"; thumbs.appendChild(im); };
-      r.readAsDataURL(f);
-    });
+    const files=[...(inputImages.files||[])];
+    if(!files.length) return;
+    const readOne=(file)=>new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(file); });
+    (async ()=>{
+      for(const f of files){
+        if(pickedImgs.length>=5) break;
+        try{ const dataUrl=await readOne(f); pickedImgs.push(dataUrl); }catch{}
+      }
+      renderThumbs();
+      inputImages.value=""; // чтобы можно было выбрать те же файлы ещё раз
+    })();
   };
 
-  async function filesToDataURLs(inputEl){
-    const files = [...(inputEl.files||[])].slice(0,5);
+  function renderThumbs(){
+    imgCount.textContent = pickedImgs.length ? `${pickedImgs.length}/5` : "";
+    thumbs.innerHTML="";
+    pickedImgs.forEach((src,i)=>{
+      const im=document.createElement("img");
+      im.src=src; im.style.cssText="width:72px;height:52px;object-fit:cover;border-radius:10px;border:1px solid var(--line)";
+      thumbs.appendChild(im);
+    });
+  }
+
+  async function filesToDataURLs(el){ // на всякий случай (если вдруг использовали сразу один выбор)
+    const files = [...(el.files||[])].slice(0,5);
     const tasks = files.map(f => new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(f); }));
     return await Promise.all(tasks);
   }
@@ -488,7 +506,8 @@
     const desc=$("#sDesc").value.trim(); if(desc.length<20) return alert("Опис ≥ 20 символів.");
     const cond=$("#sCond").value;
 
-    const imgs = await filesToDataURLs($("#sImages"));
+    let imgs = pickedImgs.slice(0,5);
+    if(!imgs.length){ imgs = await filesToDataURLs(inputImages); }
     const db=getDB();
     db.unshift({
       id: uid(), region, city,
@@ -500,7 +519,9 @@
     });
     setDB(db);
     alert("Оголошення опубліковано.");
-    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; $("#sImages").value=""; thumbs.innerHTML=""; imgCount.textContent=""; $("#sRegion").value=""; $("#sCity").value="";
+    // сброс формы и локального набора фоток
+    pickedImgs=[]; renderThumbs();
+    $("#sTitle").value=""; $("#sPrice").value=""; $("#sPhone").value=""; $("#sDesc").value=""; inputImages.value=""; $("#sRegion").value=""; $("#sCity").value="";
     $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
@@ -571,7 +592,6 @@
     const ttl=document.createElement('div'); ttl.className='title'; ttl.style.font="700 20px/1.2 'Russo One'"; ttl.textContent=currentItem.title;
     const price=document.createElement('div'); price.className='pill green'; price.style.cssText='height:38px;line-height:38px;border-radius:12px'; price.textContent='₴ '+currentItem.price.toLocaleString('uk-UA');
 
-    // Глаз — встроенный SVG, не пропадёт
     const viewsP=document.createElement('div'); viewsP.className='pill green'; viewsP.style.cssText='gap:8px';
     const eyeImg=document.createElement('img'); eyeImg.src=ICON.eye; eyeImg.style.cssText='width:16px;height:16px;filter:brightness(0) invert(1)'; viewsP.appendChild(eyeImg);
     const vv=document.createElement('span'); vv.id='viewCnt'; vv.textContent=currentItem.views; viewsP.appendChild(vv);
@@ -623,11 +643,17 @@
 
   /* ===== INIT ===== */
   (function init(){
+    // логотипы
+    $("#logoImg").src = LOGO_CIRCLE;
+    $("#logoImg2").src = LOGO_CIRCLE;
+
     // иконки + баннер
-    setIcon($("#likeIconHeader"), ICON.like);
-    setIcon($("#shareIcon"), ICON.share);
-    setIcon($("#hotHeadIcon"), ICON.flame);
-    $("#adImg").src = "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png";
+    $("#likeIconHeader").src = ICON.like;
+    $("#shareIcon").src = ICON.share;
+    $("#hotHeadIcon").src = ICON.flame;
+
+    $("#adImg1").src = "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png";
+    $("#adImg2").src = "https://i.ibb.co/bMMFfXtx/2025-09-17-225853.png";
 
     // visitors
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
