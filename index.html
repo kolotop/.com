@@ -9,7 +9,7 @@
 
   <!-- Share preview -->
   <meta property="og:title" content="KOLO — барахолка оголошень">
-  <meta property="og:description" content="KOLO: додай оголошення за хвилину. Фільтри, HOT-ТОП, галерея, лайки та перегляди.">
+  <meta property="og:description" content="KOLO: додай оголошення за хвилину. Фільтри, HOT, галерея, лайки.">
   <meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%2310b981'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial Black,Arial' font-size='96' fill='white'>KOLO</text></svg>">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='14' ry='14' width='64' height='64' fill='%2310b981'/><circle cx='32' cy='32' r='14' fill='white'/></svg>">
 
@@ -74,18 +74,21 @@
     @media (max-width:640px){ .grid{grid-template-columns:1fr;} }
 
     .card{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; cursor:pointer; transition:box-shadow .08s ease; box-shadow:var(--shadow-sm)}
-    .card:active{box-shadow:var(--shadow-lg)}
+    .card:active{box-shadow:var(--shadow-lg)} /* без transform */
     .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-    /* price: bottom-right & a bit smaller */
+    /* price bottom-right, чуть меньше */
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:5px 8px; font:800 12px/1 "Russo One"; z-index:2}
-    /* like button — одинаковый вид на моб/десктоп */
+    /* like — фиксированная ширина, чтобы ничего не дёргалось */
     .likeBtn{
-      position:absolute; right:8px; top:8px; height:32px; min-width:40px; padding:0 8px;
-      border-radius:10px; border:0; background:var(--brand); color:#fff; font:900 14px/32px 'Russo One',sans-serif;
-      cursor:pointer; box-shadow:var(--shadow-sm); outline:none; z-index:2
+      position:absolute; right:8px; top:8px; width:58px; height:32px;
+      padding:0 8px; display:flex; align-items:center; justify-content:center; gap:6px;
+      border-radius:10px; border:0; background:var(--brand); color:#fff;
+      font:900 14px/32px 'Russo One',sans-serif; cursor:pointer; box-shadow:var(--shadow-sm); outline:none; z-index:2
     }
-    .likeBtn span{font-weight:800; margin-left:6px}
+    .likeBtn:focus{outline:none}
+    .likeBtn span{font-weight:800}
+
     .body{padding:10px; display:flex; flex-direction:column; gap:6px}
     .title{font:700 16px/1.2 "Russo One"; letter-spacing:.4px; color:#0f172a}
 
@@ -165,15 +168,16 @@
     @media (max-width:640px){ .choiceGrid{grid-template-columns:1fr} }
     .choiceCard{border:1px solid var(--line); border-radius:14px; padding:16px; cursor:pointer; background:#fff}
     .choiceCard:hover{box-shadow:var(--shadow-sm)}
+    .choiceCard.normal{background:var(--brand); color:#fff; border-color:transparent; box-shadow:var(--shadow-sm)}
+    .choiceCard.hot{background:linear-gradient(90deg,#ffedea,#ffeae5); border-color:#ffe0dc}
   </style>
 </head>
 <body>
-  <!-- PRELOADER 5 сек -->
+  <!-- PRELOADER 5 сек (без текста) -->
   <div id="preloader" class="preloader" aria-hidden="false">
     <div class="pl-wrap">
       <div class="pl-ring"></div>
       <div class="pl-logo">KOLO</div>
-      <!-- текст «Завантаження…» убран -->
     </div>
   </div>
 
@@ -188,7 +192,7 @@
     <!-- HOT -->
     <section class="panel hotWrap" id="hotPanel" style="display:none">
       <div class="hotHead">
-        <div class="tag">🔥 HOT — ТОП-10</div>
+        <div class="tag">🔥 HOT</div> <!-- текст «— ТОП-10» удалён -->
       </div>
       <div class="hotGrid" id="hotGrid"></div>
     </section>
@@ -234,13 +238,13 @@
         <button class="closeX" id="choiceClose">Закрити</button>
       </div>
       <div class="choiceGrid">
-        <div class="choiceCard" id="chooseNormal">
+        <div class="choiceCard normal" id="chooseNormal">
           <div class="title" style="font:700 18px/1 'Russo One'">Звичайне оголошення</div>
-          <div style="opacity:.85;margin-top:6px">Публікація за замовчуванням</div>
+          <div style="opacity:.95;margin-top:6px">Публікація за замовчуванням</div>
         </div>
-        <div class="choiceCard" id="chooseHot">
+        <div class="choiceCard hot" id="chooseHot">
           <div class="title" style="font:700 18px/1 'Russo One'">HOT швидкий продаж</div>
-          <div style="opacity:.85;margin-top:6px">Покращена видимість у списках</div>
+          <div style="opacity:.95;margin-top:6px">Покращена видимість у списках</div>
         </div>
       </div>
     </div>
@@ -266,7 +270,8 @@
         <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380 (..) ...-..-.."></div>
 
         <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
-        <div style="grid-column:1/-1"><label>URL фото (через |)</label><input class="input" id="sImages"></div>
+        <!-- загрузка фото с телефона, не ссылки -->
+        <div style="grid-column:1/-1"><label>Фото (з телефону)</label><input class="input" id="sImages" type="file" accept="image/*" multiple></div>
       </div>
       <div class="actions">
         <button class="btn" id="sSave">Опублікувати</button>
@@ -460,7 +465,7 @@
   }
   $$('.select').forEach(enhanceSelect);
 
-  /* ===== Генерація 1000 оголошень (без «Робота», без «пропозиція» у заголовках) ===== */
+  /* ===== Генерація 1000 оголошень (без «Робота», без «пропозиція») ===== */
   const FIRSTNAMES=["Олег","Ірина","Сергій","Анна","Віктор","Максим","Марія","Юрій","Олексій","Наталія","Дмитро","Олена","Микита","Андрій","Світлана"];
   const LASTNAMES=["Шевченко","Коваленко","Бондаренко","Ткаченко","Кравченко","Мельник","Ковальчук","Петренко","Поліщук","Гриценко","Савченко","Гнатюк","Яковенко"];
   const OPERATORS=["50","63","66","67","68","73","93","95","96","97","98","99"];
@@ -517,16 +522,10 @@
       const title = baseTitle.replace(/—?\s*пропозиція/gi,'').trim();
 
       const created = Date.now() - rand(0, 60*86400*1000);
-      const views = rand(100, 600); // неокруглённые 100–600
+      const views = rand(100, 600); // 100–600 неокруглённые
       const likes = Math.min(999, Math.round(views/25)+rand(0,10));
       const images = imgSetBy(cat, 3);
       const name = `${pick(FIRSTNAMES)} ${pick(LASTNAMES)}`;
-      const descPool = [
-        "Стан відмінний, уважно доглянуте. Перевірка в сервісі вітається. Можлива доставка/самовивіз.",
-        "Реальне оголошення — фото відповідають дійсності. Причина продажу: оновлення/переїзд.",
-        "Комплектація на фото. Без прихованих дефектів. Торг біля капота/при зустрічі.",
-        "Відправлю Новою поштою або зустріч у центрі. Пишіть у будь-який час у месенджер."
-      ];
 
       out.push({
         id: uid(),
@@ -535,7 +534,7 @@
         cat, cond, title,
         price, currency:"₴",
         created, views, likes,
-        desc: pick(descPool),
+        desc: "Реальне оголошення. Перевірка вітається. Відправлю Новою поштою або зустріч у центрі.",
         images,
         contact: {name, phone: genPhone()}
       });
@@ -543,21 +542,17 @@
     setDB(out);
   }
 
-  /* ===== HOT ===== */
+  /* ===== HOT (динамічний перерахунок щораз) ===== */
   function ensureHot(){
-    const ctrl = getCtrl();
     const db = getDB();
+    if(!db.length){ $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; return; }
     const now = Date.now();
-    if(!ctrl.hotUntil || !ctrl.hotIds || now > ctrl.hotUntil || !Array.isArray(ctrl.hotIds)){
-      const scored = db.map(x => ({
-        id: x.id,
-        score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 5000 - (now - x.created)/1000)
-      })).sort((a,b)=>b.score-a.score);
-      ctrl.hotIds = scored.slice(0,10).map(s=>s.id);
-      ctrl.hotUntil = now + 7*24*3600*1000;
-      setCtrl(ctrl);
-    }
-    renderHot(ctrl.hotIds);
+    const scored = db.map(x => ({
+      id: x.id,
+      score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 5000 - (now - x.created)/1000)
+    })).sort((a,b)=>b.score-a.score);
+    const topIds = scored.slice(0, Math.min(10, scored.length)).map(s=>s.id); // до 10, но не «залипає»
+    renderHot(topIds);
   }
   function renderHot(ids){
     const grid=$("#hotGrid"); grid.innerHTML="";
@@ -594,7 +589,17 @@
   }
   initSellForm();
 
-  $("#sSave").onclick=()=>{
+  async function filesToDataURLs(inputEl){
+    const files = [...(inputEl.files||[])].slice(0,6);
+    const tasks = files.map(f => new Promise(res=>{
+      const r=new FileReader();
+      r.onload=()=>res(r.result);
+      r.readAsDataURL(f);
+    }));
+    return await Promise.all(tasks);
+  }
+
+  $("#sSave").onclick=async ()=>{
     const ctrl=getCtrl(); const now=Date.now();
     if(ctrl.lastPost && now-ctrl.lastPost<60000){ alert("Публікувати можна не частіше 1 разу на 60 сек."); return; }
     const region=$("#sRegion").value.trim(), city=$("#sCity").value.trim(), cat=$("#sCat").value, title=$("#sTitle").value.trim();
@@ -604,7 +609,8 @@
     const phone=$("#sPhone").value.trim(); if(phone && !/^\+?\d[\d\s\-\(\)]{8,}$/.test(phone)) return alert("Телефон некоректний.");
     const desc=$("#sDesc").value.trim(); if(desc.length<20) return alert("Опис ≥ 20 символів.");
     const cond=$("#sCond").value;
-    const imgs=($("#sImages").value||"").split("|").map(x=>x.trim()).filter(Boolean);
+
+    const imgs = await filesToDataURLs($("#sImages"));
     const db=getDB();
     db.unshift({
       id: uid(), region, city,
@@ -682,7 +688,7 @@
         <div class="meta" style="color:var(--muted)">${it.region} • ${it.city}</div>
       </div>`;
     const likeButton = el.querySelector(".likeBtn");
-    likeButton.addEventListener('mousedown', e=>e.preventDefault());
+    likeButton.addEventListener('mousedown', e=>e.preventDefault()); // без фокуса — без дрижання
     likeButton.onclick=(e)=>{
       e.stopPropagation();
       if(like(it.id)){ 
@@ -744,20 +750,15 @@
     };
   }
 
-  /* ===== Санітизація існуючої БД: видалити «Робота», прибрати слово «пропозиція», вирівняти перегляди 100–600 ===== */
+  /* ===== Санітизація існуючої БД ===== */
   function sanitizeDB(){
     let db=getDB();
     let changed=false;
-    const filtered=db.filter(it=>{
-      if(it.cat==="Робота"){ changed=true; return false; }
-      return true;
-    }).map(it=>{
+    const filtered=db.filter(it=> it.cat!=="Робота").map(it=>{
       const t=it.title||"";
       const nt=t.replace(/—?\s*пропозиція/gi,'').trim();
       if(nt!==t){ it.title=nt; changed=true; }
-      if(!(it.views>=100 && it.views<=600)){
-        it.views = rand(100,600); changed=true;
-      }
+      if(!(it.views>=100 && it.views<=600)){ it.views = rand(100,600); changed=true; }
       return it;
     });
     if(changed){ setDB(filtered); }
@@ -765,16 +766,15 @@
 
   /* ===== Перший старт ===== */
   (function init(){
-    // 5 секунд прелоадер
     lockScroll(true);
     setTimeout(()=>{ const pl=$("#preloader"); pl.style.display='none'; lockScroll(false); }, 5000);
 
     if(getDB().length===0){ seedDB(); } else { sanitizeDB(); }
     applyFilters();
-    ensureHot();
+    ensureHot(); // сразу актуальные TOP, не «9»
   })();
 
-  /* Вкладки + модалі + блокування скролу */
+  /* Вкладки + модалі */
   $("#tabSearch").onclick=()=>{ $("#searchOverlay").classList.add('on'); $("#searchOverlay").setAttribute('aria-hidden','false'); lockScroll(true); };
   $("#searchClose").onclick=()=>{ $("#searchOverlay").classList.remove('on'); $("#searchOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
 
