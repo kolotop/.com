@@ -1,114 +1,104 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="utf-8" />
-<title>KOLO — барахолка оголошень</title>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
-<meta name="format-detection" content="telephone=no"/>
-<meta name="theme-color" content="#10b981"/>
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#f6fbf8; --paper:#fff; --ink:#0f172a; --muted:#64748b;
-    --brand:#10b981; --brand-press:#0c8f63; --line:#d6e8de;
-    --hot:#ff4d4f; --shadow:0 8px 30px rgba(16,185,129,.18)
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}
+  <meta charset="utf-8" />
+  <title>KOLO — барахолка оголошень</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <meta name="theme-color" content="#10b981"/>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6fbf8; --paper:#fff; --ink:#0f172a; --muted:#64748b;
+      --brand:#10b981; --brand-press:#0c8f63; --line:#d6e8de; --hot:#ff4d4f;
+      --shadow:0 8px 30px rgba(16,185,129,.18);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}
 
-  /* preloader */
-  .pre{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:9999}
-  .pl{position:relative;width:220px;height:220px;display:grid;place-items:center}
-  .ring{position:absolute;inset:0;border-radius:50%;border:14px solid #e7f4ee;border-top-color:var(--brand);animation:spin 1.15s linear infinite}
-  .core{width:160px;height:160px;border-radius:50%;background:var(--brand);outline:10px solid #e7f4ee;display:grid;place-items:center}
-  .klogo{font:900 42px/1 "Russo One";color:#fff;letter-spacing:2px}
-  .pl-sub{font:800 15px/1.1 "Montserrat";white-space:nowrap;color:#0b3b2d}
-  @keyframes spin{to{transform:rotate(360deg)}}
+    /* PRELOADER */
+    .pre{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:9999}
+    .pl{position:relative;width:220px;height:220px;display:grid;place-items:center}
+    .ring{position:absolute;inset:0;border-radius:50%;border:14px solid #e7f4ee;border-top-color:var(--brand);animation:spin 1.15s linear infinite}
+    .core{width:160px;height:160px;border-radius:50%;background:var(--brand);outline:10px solid #e7f4ee;display:grid;place-items:center}
+    .klogo{font:900 42px/1 "Russo One";color:#fff;letter-spacing:2px}
+    .pl-sub{font:800 15px/1 "Montserrat";white-space:nowrap;color:#0b3b2d}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* topbar */
-  .top{position:sticky;top:0;z-index:50;height:64px;background:#ffffffcc;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(6px);
-       display:flex;align-items:center;gap:10px;padding:10px 12px}
-  .pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
-  .plus{background:var(--brand);color:#fff;border-color:transparent;font-family:"Russo One";font-size:24px;width:56px;justify-content:center;box-shadow:var(--shadow);text-shadow:0 1px 0 rgba(0,0,0,.35)}
-  .plus:active{transform:translateY(1px)}
-  .counter{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800}
+    /* TOPBAR */
+    .top{position:sticky;top:0;z-index:50;height:64px;background:#ffffffcc;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(6px);display:flex;align-items:center;gap:10px;padding:10px 12px}
+    .pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
+    .plus{background:var(--brand);color:#fff;border-color:transparent;font-family:"Russo One";font-size:24px;width:56px;justify-content:center;box-shadow:var(--shadow);text-shadow:0 1px 0 rgba(0,0,0,.35)}
+    .plus:active{transform:translateY(1px)}
+    .counter{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800}
+    .container{max-width:1160px;margin:10px auto;padding:0 12px}
 
-  .container{max-width:1160px;margin:10px auto;padding:0 12px}
-  /* banner */
-  .banner{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
-  .banner a{display:block;position:relative}
-  .banner img{width:100%;height:120px;object-fit:cover;display:block}
-  .bnote{font-size:12px;opacity:.85;text-align:right;margin:6px 4px 0}
+    /* BANNER */
+    .banner{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+    .banner a{display:block}
+    .banner img{width:100%;height:120px;object-fit:cover;display:block}
+    .bnote{font-size:12px;opacity:.85;text-align:right;margin:6px 4px 0}
 
-  /* HOT */
-  .hotWrap{margin:12px 0}
-  .hotHead{display:flex;align-items:center;gap:10px;margin:6px 2px 10px}
-  .hotTag{display:inline-flex;align-items:center;gap:6px;background:var(--hot);color:#fff;border-radius:12px;padding:8px 12px;font:700 14px "Russo One"}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media (max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:520px){.banner img{height:140px}}
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}
 
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(2,44,34,.06);cursor:pointer}
-  .thumb{position:relative;padding-top:64%;background:#e9f7f1;overflow:hidden}
-  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  /* badges on photo */
-  .b-like{position:absolute;left:8px;top:8px;background:#ffffffee;border:1px solid var(--line);border-radius:12px;height:28px;padding:0 10px;display:flex;align-items:center;gap:6px;font-weight:800}
-  .b-views{position:absolute;right:8px;top:8px;background:#ffffffee;border:1px solid var(--line);border-radius:12px;height:28px;padding:0 10px;display:flex;align-items:center;gap:6px;font-weight:800}
-  .b-price{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:12px;height:32px;padding:0 10px;display:flex;align-items:center;font:800 14px "Russo One"}
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(2,44,34,.06);cursor:pointer}
+    .thumb{position:relative;padding-top:64%;background:#e9f7f1;overflow:hidden}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    /* badges on photo */
+    .b-like{position:absolute;left:8px;top:8px;background:#ffffffee;border:1px solid var(--line);border-radius:12px;height:28px;padding:0 10px;display:flex;align-items:center;gap:6px;font-weight:800}
+    .b-views{position:absolute;right:8px;top:8px;background:#ffffffee;border:1px solid var(--line);border-radius:12px;height:28px;padding:0 10px;display:flex;align-items:center;gap:6px;font-weight:800}
+    .b-price{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:12px;height:32px;padding:0 10px;display:flex;align-items:center;font:800 14px "Russo One"}
+    .body{padding:10px}
+    .ttl{font:800 16px/1.2 "Russo One"}
+    .meta{color:var(--muted);font-size:13px}
 
-  .body{padding:10px}
-  .ttl{font:800 16px/1.2 "Russo One"}
-  .meta{color:var(--muted);font-size:13px}
+    /* DETAIL */
+    .mask{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:70}
+    .mask.on{display:flex}
+    .sheet{width:min(1024px,96vw);max-height:90vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+    .mhead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .ghost{height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:800;padding:0 12px;cursor:pointer}
+    .green{background:var(--brand);color:#fff;border-color:transparent}
+    .ico{width:18px;height:18px;filter:brightness(0) invert(1)}
+    .big{position:relative;padding-top:56%;background:#e9f7f1;border-radius:12px;overflow:hidden}
+    .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .nav{position:absolute;top:50%;transform:translateY(-50%);min-width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#ffffffcc;backdrop-filter:saturate(130%) blur(3px);font:900 26px/42px "Russo One";cursor:pointer}
+    .prev{left:8px} .next{right:8px}
+    .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+    @media (max-width:820px){.specs{grid-template-columns:repeat(2,1fr)}}
+    .spec{background:#f4fbf7;border:1px solid var(--line);border-radius:12px;padding:8px}
+    .h{font:700 14px "Russo One";margin-bottom:6px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
 
-  /* detail */
-  .mask{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:70}
-  .mask.on{display:flex}
-  .sheet{width:min(1024px,96vw);max-height:90vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
-  .mhead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-  .ghost{height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:800;padding:0 12px;cursor:pointer}
-  .green{background:var(--brand);color:#fff;border-color:transparent}
-  .ico{width:18px;height:18px;filter:brightness(0) invert(1)}
-  .big{position:relative;padding-top:56%;background:#e9f7f1;border-radius:12px;overflow:hidden}
-  .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .nav{position:absolute;top:50%;transform:translateY(-50%);min-width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#ffffffcc;backdrop-filter:saturate(130%) blur(3px);font:900 26px/42px "Russo One";cursor:pointer}
-  .prev{left:8px} .next{right:8px}
+    /* OVERLAYS */
+    .ov{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:80}
+    .ov.on{display:flex}
+    .modal{width:min(880px,96vw);max-height:90vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+    .closeX{height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;font:800 13px/38px Russo One;padding:0 12px;cursor:pointer}
+    label{font-size:12px;font-weight:800;opacity:.95;display:block;margin:0 0 6px}
+    .input,.select,textarea{width:100%;height:46px;border:1px solid #cfe8da;background:#edf7f1;border-radius:12px;padding:0 12px;font-size:14px}
+    textarea{height:auto;min-height:90px;padding:10px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:640px){.grid2{grid-template-columns:1fr}}
 
-  .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-  @media (max-width:820px){.specs{grid-template-columns:repeat(2,1fr)}}
-  .spec{background:#f4fbf7;border:1px solid var(--line);border-radius:12px;padding:8px}
-  .h{font:700 14px "Russo One";margin-bottom:6px}
-  .divider{height:1px;background:var(--line);margin:12px 0}
-
-  /* overlays */
-  .ov{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:80}
-  .ov.on{display:flex}
-  .modal{width:min(880px,96vw);max-height:90vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
-  .closeX{height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;font:800 13px/38px Russo One;padding:0 12px;cursor:pointer}
-  label{font-size:12px;font-weight:800;opacity:.95;display:block;margin:0 0 6px}
-  .input,.select,textarea{width:100%;height:46px;border:1px solid #cfe8da;background:#edf7f1;border-radius:12px;padding:0 12px;font-size:14px}
-  textarea{height:auto;min-height:90px;padding:10px}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media (max-width:640px){.grid2{grid-template-columns:1fr}}
-
-  /* support FAB */
-  .fab{position:fixed;right:14px;bottom:16px;width:58px;height:58px;border-radius:50%;background:var(--brand);box-shadow:var(--shadow);display:grid;place-items:center;color:#fff;z-index:60;cursor:pointer}
-  .fabPanel{position:fixed;right:-320px;bottom:84px;width:300px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow);transition:transform .2s ease;transform:translateX(0);z-index:60}
-  .fabPanel.on{transform:translateX(-334px)}
-  .msgl{display:flex;flex-direction:column;gap:8px;max-height:45vh;overflow:auto;margin-top:8px}
-  .btn{height:46px;border:none;border-radius:14px;background:var(--brand);color:#fff;font:800 16px/46px Russo One;padding:0 16px;cursor:pointer}
-  .btn:active{transform:translateY(1px)}
-  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-</style>
+    /* FAB SUPPORT */
+    .fab{position:fixed;right:14px;bottom:16px;width:58px;height:58px;border-radius:50%;background:var(--brand);box-shadow:var(--shadow);display:grid;place-items:center;color:#fff;z-index:60;cursor:pointer}
+    .fabPanel{position:fixed;right:-320px;bottom:84px;width:300px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow);transition:transform .2s ease;transform:translateX(0);z-index:60}
+    .fabPanel.on{transform:translateX(-334px)}
+    .msgl{display:flex;flex-direction:column;gap:8px;max-height:45vh;overflow:auto;margin-top:8px}
+    .btn{height:46px;border:none;border-radius:14px;background:var(--brand);color:#fff;font:800 16px/46px Russo One;padding:0 16px;cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  </style>
 </head>
 <body>
 
 <!-- PRELOADER -->
 <div id="pre" class="pre">
-  <div class="pl">
-    <div class="ring"></div>
-    <div class="core"><div class="klogo">KOLO</div></div>
-  </div>
+  <div class="pl"><div class="ring"></div><div class="core"><div class="klogo">KOLO</div></div></div>
   <div class="pl-sub">Дошка оголошень №1 в Україні</div>
 </div>
 
@@ -121,16 +111,14 @@
 
 <main class="container">
   <!-- БАННЕР (один, слайд из двух картинок) -->
-  <div class="banner">
-    <a id="adLink" target="_blank" rel="noopener">
-      <img id="adImg" alt="реклама">
-    </a>
-  </div>
+  <div class="banner"><a id="adLink" target="_blank" rel="noopener"><img id="adImg" alt="реклама"></a></div>
   <div class="bnote">Замовити рекламу</div>
 
   <!-- HOT -->
-  <section class="hotWrap" id="hotWrap" style="display:none">
-    <div class="hotHead"><div class="hotTag">HOT</div></div>
+  <section id="hotWrap" style="display:none;margin-top:12px">
+    <div style="display:flex;align-items:center;gap:10px;margin:6px 2px 10px">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--hot);color:#fff;border-radius:12px;padding:8px 12px;font:700 14px 'Russo One'">HOT</div>
+    </div>
     <div id="hotGrid" class="grid"></div>
   </section>
 
@@ -152,10 +140,7 @@
       <button id="closeD" class="ghost">Закрити</button>
     </div>
     <div id="dHead" style="display:flex;align-items:center;gap:10px;margin-bottom:8px"></div>
-    <div class="big" id="big">
-      <button class="nav prev" id="gPrev">‹</button>
-      <button class="nav next" id="gNext">›</button>
-    </div>
+    <div class="big" id="big"><button class="nav prev" id="gPrev">‹</button><button class="nav next" id="gNext">›</button></div>
     <div class="divider"></div>
     <div id="specs" class="specs"></div>
     <div class="divider"></div>
@@ -226,11 +211,7 @@
 </div>
 <div id="fabPanel" class="fabPanel">
   <div style="font:800 14px Russo One;margin-bottom:6px">Підтримка</div>
-  <div class="grid2">
-    <div><label>Ім’я</label><input id="cName" class="input"></div>
-    <div><label>Контакт</label><input id="cContact" class="input" placeholder="@tg, email"></div>
-  </div>
-  <div style="margin-top:6px"><label>Повідомлення</label><textarea id="cText" class="input" rows="3"></textarea></div>
+  <div><label>Повідомлення</label><textarea id="cText" class="input" rows="3"></textarea></div>
   <div style="display:flex;gap:8px;margin-top:8px">
     <button id="sendMsg" class="btn">Надіслати</button>
     <button id="closeFab" class="btn ghost">Закрити</button>
@@ -239,57 +220,47 @@
 </div>
 
 <script>
-/* ========= НАСТРОЙКИ ========= */
-const API = "https://products-pharmacies-childhood-lying.trycloudflare.com"; // <<< ЗАМЕНИТЕ
-const PRIVAT = "https://www.privat24.ua/send/3g9dp";           // базовая ссылка
+/* ====== CONFIG (впишите свой туннель) ====== */
+const API    = "https://YOUR-CLOUDFLARE-TUNNEL.trycloudflare.com";
+const PRIVAT = "https://www.privat24.ua/send/3g9dp";
 
-/* ========= УТИЛЫ ========= */
-const $ = s=>document.querySelector(s), $$ = s=>document.querySelectorAll(s);
+/* ====== HELPERS ====== */
+const $ = s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const fmt = n => (n??0).toLocaleString('uk-UA');
 const svgLike = `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="#10b981" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>`;
 const svgEye  = `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="#0b3b2d" d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>`;
+async function api(path,opt){ const r=await fetch(API+path,{...opt,headers:{'Content-Type':'application/json'}}); if(!r.ok) throw new Error(r.statusText); return r.json(); }
 
-/* ========= ГЛОБАЛ ========= */
-let cfg = {ads:["",""], adLink:"#"};
-let page=0, pageSize=24, last=[], q="";
-let imagesPicked=[], newDraftId=null;
-let gal=[], gi=0, cur=null;
+/* ====== GLOBALS ====== */
+let cfg={ads:[""],adLink:"#"};
+let page=0,size=24,q=""; let cur=null, gal=[], gi=0;
+let imagesPicked=[], draftId=null, draftNum=null;
+let sid = localStorage.getItem("kolo_sid")||"";
+let lastPoll=0;
 
-/* ========= API ========= */
-async function api(path, opt) {
-  const r = await fetch(API+path, {...opt, headers: {'Content-Type':'application/json'}});
-  if(!r.ok) throw new Error(r.statusText);
-  return r.json();
-}
-
-/* ========= БАННЕР ========= */
+/* ====== BANNER ====== */
 function runBanner(){
-  let i=0;
-  const rot=()=>{ $("#adImg").src = cfg.ads[i%cfg.ads.length]||""; $("#adLink").href = cfg.adLink||"#"; i++; };
-  rot(); setInterval(rot, 5000);
+  let i=0; const rot=()=>{ $("#adImg").src = cfg.ads[i%cfg.ads.length]||""; $("#adLink").href = cfg.adLink||"#"; i++; };
+  rot(); setInterval(rot,5000);
 }
 
-/* ========= РЕНДЕР СПИСКА ========= */
+/* ====== LIST ====== */
 function card(it){
   const el=document.createElement('article'); el.className='card'; el.onclick=()=>open(it.id);
   const t=document.createElement('div'); t.className='thumb';
   const img=document.createElement('img'); img.src=(it.images&&it.images[0])||""; t.appendChild(img);
-
   const b1=document.createElement('div'); b1.className='b-like'; b1.innerHTML=svgLike+`<b>${fmt(it.likes)}</b>`;
   const b2=document.createElement('div'); b2.className='b-views'; b2.innerHTML=svgEye+`<b>${fmt(it.views)}</b>`;
-  const b3=document.createElement('div'); b3.className='b-price'; b3.textContent = fmt(it.price)+" ₴";
+  const b3=document.createElement('div'); b3.className='b-price'; b3.textContent=fmt(it.price)+" ₴";
   t.append(b1,b2,b3);
-
   const body=document.createElement('div'); body.className='body';
   body.innerHTML=`<div class="ttl">${it.title}</div>
                   <div class="meta">${it.cat} • ${it.cond}</div>
                   <div class="meta">${it.region} • ${it.city} • № ${it.num}</div>`;
-  el.append(t,body);
-  return el;
+  el.append(t,body); return el;
 }
 async function load(){
-  const data = await api(`/listings?search=${encodeURIComponent(q)}&page=${page}&size=${pageSize}`);
-  last = (page? last.concat(data.items) : data.items);
+  const data=await api(`/listings?search=${encodeURIComponent(q)}&page=${page}&size=${size}`);
   const g=$("#grid"); if(!page) g.innerHTML="";
   data.items.forEach(it=>g.appendChild(card(it)));
   $("#more").style.display = data.hasMore? "inline-flex":"none";
@@ -299,13 +270,12 @@ async function load(){
   }
 }
 
-/* ========= DETAIL ========= */
+/* ====== DETAIL ====== */
 async function open(id){
-  cur = await api(`/listing/${id}`);
-  await api(`/view/${id}`,{method:'POST'});
+  cur = await api(`/listing/${id}`); await api(`/view/${id}`,{method:'POST'});
   gal = cur.images||[]; gi=0;
-  $("#dHead").innerHTML = `
-    <div class="ttl" style="font-size:20px">${cur.title}</div>
+  $("#dHead").innerHTML =
+   `<div class="ttl" style="font-size:20px">${cur.title}</div>
     <div style="flex:1"></div>
     <div class="pill" style="gap:8px">${svgLike}<b>${fmt(cur.likes)}</b></div>
     <div class="pill" style="gap:8px">${svgEye}<b>${fmt((cur.views||0)+1)}</b></div>
@@ -321,90 +291,63 @@ async function open(id){
   $("#dDesc").textContent = cur.desc||"";
   $("#detail").classList.add('on');
 }
-function renderBig(){
-  const b=$("#big"); b.querySelectorAll("img").forEach(x=>x.remove());
-  const im=document.createElement('img'); im.src = gal[gi]||""; b.appendChild(im);
-}
+function renderBig(){ const b=$("#big"); b.querySelectorAll("img").forEach(x=>x.remove()); const im=document.createElement('img'); im.src=gal[gi]||""; b.appendChild(im); }
 $("#gPrev").onclick=()=>{gi=(gi-1+gal.length)%gal.length;renderBig();}
 $("#gNext").onclick=()=>{gi=(gi+1)%gal.length;renderBig();}
 $("#closeD").onclick=()=>$("#detail").classList.remove('on');
 $("#shareBtn").onclick=()=>{ const url=location.origin+location.pathname+'#'+(cur?.id||''); navigator.share?navigator.share({title:cur?.title||'Оголошення',url}).catch(()=>{}):navigator.clipboard?.writeText(url); };
 
-/* ========= SELL ========= */
+/* ====== SELL ====== */
 const CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Тварини","Послуги","Фото/Відео","Освіта","Логістика","Сільське господарство","Краса та здоров’я"];
 const COND=["Нове","Вживане","Після ремонту"];
-$("#sCat").innerHTML = CATS.map(x=>`<option>${x}</option>`).join("");
-$("#sCond").innerHTML = COND.map(x=>`<option>${x}</option>`).join("");
-$("#btnAdd").onclick=()=>$("#sell").classList.add('on');
-$("#sellClose").onclick=()=>$("#sell").classList.remove('on');
+$("#sCat").innerHTML=CATS.map(x=>`<option>${x}</option>`).join(""); $("#sCond").innerHTML=COND.map(x=>`<option>${x}</option>`).join("");
+$("#btnAdd").onclick=()=>$("#sell").classList.add('on'); $("#sellClose").onclick=()=>$("#sell").classList.remove('on');
 $("#pick").onclick=()=>$("#sImgs").click();
 $("#sImgs").onchange=async e=>{
-  const files=[...e.target.files]; for(const f of files){ if(imagesPicked.length>=5) break;
-    const r=new FileReader(); await new Promise(res=>{r.onload=()=>{imagesPicked.push(r.result);res()}; r.readAsDataURL(f);});
+  const files=[...e.target.files];
+  for(const f of files){ if(imagesPicked.length>=5) break;
+    const r=new FileReader(); await new Promise(res=>{r.onload=()=>{imagesPicked.push(r.result);res();}; r.readAsDataURL(f);});
   }
-  $("#pCount").textContent = `${imagesPicked.length}/5`;
-  const box=$("#pThumbs"); box.innerHTML=""; imagesPicked.forEach(s=>{const i=document.createElement('img');i.src=s;i.style.cssText="width:72px;height:54px;object-fit:cover;border-radius:10px;border:1px solid #d6e8de";box.appendChild(i)});
+  $("#pCount").textContent=`${imagesPicked.length}/5`; const box=$("#pThumbs"); box.innerHTML="";
+  imagesPicked.forEach(s=>{const i=document.createElement('img'); i.src=s; i.style.cssText="width:72px;height:54px;object-fit:cover;border-radius:10px;border:1px solid #d6e8de"; box.appendChild(i)});
 };
-
 $("#publish").onclick=async ()=>{
-  const body={
-    name:$("#sName").value.trim(),
-    phone:$("#sPhone").value.trim(),
-    region:$("#sRegion").value.trim(),
-    city:$("#sCity").value.trim(),
+  const body={name:$("#sName").value.trim(), phone:$("#sPhone").value.trim(),
+    region:$("#sRegion").value.trim(), city:$("#sCity").value.trim(),
     cat:$("#sCat").value, cond:$("#sCond").value,
-    title:$("#sTitle").value.trim(),
-    price:+($("#sPrice").value||0),
-    desc:$("#sDesc").value.trim(),
-    images:imagesPicked.slice(0,5)
-  };
+    title:$("#sTitle").value.trim(), price:+($("#sPrice").value||0),
+    desc:$("#sDesc").value.trim(), images:imagesPicked.slice(0,5)};
   if(!body.name||!body.region||!body.city||!body.title||!body.price) return alert("Заповніть Ім’я/Область/Місто/Заголовок/Ціну");
   const r = await api('/listings/new',{method:'POST',body:JSON.stringify(body)});
-  newDraftId = r.id;
-  // платежи
-  const pr = new URL(PRIVAT); pr.searchParams.set('amount','39'); pr.searchParams.set('message',`KOLO L${r.num} basic`);
+  draftId=r.id; draftNum=r.num;
+  const pr = new URL(PRIVAT); pr.searchParams.set('amount','39');  pr.searchParams.set('message',`KOLO L${r.num} basic`);
   const hr = new URL(PRIVAT); hr.searchParams.set('amount','299'); hr.searchParams.set('message',`KOLO L${r.num} HOT`);
   const br = new URL(PRIVAT); br.searchParams.set('amount','999'); br.searchParams.set('message',`KOLO banner 7d`);
-  $("#payBasic").href = pr.toString(); $("#payHot").href = hr.toString(); $("#payBanner").href = br.toString();
-  $("#sId").textContent = `Номер оголошення: L${r.num}. Після оплати натисніть «Повідомити про оплату».`;
+  $("#payBasic").href=pr.toString(); $("#payHot").href=hr.toString(); $("#payBanner").href=br.toString();
+  $("#sId").textContent=`Номер оголошення: L${r.num}. Після оплати натисніть «Повідомити про оплату».`;
   $("#payBox").style.display="block";
 };
-$("#paidNotify").onclick=async ()=>{
-  if(!newDraftId) return;
-  await api('/payment/notify',{method:'POST',body:JSON.stringify({id:newDraftId})});
-  alert("Дякуємо! Ми перевіримо оплату та опублікуємо оголошення.");
-  $("#sell").classList.remove('on');
-  imagesPicked=[]; $("#pThumbs").innerHTML=""; $("#pCount").textContent="";
-};
+$("#paidNotify").onclick=async ()=>{ if(!draftId) return; await api('/payment/notify',{method:'POST',body:JSON.stringify({id:draftId})}); alert("Дякуємо! Ми перевіримо оплату та опублікуємо оголошення."); $("#sell").classList.remove('on'); imagesPicked=[]; $("#pThumbs").innerHTML=""; $("#pCount").textContent=""; };
 
-/* ========= SEARCH ========= */
-$("#btnSearch").onclick=()=>$("#search").classList.add('on');
-$("#sClose").onclick=()=>$("#search").classList.remove('on');
+/* ====== SEARCH ====== */
+$("#btnSearch").onclick=()=>$("#search").classList.add('on'); $("#sClose").onclick=()=>$("#search").classList.remove('on');
 $("#apply").onclick=()=>{ q=$("#q").value.trim(); page=0; load(); $("#search").classList.remove('on'); };
 
-/* ========= SUPPORT ========= */
-$("#fab").onclick=()=>$("#fabPanel").classList.toggle('on');
-$("#closeFab").onclick=()=>$("#fabPanel").classList.remove('on');
-$("#sendMsg").onclick=async ()=>{
-  const name=$("#cName").value.trim(), contact=$("#cContact").value.trim(), text=$("#cText").value.trim();
-  if(!name||!text) return alert("Напишіть ім’я та повідомлення");
-  const m = await api('/support/send',{method:'POST',body:JSON.stringify({name,contact,text})});
-  const d=document.createElement('div'); d.textContent=`#${m.mid}: відправлено`; $("#msgList").prepend(d); $("#cText").value="";
-};
+/* ====== SUPPORT ====== */
+$("#fab").onclick=()=>$("#fabPanel").classList.toggle('on'); $("#closeFab").onclick=()=>$("#fabPanel").classList.remove('on');
+async function ensureChat(){ if(sid) return sid; const r=await api('/support/open',{method:'POST',body:JSON.stringify({sid:sid||null})}); sid=r.sid; localStorage.setItem('kolo_sid',sid); return sid; }
+$("#sendMsg").onclick=async ()=>{ const text=$("#cText").value.trim(); if(!text) return; await ensureChat(); const m=await api('/support/send',{method:'POST',body:JSON.stringify({sid,text})}); $("#cText").value=""; appendMsg(`Ви: ${m.text}`); };
+function appendMsg(t){ const d=document.createElement('div'); d.textContent=t; $("#msgList").appendChild(d); $("#msgList").scrollTop = 999999; }
+async function poll(){ try{ await ensureChat(); const r=await api(`/support/poll?sid=${encodeURIComponent(sid)}&since=${lastPoll}`); lastPoll=r.now; (r.msgs||[]).forEach(m=>appendMsg(m.sender==='admin'?`Адмін: ${m.text}`:`Ви: ${m.text}`)); }catch{} }
+setInterval(poll, 1500);
 
-/* ========= INIT ========= */
+/* ====== INIT ====== */
 (async function(){
-  // конфиг
-  try{ cfg = await api('/config'); }catch(e){ cfg={ads:[""],adLink:"#"} }
+  try{ cfg=await api('/config'); }catch(e){ cfg={ads:[""],adLink:"#"} }
   runBanner();
-  // посетители
-  try{ const v=await api('/visitors'); $("#visCount").textContent=fmt(v.count); }catch{};
-  // список
-  await load();
-  $("#more").onclick=()=>{page++;load();}
-  // deep
+  try{ const v=await api('/visitors'); $("#visCount").textContent=fmt(v.count);}catch{}
+  await load(); $("#more").onclick=()=>{page++;load();};
   if(location.hash.length>1){ try{ await open(location.hash.slice(1)); }catch{} }
-  // hide preloader
   setTimeout(()=>$("#pre").style.display="none",800);
 })();
 </script>
