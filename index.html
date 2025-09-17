@@ -34,7 +34,7 @@
     body{margin:0; background:var(--bg); color:var(--ink); font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;}
     body.modal-open{overflow:hidden}
 
-    /* ===== PRELOADER (5s). KOLO НЕ крутится. Круг больше. ===== */
+    /* ===== PRELOADER (5s). KOLO не крутится. Круг больше. ===== */
     .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:9999}
     .pl-wrap{position:relative; width:240px; height:240px; display:grid; place-items:center}
     .pl-ring{position:absolute; inset:0; border-radius:50%; border:14px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite}
@@ -52,12 +52,11 @@
     .badgeHot{background:var(--hotRed)!important; color:#fff!important; border:1px solid #ff6567!important}
     .grow{flex:1}
     .visitors{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:800; color:#0b3b2d}
-    .visitors img{width:18px; height:18px; aspect-ratio:1/1; object-fit:contain; display:block}
 
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* Реклама — сделана чуть ниже и "contain" */
+    /* Реклама — чуть меньше и contain */
     .adWrap{margin:8px 0 6px}
     .adBar{height:64px; border:1px solid var(--line); border-radius:12px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
     .adBar a{display:block; width:100%; height:100%}
@@ -160,7 +159,6 @@
     <div class="logo">KOLO</div>
     <div class="pill" id="tabSearch">Пошук</div>
     <div class="visitors" id="visitors">
-      <img id="uIcon" alt="users" referrerpolicy="no-referrer">
       <span id="visCount">17369</span> корисувачів
     </div>
     <div class="grow"></div>
@@ -181,7 +179,7 @@
     <!-- HOT -->
     <section class="panel hotWrap" id="hotPanel" style="display:none">
       <div class="hotHead">
-        <div class="tag"><img id="hotHeadIcon" alt="flame" referrerpolicy="no-referrer"> HOT</div>
+        <div class="tag"><img id="hotHeadIcon" alt="flame"> HOT</div>
       </div>
       <div class="hotGrid" id="hotGrid"></div>
     </section>
@@ -200,11 +198,11 @@
         <div class="logo">KOLO</div>
         <div class="grow"></div>
         <button class="pill green" id="dShare" title="Поділитися" style="gap:8px;height:34px;line-height:34px">
-          <img class="pillIcon" id="shareIcon" alt="share" referrerpolicy="no-referrer" style="width:16px;height:16px;filter:brightness(0) invert(1)">
+          <img class="pillIcon" id="shareIcon" alt="share" style="width:16px;height:16px;filter:brightness(0) invert(1)">
           Поділитися
         </button>
         <button title="Лайк" aria-label="Лайк" class="pill green" id="dLike" style="height:34px;line-height:34px;padding:0 12px;gap:8px">
-          <img class="pillIcon" id="likeIconHeader" alt="like" referrerpolicy="no-referrer" style="width:16px;height:16px;filter:brightness(0) invert(1)">
+          <img class="pillIcon" id="likeIconHeader" alt="like" style="width:16px;height:16px;filter:brightness(0) invert(1)">
           <span id="dLikeCnt">0</span>
         </button>
         <button class="closeX" id="dClose">Закрити</button>
@@ -264,7 +262,7 @@
 
         <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3" style="height:auto; padding:10px"></textarea></div>
 
-        <!-- Фото: максимум 5. Кнопка "Додати" как Закрити -->
+        <!-- Фото: максимум 5. Кнопка "Додати" -->
         <div style="grid-column:1/-1">
           <label>Фото</label>
           <input id="sImages" type="file" accept="image/*" multiple style="display:none">
@@ -301,25 +299,17 @@
   const CTRL_KEY = "kolo_ctrl_v3";
   const VER_KEY = "kolo_ver_v2";
 
-  /* Иконки (плюс встроенные SVG как фолбэки) */
-  const ICONS = {
-    like: "https://i.ibb.co/4wsFcDjh/like.png",
-    share: "https://i.ibb.co/fVMpJz36/share.png",
-    eye:   "https://i.ibb.co/X1253RM/eye.png",
-    user:  "https://i.ibb.co/fYqBCMS9/user.png",
-    flame: "https://i.ibb.co/NgjfFSG5/flame.png"
-  };
-  const SVG_FALLBACK = {
+  /* Встроенные SVG — больше никаких внешних URL */
+  const ICON = {
     like:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
     share:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7-4.11A2.99 2.99 0 0018 7a3 3 0 10-3-3c0 .24.04.47.09.7l-7 4.11A3 3 0 006 9a3 3 0 100 6c.66 0 1.27-.21 1.77-.57l7.19 4.23c.05.21.04.44.04.67a3 3 0 103-3z"/></svg>',
     eye:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>',
-    user:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230b3b2d" d="M12 12c2.76 0 5-2.69 5-6s-2.24-6-5-6-5 2.69-5 6 2.24 6 5 6zm0 2c-4.42 0-8 3.58-8 8h16c0-4.42-3.58-8-8-8z"/></svg>',
     flame:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M13.5 0s1.5 3-1.5 6-3 6 0 9c3 3 9 0 9-6 0-6-6-9-6-9s.5 3-1.5 6c-2 3-5 3-5 6s3 4 3 4-6-1-6-7C5 5 9 3 13.5 0z"/></svg>'
   };
-  function setIcon(el, url, fbKey){ el.src=url; el.onerror=()=>{el.onerror=null; el.src=SVG_FALLBACK[fbKey]||''}; }
-  function safeIcon(url, fbKey, cls=""){ const img=document.createElement("img"); if(cls) img.className=cls; img.alt=fbKey; img.referrerPolicy="no-referrer"; setIcon(img,url,fbKey); return img; }
 
-  /* Visitors */
+  function setIcon(el, dataURI){ el.src=dataURI; }
+
+  /* Посетители */
   const VIS_START = 17369;
   (function bumpLocal(){
     try{
@@ -331,13 +321,13 @@
   })();
   function getLocalInc(){ try{ return (JSON.parse(localStorage.getItem("kolo_vis_local")||'{"c":0}').c)||0; }catch{return 0;} }
   function visitorsNow(){
-    const now=new Date(); const epoch=Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-    const per15 = Math.floor((Date.now()-epoch)/(15*1000)); // +1..3 каждые 15 сек
-    let bonus=0; for(let i=0;i<per15;i++){ bonus += (i%3)+1; } // псевдо 1..3
+    const epoch = new Date(); const start=Date.UTC(epoch.getUTCFullYear(), epoch.getUTCMonth(), epoch.getUTCDate());
+    const ticks = Math.floor((Date.now()-start)/(15*1000)); // каждые 15 сек
+    let bonus=0; for(let i=0;i<ticks;i++){ bonus += (i%3)+1; }
     return VIS_START + bonus + getLocalInc();
   }
 
-  /* Data */
+  /* Данные */
   const UA_REGIONS={"Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],"Львівська":["Львів","Дрогобич","Червоноград","Стрий"],"Одеська":["Одеса","Чорноморськ","Южне","Ізмаїл","Білгород-Дністровський"],"Харківська":["Харків","Лозова","Ізюм"],"Дніпропетровська":["Дніпро","Кривий Ріг","Кам'янське","Нікополь","Павлоград"],"Запорізька":["Запоріжжя","Мелітополь","Бердянськ"],"Миколаївська":["Миколаїв","Первомайськ","Южноукраїнськ"],"Херсонська":["Херсон","Нова Каховка","Каховка"],"Вінницька":["Вінниця","Жмеринка","Могилів-Подільський"],"Полтавська":["Полтава","Кременчук","Миргород"],"Черкаська":["Черкаси","Умань","Сміла"],"Чернігівська":["Чернігів","Ніжин","Прилуки"],"Сумська":["Суми","Шостка","Конотоп","Охтирка"],"Житомирська":["Житомир","Бердичів","Коростень"],"Хмельницька":["Хмельницький","Кам'янець-Подільський","Шепетівка"],"Чернівецька":["Чернівці","Хотин"],"Рівненська":["Рівне","Дубно","Вараш"],"Івано-Франківська":["Івано-Франківськ","Калуш","Коломия","Яремче"],"Тернопільська":["Тернопіль","Чортків","Кременець"],"Волинська":["Луцьк","Ковель","Володимир"],"Закарпатська":["Ужгород","Мукачево","Хуст"],"Кіровоградська":["Кропивницький","Олександрія","Світловодськ"]};
   const PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
   const ALL_CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти","Мода та стиль","Одяг","Взуття","Аксесуари","Дитячий світ","Іграшки","Візочки","Одяг для дітей","Тварини","Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика","Бізнес та обладнання","Сільське господарство","Краса та здоров’я"];
@@ -354,7 +344,18 @@
   function fmtUA(date){ return new Date(date).toLocaleDateString('uk-UA'); }
   function lockScroll(on){ document.body.classList.toggle('modal-open', !!on); }
   function createImg(src, alt, fallback){ const img=document.createElement("img"); img.loading="lazy"; img.alt=alt; img.referrerPolicy="no-referrer"; img.src = src || fallback; img.onerror=()=>{ img.onerror=null; img.src=fallback; }; return img; }
-  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d'); const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500); g.fillStyle="#a0dcc8"; g.fillRect(0,420,800,80); g.fillStyle='#0f172a'; g.font="bold 42px 'Russo One', Arial"; g.textAlign="center"; g.fillText(title.slice(0,22), 400, 100); g.fillStyle="#00000022"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,120); } return c.toDataURL('image/png'); }
+
+  /* Плейсхолдер БЕЗ текста заголовка */
+  function itemPNG(title, seed=0){ 
+    const c=document.createElement('canvas'); c.width=800; c.height=500; 
+    const g=c.getContext('2d'); 
+    const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); 
+    g.fillStyle=grad; g.fillRect(0,0,800,500); 
+    g.fillStyle="#00000010"; 
+    for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,140); } 
+    return c.toDataURL('image/png'); 
+  }
+
   function imgPool(cat){ if(cat==="Транспорт") return IMG.car; if(cat==="Велосипеди") return IMG.bike; if(cat==="Електроніка") return [...IMG.phone, ...IMG.laptop, ...IMG.tv]; if(cat==="Побутова техніка") return [...IMG.washer]; if(cat==="Меблі"||cat==="Дім і сад") return [...IMG.sofa, ...IMG.tools, ...IMG.decor]; if(cat==="Тварини") return [...IMG.dog, ...IMG.cat]; if(cat==="Нерухомість") return IMG.flat; if(cat==="Послуги") return IMG.service; return [...IMG.phone, ...IMG.tools, ...IMG.sofa]; }
   function imgSetBy(cat,n=3){ const pool=imgPool(cat); const out=[]; for(let i=0;i<n;i++) out.push(pool[(i+Math.floor(Math.random()*pool.length))%pool.length]); return out; }
   function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 ${op} ${Math.floor(100+Math.random()*900)}-${Math.floor(10+Math.random()*90)}-${Math.floor(10+Math.random()*90)}`; }
@@ -450,7 +451,7 @@
   }
   initSellForm();
 
-  // Выбор файлов: максимум 5, кнопка "Додати"
+  // Фото: максимум 5, кнопка "Додати"
   const inputImages = $("#sImages"), btnPick = $("#btnPickImages"), thumbs=$("#thumbs"), imgCount=$("#imgCount");
   btnPick.onclick=()=> inputImages.click();
   inputImages.onchange=()=>{
@@ -503,7 +504,7 @@
     $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
-  /* SEARCH: только ключевое слово */
+  /* SEARCH */
   const grid=$("#grid"), btnMore=$("#btnMore"), fltQuery=$("#fltQuery");
   let page=0, pageSize=24, lastResults=[];
   function applyFilters(){
@@ -570,9 +571,9 @@
     const ttl=document.createElement('div'); ttl.className='title'; ttl.style.font="700 20px/1.2 'Russo One'"; ttl.textContent=currentItem.title;
     const price=document.createElement('div'); price.className='pill green'; price.style.cssText='height:38px;line-height:38px;border-radius:12px'; price.textContent='₴ '+currentItem.price.toLocaleString('uk-UA');
 
-    // Иконка глаз — используем встроенный SVG, чтобы не исчезала
+    // Глаз — встроенный SVG, не пропадёт
     const viewsP=document.createElement('div'); viewsP.className='pill green'; viewsP.style.cssText='gap:8px';
-    const eyeImg=document.createElement('img'); eyeImg.src=SVG_FALLBACK.eye; eyeImg.style.cssText='width:16px;height:16px;filter:brightness(0) invert(1)'; viewsP.appendChild(eyeImg);
+    const eyeImg=document.createElement('img'); eyeImg.src=ICON.eye; eyeImg.style.cssText='width:16px;height:16px;filter:brightness(0) invert(1)'; viewsP.appendChild(eyeImg);
     const vv=document.createElement('span'); vv.id='viewCnt'; vv.textContent=currentItem.views; viewsP.appendChild(vv);
 
     head.appendChild(ttl); head.appendChild(price); head.appendChild(viewsP);
@@ -623,13 +624,12 @@
   /* ===== INIT ===== */
   (function init(){
     // иконки + баннер
-    setIcon($("#likeIconHeader"), ICONS.like, "like");
-    setIcon($("#shareIcon"), ICONS.share, "share");
-    setIcon($("#uIcon"), ICONS.user, "user");
-    setIcon($("#hotHeadIcon"), ICONS.flame, "flame");
-    setIcon($("#adImg"), "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png", "share");
+    setIcon($("#likeIconHeader"), ICON.like);
+    setIcon($("#shareIcon"), ICON.share);
+    setIcon($("#hotHeadIcon"), ICON.flame);
+    $("#adImg").src = "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png";
 
-    // visitors (плавное увеличение)
+    // visitors
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
     updVisitors(); setInterval(updVisitors, 1000);
 
