@@ -22,7 +22,7 @@
       --line:#d6e8de;
       --field-bg:#edf7f1; --field-br:#cfe8da;
       --top:60px;
-      --hotRed:#ff4d4f;          /* чистий червоний для HOT */
+      --hotRed:#ff4d4f;                /* HOT: чистый красный */
       --thumb-ph:#e7f4ee;
       --shadow-sm: 0 4px 12px rgba(2, 44, 34, .08);
       --shadow-lg: 0 14px 40px rgba(2, 44, 34, .14);
@@ -34,24 +34,14 @@
     body.modal-open{overflow:hidden}
 
     /* ===== PRELOADER 5s ===== */
-    .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:9999}
-    .pl-ring{
-      width:180px; height:180px; border-radius:50%;
-      border:12px solid #e7f4ee; border-top-color:#10b981;
-      animation:spin 1.2s linear infinite;
-      position:relative;
-    }
+    .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; z-index:9999}
+    .pl-ring{width:180px; height:180px; border-radius:50%; border:12px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite; position:relative}
     .pl-logo{position:absolute; inset:0; display:grid; place-items:center; font:700 36px "Russo One"; color:#10b981; letter-spacing:2px}
     .pl-sub{font-size:13px; opacity:.9}
     @keyframes spin{to{transform:rotate(360deg)}}
 
     /* Topbar */
-    .topbar{
-      position:sticky; top:0; z-index:100;
-      height:var(--top); display:flex; align-items:center; gap:10px;
-      padding:10px 12px; background:#ffffffcc; backdrop-filter:saturate(140%) blur(6px);
-      border-bottom:1px solid var(--line);
-    }
+    .topbar{position:sticky; top:0; z-index:100; height:var(--top); display:flex; align-items:center; gap:10px; padding:10px 12px; background:#ffffffcc; backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line)}
     .logo{background:var(--brand); color:#fff; border-radius:12px; padding:8px 12px; font:700 16px/1 "Russo One",sans-serif; box-shadow:var(--shadow-sm)}
     .pill{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:700; color:#0f172a}
     .pill.green{background:var(--brand); color:#fff; border-color:transparent; font-family:"Russo One"; text-transform:uppercase; box-shadow:var(--shadow-sm); text-shadow:0 1px 0 rgba(0,0,0,.35)}
@@ -63,7 +53,7 @@
     .container{max-width:1200px; margin:12px auto; padding:0 12px;}
     .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
 
-    /* Реклама — просто місце, без «плюса» */
+    /* Реклама — просто место */
     .adWrap{margin:8px 0 6px}
     .adBar{height:80px; border:1px solid var(--line); border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden}
     .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px}
@@ -95,10 +85,10 @@
     .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
     .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:5px 8px; font:800 12px/1 "Russo One"; z-index:2}
     .likeBtn,.viewPill{
-      position:absolute; top:8px; height:32px; min-width:58px;
+      position:absolute; top:8px; height:30px; min-width:54px;
       padding:0 8px; display:flex; align-items:center; justify-content:center; gap:6px;
       border-radius:10px; border:0; background:var(--brand); color:#fff;
-      font:900 14px/32px 'Russo One',sans-serif; box-shadow:var(--shadow-sm); outline:none; z-index:2
+      font:900 13px/30px 'Russo One',sans-serif; box-shadow:var(--shadow-sm); outline:none; z-index:2
     }
     .likeBtn{right:8px; cursor:pointer}
     .viewPill{left:8px}
@@ -119,10 +109,8 @@
       position:absolute; top:50%; transform:translateY(-50%);
       height:48px; min-width:48px; padding:0 12px;
       border-radius:14px; border:1px solid var(--line);
-      background:#ffffffdd;
-      color:#065f46; font-weight:900; font-size:26px; line-height:46px;
-      cursor:pointer; box-shadow:var(--shadow-sm);
-      backdrop-filter:saturate(110%) blur(3px);
+      background:#ffffffdd; color:#065f46; font-weight:900; font-size:26px; line-height:46px;
+      cursor:pointer; box-shadow:var(--shadow-sm); backdrop-filter:saturate(110%) blur(3px);
     }
     .navPrev{left:8px} .navNext{right:8px}
 
@@ -134,7 +122,7 @@
     .seller{display:flex; gap:10px; align-items:center}
     .avatar{width:44px; height:44px; border-radius:50%; background:#dff3ea; color:#065f46; display:flex; align-items:center; justify-content:center; font-weight:800}
 
-    .pager{display:flex; justify-content:center; margin:16px 0 12px} /* чуть выше низа */
+    .pager{display:flex; justify-content:center; margin:16px 0 12px}
     #dAttribution{display:none}
 
     /* SELL / SEARCH */
@@ -142,7 +130,6 @@
     .overlay.on{display:flex}
     .modal{width:min(960px,96vw); max-height:88vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-lg);}
     .closeX{height:38px; border:1px solid var(--line); background:#fff; color:#0f172a; border-radius:12px; font:700 13px/38px 'Russo One'; padding:0 12px; cursor:pointer}
-
     label{font-size:12px; font-weight:800; opacity:.92; display:block; margin:0 0 6px; color:#0b3b2d}
     .input,.select{ width:100%; height:46px; border-radius:12px; border:1px solid var(--field-br); background:#edf7f1; color:#064e3b; padding:0 12px; font-size:14px; outline:none }
     textarea.input{color:#0f172a}
@@ -151,8 +138,6 @@
     .btn:active{transform:translateY(2px); background:var(--brand-press)}
     .btn.ghost{background:#fff; color:#0f172a; border:1px solid var(--line)}
     .btnMore{height:42px; line-height:42px}
-
-    /* Choice before Sell */
     .choiceGrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
     @media (max-width:640px){ .choiceGrid{grid-template-columns:1fr} }
     .choiceCard{border:1px solid var(--line); border-radius:14px; padding:16px; cursor:pointer}
@@ -162,7 +147,7 @@
   </style>
 </head>
 <body class="modal-open">
-  <!-- PRELOADER (5 сек, текст KOLO не крутится) -->
+  <!-- PRELOADER (ровно 5 сек) -->
   <div id="preloader" class="preloader" aria-hidden="false">
     <div class="pl-ring"><div class="pl-logo">KOLO</div></div>
     <div class="pl-sub">Дошка оголошень №1 в Україні</div>
@@ -180,7 +165,7 @@
   </header>
 
   <main class="container">
-    <!-- РЕКЛАМА (просто місце; картинка з сервера додаси пізніше) -->
+    <!-- РЕКЛАМА -->
     <div class="adWrap">
       <div class="adBar"><img id="adImg" alt="" referrerpolicy="no-referrer" style="display:none"></div>
       <div class="adNote">Замовити рекламу</div>
@@ -193,7 +178,7 @@
     </section>
     <div class="hotSplit" id="hotSplit" style="display:none"></div>
 
-    <!-- RESULTS -->
+    <!-- РЕЗУЛЬТАТИ -->
     <section class="topline"><div class="grow"></div></section>
     <section class="grid" id="grid"></section>
     <div class="pager"><button class="btn btnMore" id="btnMore" style="display:none">Показати ще</button></div>
@@ -257,7 +242,7 @@
         <button class="closeX" id="sellClose">Закрити</button>
       </div>
       <div class="actions" style="margin:-4px 0 8px"><span id="sellModeBadge" class="pill green">Звичайне</span></div>
-      <div class="actions" style="margin-top:0;color:#0b3b2d;font-size:12px;opacity:.85">Фото завантажуються з телефона (кілька файлів підтримуються)</div>
+      <div class="actions" style="margin-top:0;color:#0b3b2d;font-size:12px;opacity:.85">Фото з телефона (можна декілька)</div>
       <div class="filters" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
         <div><label>Область</label><input class="input" id="sRegion"></div>
         <div><label>Місто</label><input class="input" id="sCity"></div>
@@ -301,45 +286,54 @@
   const CTRL_KEY = "kolo_ctrl_v3";
   const VER_KEY = "kolo_ver_v2";
 
-  /* Ваши ссылки на иконки (если не отдадут картинку — будет встроенный SVG) */
+  /* Иконки (с жёстким фоллбеком) */
   const ICONS = {
     like: "https://ibb.co/4wsFcDjh",
     share: "https://ibb.co/fVMpJz36",
     eye: "https://ibb.co/X1253RM",
     user: "https://ibb.co/fYqBCMS9"
   };
-  const DATA_ICONS = {
-    like: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  const SVG_FALLBACK = {
+    like:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
     share:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7-4.11A2.99 2.99 0 0018 7a3 3 0 10-3-3c0 .24.04.47.09.7l-7 4.11A3 3 0 006 9a3 3 0 100 6c.66 0 1.27-.21 1.77-.57l7.19 4.23c.05.21.04.44.04.67a3 3 0 103-3z"/></svg>',
-    eye:  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>',
-    user: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230b3b2d" d="M12 12c2.76 0 5-2.69 5-6s-2.24-6-5-6-5 2.69-5 6 2.24 6 5 6zm0 2c-4.42 0-8 3.58-8 8h16c0-4.42-3.58-8-8-8z"/></svg>'
+    eye:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>',
+    user:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230b3b2d" d="M12 12c2.76 0 5-2.69 5-6s-2.24-6-5-6-5 2.69-5 6 2.24 6 5 6zm0 2c-4.42 0-8 3.58-8 8h16c0-4.42-3.58-8-8-8z"/></svg>'
   };
+  function setIcon(el, url, fbKey){ el.src=url; el.onerror=()=>{el.onerror=null; el.src=SVG_FALLBACK[fbKey]||''}; }
+  function safeIcon(url, fbKey, cls="pillIcon"){ const img=document.createElement("img"); img.className=cls; img.alt=fbKey; img.referrerPolicy="no-referrer"; setIcon(img,url,fbKey); return img; }
 
-  /* Відвідувачі — старт 17369 + 1..3 кожні 15с (від полуночі UTC) +1 за оновлення */
+  /* Відвідувачі: старт 17369, +1 кожні 3 хв. (UTC), +1 за оновлення вкладки (локально) */
   const VIS_START = 17369;
-  const nowUTC = new Date();
-  const VIS_EPOCH = Date.UTC(nowUTC.getUTCFullYear(), nowUTC.getUTCMonth(), nowUTC.getUTCDate()); // сьогодні 00:00 UTC
-  const SLOT_MS = 15000;
-  function sumPattern(n){ const c=Math.floor(n/3), r=n%3; return c*6 + (r>=1?1:0) + (r>=2?2:0); }
-  function sessionExtra(){ const k=(+sessionStorage.getItem("vis_extra")||0)+1; sessionStorage.setItem("vis_extra", k); return k; }
-  let visExtra = sessionExtra();
-  function visitorsNow(){ const n=Math.max(0, Math.floor((Date.now()-VIS_EPOCH)/SLOT_MS)); return VIS_START + sumPattern(n) + visExtra; }
+  const STEP_MS = 3*60*1000; // 3 хвилини
+  const now = new Date();
+  const EPOCH = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()); // сьогодні 00:00 UTC
+  // локальний «+1 за оновлення вкладки» з обнуленням щодоби
+  const LOCAL_KEY = "kolo_vis_local";
+  (function bumpLocal(){
+    try{
+      const raw = JSON.parse(localStorage.getItem(LOCAL_KEY)||'{"d":0,"c":0}');
+      const day = Math.floor(Date.now()/86400000);
+      if(raw.d!==day){ localStorage.setItem(LOCAL_KEY, JSON.stringify({d:day, c:1})); }
+      else{ raw.c+=1; localStorage.setItem(LOCAL_KEY, JSON.stringify(raw)); }
+    }catch{ localStorage.setItem(LOCAL_KEY, JSON.stringify({d:Math.floor(Date.now()/86400000), c:1})) }
+  })();
+  function getLocalInc(){ try{ const r=JSON.parse(localStorage.getItem(LOCAL_KEY)||'{"c":0}'); return r.c||0; }catch{return 0;} }
+  function visitorsNow(){
+    const base = VIS_START + Math.floor((Date.now()-EPOCH)/STEP_MS);
+    return base + getLocalInc();
+  }
 
-  /* Довідники */
+  /* ===== Довідники/данные/утилы (как раньше) ===== */
   const UA_REGIONS={"Київська":["Київ","Біла Церква","Бровари","Бориспіль","Ірпінь","Буча"],"Львівська":["Львів","Дрогобич","Червоноград","Стрий"],"Одеська":["Одеса","Чорноморськ","Южне","Ізмаїл","Білгород-Дністровський"],"Харківська":["Харків","Лозова","Ізюм"],"Дніпропетровська":["Дніпро","Кривий Ріг","Кам'янське","Нікополь","Павлоград"],"Запорізька":["Запоріжжя","Мелітополь","Бердянськ"],"Миколаївська":["Миколаїв","Первомайськ","Южноукраїнськ"],"Херсонська":["Херсон","Нова Каховка","Каховка"],"Вінницька":["Вінниця","Жмеринка","Могилів-Подільський"],"Полтавська":["Полтава","Кременчук","Миргород"],"Черкаська":["Черкаси","Умань","Сміла"],"Чернігівська":["Чернігів","Ніжин","Прилуки"],"Сумська":["Суми","Шостка","Конотоп","Охтирка"],"Житомирська":["Житомир","Бердичів","Коростень"],"Хмельницька":["Хмельницький","Кам'янець-Подільський","Шепетівка"],"Чернівецька":["Чернівці","Хотин"],"Рівненська":["Рівне","Дубно","Вараш"],"Івано-Франківська":["Івано-Франківськ","Калуш","Коломия","Яремче"],"Тернопільська":["Тернопіль","Чортків","Кременець"],"Волинська":["Луцьк","Ковель","Володимир"],"Закарпатська":["Ужгород","Мукачево","Хуст"],"Кіровоградська":["Кропивницький","Олександрія","Світловодськ"]};
   const PLACES = Object.keys(UA_REGIONS).flatMap(r => UA_REGIONS[r].map(n => ({region:r, name:n})));
   const ALL_CATS=["Транспорт","Запчастини та аксесуари","Нерухомість","Електроніка","Дім і сад","Меблі","Побутова техніка","Будівництво та ремонт","Спорт і Хобі","Велосипеди","Туризм","Музичні інструменти","Мода та стиль","Одяг","Взуття","Аксесуари","Дитячий світ","Іграшки","Візочки","Одяг для дітей","Тварини","Послуги","Ремонт","Доставка","Фото/Відео","Освіта","Логістика","Бізнес та обладнання","Сільське господарство","Краса та здоров’я"];
   const CONDS=["Нове","Вживане","Після ремонту"];
   const FIRSTNAMES=["Олег","Ірина","Сергій","Анна","Віктор","Максим","Марія","Юрій","Олексій","Наталія","Дмитро","Олена","Микита","Андрій","Світлана"];
   const LASTNAMES=["Шевченко","Коваленко","Бондаренко","Ткаченко","Кравченко","Мельник","Ковальчук","Петренко","Поліщук","Гриценко","Савченко","Гнатюк","Яковенко"];
-  const OPERATORS=["50","63","66","67","68","73","93","95","96","97","98","99"];
-
   const IMG={car:["https://upload.wikimedia.org/wikipedia/commons/8/8e/2017_Skoda_Octavia_SE_TDi_1.6_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/6/65/2018_Toyota_Camry_LE_front_6.22.18.jpg","https://upload.wikimedia.org/wikipedia/commons/b/b1/2018_BMW_320d_M_Sport_Automatic_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/e/ea/2018_Audi_A4_Sport_TDi_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/2/26/2018_Volkswagen_Golf_SE_NAV_TDi_1.6_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/1/1e/2018_Volvo_XC60_Momentum_D4_AWD_2.0_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/7/7f/2018_Kia_Sportage_3_CRDi_ISG_1.7_Front.jpg","https://upload.wikimedia.org/wikipedia/commons/4/4e/2017_Hyundai_Tucson_Premium_SE_2.0.jpg"],phone:["https://upload.wikimedia.org/wikipedia/commons/9/94/Samsung_Galaxy_S21_5G.jpg","https://upload.wikimedia.org/wikipedia/commons/1/17/Google_Pixel_6_-_Retail_Package.jpg","https://upload.wikimedia.org/wikipedia/commons/3/3c/IPhone_13_Pro_Max_Alpine_Green.png"],laptop:["https://upload.wikimedia.org/wikipedia/commons/4/40/MacBook_Pro_16-inch.png","https://upload.wikimedia.org/wikipedia/commons/4/45/Lenovo_ThinkPad_T440s.jpg"],tv:["https://upload.wikimedia.org/wikipedia/commons/6/60/Modern_TV.jpg"],washer:["https://upload.wikimedia.org/wikipedia/commons/5/5f/Washing_machine_bosch.jpg"],sofa:["https://upload.wikimedia.org/wikipedia/commons/1/1d/Sofa_in_living_room.jpg"],bike:["https://upload.wikimedia.org/wikipedia/commons/7/7b/Road_bicycle.jpg"],dog:["https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg"],cat:["https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"],flat:["https://upload.wikimedia.org/wikipedia/commons/2/22/Minimalist_apartment_interior.jpg"],tools:["https://upload.wikimedia.org/wikipedia/commons/2/2f/Hand_tools.jpg"],decor:["https://upload.wikimedia.org/wikipedia/commons/0/0f/Scandinavian_interior_design.jpg"],service:["https://upload.wikimedia.org/wikipedia/commons/6/6f/Electrician_at_work.jpg"]};
 
   const getDB=()=>{try{return JSON.parse(localStorage.getItem(DB_KEY)||"[]")}catch{return[]}};
   const setDB=v=>localStorage.setItem(DB_KEY,JSON.stringify(v));
-  const getCtrl=()=>{try{return JSON.parse(localStorage.getItem(CTRL_KEY)||"{}")}catch{return{}}};
-  const setCtrl=v=>localStorage.setItem(CTRL_KEY,JSON.stringify(v));
   const uid=()=>Math.random().toString(16).slice(2)+Date.now().toString(16);
   const round100 = v => Math.max(0, Math.round(v/100)*100);
   const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -359,7 +353,6 @@
   function imgSetBy(cat,n=3){ const pool=imgPool(cat); const out=[]; for(let i=0;i<n;i++) out.push(pool[(i+Math.floor(Math.random()*pool.length))%pool.length]); return out; }
   function genPhone(){ const ops=["50","63","66","67","68","73","93","95","96","97","98","99"]; const op=pick(ops); return `+380 (${op}) ${Math.floor(100+Math.random()*900)}-${Math.floor(10+Math.random()*90)}-${Math.floor(10+Math.random()*90)}`; }
 
-  /* ===== DATA (детерміновані) ===== */
   function seedDB(){
     const out=[];
     const TEMPL = {
@@ -407,7 +400,7 @@
     localStorage.setItem(VER_KEY, "1");
   }
 
-  /* ===== HOT ===== */
+  /* HOT */
   function ensureHot(){
     const db = getDB().filter(x=>x.hot===true);
     if(!db.length){ $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; return; }
@@ -416,8 +409,7 @@
       id: x.id,
       score: (x.likes||0)*6 + (x.views||0) + Math.max(0, 2000 - (now - x.created)/1000)
     })).sort((a,b)=>b.score-a.score);
-    const topIds = scored.slice(0, Math.min(10, scored.length)).map(s=>s.id);
-    renderHot(topIds);
+    renderHot(scored.slice(0, Math.min(10, scored.length)).map(s=>s.id));
   }
   function renderHot(ids){
     const grid=$("#hotGrid"); grid.innerHTML="";
@@ -441,13 +433,10 @@
         card.appendChild(thumb); card.appendChild(body);
         grid.appendChild(card);
       });
-    } else {
-      $("#hotPanel").style.display="none";
-      $("#hotSplit").style.display="none";
-    }
+    } else { $("#hotPanel").style.display="none"; $("#hotSplit").style.display="none"; }
   }
 
-  /* ===== SELL ===== */
+  /* SELL */
   function initSellForm(){
     $("#sCat").innerHTML=ALL_CATS.map(x=>`<option value="${x}">${x}</option>`).join('');
     $("#sCond").innerHTML=CONDS.map(x=>`<option value="${x}">${x}</option>`).join('');
@@ -488,7 +477,7 @@
     $("#sellOverlay").classList.remove('on'); lockScroll(false); setPostMode("normal"); applyFilters(); ensureHot();
   };
 
-  /* ===== SEARCH (тільки ключове слово) ===== */
+  /* SEARCH: только ключевое слово */
   const grid=$("#grid"), btnMore=$("#btnMore"), fltQuery=$("#fltQuery");
   let page=0, pageSize=24, lastResults=[];
   function applyFilters(){
@@ -504,18 +493,11 @@
 
   function like(id){
     const db=getDB(); const idx=db.findIndex(x=>x.id===id); if(idx<0) return false;
-    const ctrl=getCtrl(); ctrl.liked = ctrl.liked||{};
+    const ctrl=JSON.parse(localStorage.getItem(CTRL_KEY)||"{}"); ctrl.liked = ctrl.liked||{};
     if(ctrl.liked[id]){ return false; }
     db[idx].likes = (db[idx].likes||0) + 1;
-    setDB(db); ctrl.liked[id]=true; setCtrl(ctrl);
+    setDB(db); ctrl.liked[id]=true; localStorage.setItem(CTRL_KEY, JSON.stringify(ctrl));
     return true;
-  }
-
-  function safeIcon(src, alt, cls="pillIcon"){
-    const img=document.createElement("img");
-    img.className=cls; img.alt=alt; img.referrerPolicy="no-referrer"; img.src=src;
-    img.onerror=()=>{ img.onerror=null; img.src=DATA_ICONS[alt]||''; };
-    return img;
   }
 
   function renderCard(it){
@@ -567,12 +549,8 @@
     const url = location.origin + location.pathname + '#' + it.id;
     const text = (it.desc||'').slice(0,120);
     const title = it.title || 'Оголошення';
-    if(navigator.share){
-      navigator.share({ title, text, url }).catch(()=>{});
-    } else {
-      navigator.clipboard?.writeText(`${title}\n${text}\n${url}`);
-      alert('Посилання скопійовано у буфер обміну.');
-    }
+    if(navigator.share){ navigator.share({ title, text, url }).catch(()=>{}); }
+    else { navigator.clipboard?.writeText(`${title}\n${text}\n${url}`); alert('Посилання скопійовано у буфер обміну.'); }
   }
 
   function openDetail(id){
@@ -612,7 +590,7 @@
       if(like(currentId)){
         currentItem.likes=(currentItem.likes||0)+1;
         dLikeCnt.textContent = currentItem.likes;
-        dLikeBtn.setAttribute('disabled','disabled'); // анти-даблклік
+        dLikeBtn.setAttribute('disabled','disabled');
         applyFilters(); ensureHot();
       }
     };
@@ -635,16 +613,16 @@
 
   /* ===== INIT ===== */
   (function init(){
-    // иконки (с fallback)
-    $("#likeIconHeader").src = ICONS.like;
-    $("#shareIcon").src = ICONS.share;
-    $("#uIcon").src = ICONS.user;
+    // иконки с фоллбеком
+    setIcon($("#likeIconHeader"), ICONS.like, "like");
+    setIcon($("#shareIcon"), ICONS.share, "share");
+    setIcon($("#uIcon"), ICONS.user, "user");
 
     // visitors
     const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
-    updVisitors(); setInterval(updVisitors, SLOT_MS);
+    updVisitors(); setInterval(updVisitors, 1000);
 
-    // прелоадер — чётко 5 сек
+    // прелоадер — 5 сек
     setTimeout(()=>{ $("#preloader").style.display='none'; lockScroll(false); }, 5000);
 
     // база
@@ -652,13 +630,10 @@
     applyFilters();
     ensureHot();
 
-    // deep-link на оголошення
-    if(location.hash && location.hash.length>1){
-      const id=location.hash.slice(1);
-      setTimeout(()=>openDetail(id), 600);
-    }
+    // deeplink
+    if(location.hash && location.hash.length>1){ const id=location.hash.slice(1); setTimeout(()=>openDetail(id), 600); }
 
-    // модалки/кнопки
+    // модалки
     $("#tabSearch").onclick=()=>{ $("#searchOverlay").classList.add('on'); $("#searchOverlay").setAttribute('aria-hidden','false'); lockScroll(true); };
     $("#searchClose").onclick=()=>{ $("#searchOverlay").classList.remove('on'); $("#searchOverlay").setAttribute('aria-hidden','true'); lockScroll(false); };
     $("#btnApply").onclick=()=>{ applyFilters(); $("#searchOverlay").classList.remove('on'); lockScroll(false); };
