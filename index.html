@@ -52,11 +52,11 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .priceBtn{position:absolute;right:16px;bottom:14px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:8px 16px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit}
 
 /* modal */
-.pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
+.pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06);font-family:'Russo One',Arial,system-ui}
 .pillStat svg{width:16px;height:16px}
 .pillStat.green{background:var(--g);color:#fff}
 .pillStat.green svg{fill:#fff}
-.pillStat b{font-family:inherit}
+.pillStat b{font-family:'Russo One',Arial,system-ui}
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
 dialog::backdrop{background:rgba(0,0,0,.68)}
 #modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
@@ -205,7 +205,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://defensive-girls-senators-harley.trycloudflare.com';
+const SERVER = 'https://programmer-meanwhile-province-inspector.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
 /* Splash 5s */
@@ -256,7 +256,7 @@ function setBanner(b){
   }
 }
 
-/* cards (no likes/views on grid) */
+/* cards */
 function mkCard(ad){
   const img = (ad.images && ad.images[0]) ? ad.images[0] : '';
   return `<div class="card" onclick="openDetail('${ad.id}')">
@@ -296,7 +296,6 @@ window.openDetail = (id)=>{
   const dlg=document.getElementById('dlgDetail'); dlg.showModal();
   dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
 
-  /* views */
   document.getElementById('vNum').textContent = (parseInt(document.getElementById('vNum').textContent,10)||0)+1;
   CUR.views = (CUR.views||0)+1; draw();
   fetch(SERVER+`/api/view/${encodeURIComponent(CUR.id)}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
@@ -314,7 +313,7 @@ function renderCar(initial=false){
 }
 window.car = d=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(false); };
 
-/* like — одномоментний клік з uid */
+/* like */
 document.getElementById('likeTop').onclick = async ()=>{
   if(!CUR) return;
   try{
