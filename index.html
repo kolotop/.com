@@ -1,266 +1,334 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <title>KOLO — барахолка оголошень</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"/>
-  <meta name="format-detection" content="telephone=no"/>
-  <meta name="theme-color" content="#10b981"/>
-
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bg:#f5fbf7; --paper:#fff; --ink:#0f172a; --muted:#64748b;
-      --brand:#10b981; --brand-press:#0d9a72; --line:#d7e9df;
-      --hot:#ff4d4f; --thumb:#e8f5ef;
-      --shadow-sm:0 4px 12px rgba(2,44,34,.08); --shadow-lg:0 14px 40px rgba(2,44,34,.14);
-      --top:60px;
-    }
-    *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-    html,body{height:100%} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,Segoe UI,Roboto,Arial,sans-serif}
-
-    /* Topbar */
-    .topbar{position:sticky;top:0;z-index:50;height:var(--top);display:flex;gap:10px;align-items:center;padding:10px 12px;background:#ffffffcc;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(6px)}
-    .pill{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
-    .counter{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:900;color:#0b3b2d}
-    .grow{flex:1}
-    /* "+" квадрат с закруглёнными углами */
-    .btnPlus{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--brand);display:grid;place-items:center;color:#fff;font:900 24px/1 "Russo One";text-decoration:none;box-shadow:var(--shadow-sm)}
-    .btnPlus:active{transform:translateY(1px);background:var(--brand-press)}
-
-    .container{max-width:1140px;margin:12px auto;padding:0 12px}
-
-    /* Банер (один, адаптивный). Смена картинок каждые 5с */
-    .adWrap{margin:6px 0 12px}
-    .adBox{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
-    .adImg{width:100%;height:140px;object-fit:contain;background:#fff} /* показываем всю картинку */
-    .adActions{display:flex;justify-content:flex-end;padding:6px}
-    .adBtn{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
-
-    /* HOT */
-    .panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-sm)}
-    .hotHead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-    .hotTag{background:var(--hot);color:#fff;border-radius:12px;padding:6px 10px;font:900 12px/1 "Russo One";box-shadow:0 0 0 1px #ff6b6d inset}
-    .hotGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-    @media (max-width:1024px){.hotGrid{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:640px){.hotGrid{grid-template-columns:repeat(2,1fr)}}
-    .hotCard{border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;background:#fff}
-    .hotThumb{position:relative;padding-top:56%;background:var(--thumb)}
-    .hotBadge{position:absolute;left:8px;top:8px;background:var(--hot);color:#fff;border-radius:999px;padding:4px 8px;font:900 11px/1 "Russo One";border:1px solid #ff6b6d}
-    .hotPrice{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:10px;padding:4px 8px;font:900 12px/1 "Russo One"}
-
-    /* GRID: на телефоне — два столбца */
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
-    .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:pointer;box-shadow:var(--shadow-sm)}
-    .thumb{position:relative;padding-top:62%;background:var(--thumb)}
-    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .pillHot{position:absolute;left:8px;top:8px;background:var(--hot);color:#fff;border:1px solid #ff6b6d;border-radius:999px;padding:4px 8px;font:900 11px/1 "Russo One"}
-    .price{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:10px;padding:4px 8px;font:900 12px/1 "Russo One"}
-    .body{padding:10px}
-    .title{font:900 16px/1.2 "Russo One"}
-    .meta{color:var(--muted);font-weight:700}
-
-    /* DETAIL */
-    .detail{position:fixed;inset:0;display:none;background:rgba(0,0,0,.38);z-index:70}
-    .detail.on{display:block}
-    .sheet{position:absolute;left:50%;top:6vh;transform:translateX(-50%);width:min(1080px,96vw);max-height:88vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-lg)}
-    .dHead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-    .btn{height:36px;border:none;border-radius:12px;background:var(--brand);color:#fff;font:900 14px/36px "Russo One";padding:0 12px;cursor:pointer}
-    .btn:active{transform:translateY(1px);background:var(--brand-press)}
-    .big{position:relative;padding-top:56%;background:var(--thumb);border-radius:12px;overflow:hidden}
-    .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#ffffffdd;font:900 26px/42px "Russo One";display:grid;place-items:center;cursor:pointer}
-    .prev{left:8px}.next{right:8px}
-    /* оверлеи на фото: лайк слева вверху, просмотры справа вверху, цена справа внизу */
-    .ovLike{position:absolute;left:8px;top:8px;border-radius:999px;background:var(--brand);color:#fff;padding:4px 8px;font:900 12px/1 "Russo One"}
-    .ovViews{position:absolute;right:8px;top:8px;border-radius:999px;background:var(--brand);color:#fff;padding:4px 8px;font:900 12px/1 "Russo One"}
-    .ovPrice{position:absolute;right:8px;bottom:8px;border-radius:10px;background:var(--brand);color:#fff;padding:4px 8px;font:900 12px/1 "Russo One"}
-
-    .pager{display:flex;justify-content:center;margin:14px 0}
-  </style>
+<meta charset="utf-8"/>
+<title>KOLO — барахолка оголошень</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
+<meta name="theme-color" content="#10b981"/>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6fbf8;--paper:#fff;--ink:#0f172a;--muted:#64748b;--brand:#10b981;--brand-press:#0c8f63;--line:#d6e8de;--hot:#ff4d4f;--shadow-sm:0 4px 12px rgba(2,44,34,.08);--shadow-lg:0 14px 40px rgba(2,44,34,.14);--top:60px;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,Segoe UI,Roboto,Arial}body.modal-open{overflow:hidden}
+.topbar{position:sticky;top:0;z-index:40;height:var(--top);display:flex;gap:10px;align-items:center;padding:10px 12px;background:#ffffffcc;backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--line)}
+.pill{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700}
+.grow{flex:1}
+.visitors{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;color:#0b3b2d}
+.btnPlus{width:38px;height:38px;border-radius:10px;background:var(--brand);border:none;color:#fff;display:grid;place-items:center;font:900 22px/1 "Russo One";box-shadow:var(--shadow-sm);cursor:pointer}
+.btnPlus:active{transform:translateY(1px);background:var(--brand-press)}
+.container{max-width:1200px;margin:12px auto;padding:0 12px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-sm)}
+.adWrap{margin:8px 0}.adBanner{position:relative;height:160px;border:1px solid var(--line);border-radius:16px;overflow:hidden}.adBanner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.adNote{font-size:12px;opacity:.85;text-align:right;margin-top:6px}
+@media(max-width:640px){.adBanner{height:140px}}
+.hotHead{display:flex;gap:10px;align-items:center;margin:10px 0 8px}.tagHot{display:inline-flex;align-items:center;gap:6px;background:var(--hot);color:#fff;border:1px solid #ff6567;border-radius:12px;padding:6px 10px;font:700 13px/1 "Russo One"}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}@media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;box-shadow:var(--shadow-sm)}
+.thumb{position:relative;padding-top:62%;background:#e7f4ee;overflow:hidden}.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hotPill{position:absolute;left:8px;top:8px;background:var(--hot);color:#fff;border:1px solid #ff6567;border-radius:999px;padding:4px 8px;font:800 11px/1 "Russo One";z-index:2}
+.badge{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:10px;padding:4px 8px;font:800 12px/1 "Russo One";z-index:2}
+.body{padding:10px;display:flex;gap:6px;flex-direction:column}.title{font:700 16px/1.2 "Russo One"}
+.detail{position:fixed;inset:0;z-index:100;display:none;background:rgba(0,0,0,.35)}.detail.active{display:block}
+.sheet{position:absolute;left:50%;top:6vh;transform:translateX(-50%);width:min(1080px,96vw);max-height:88vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-lg)}
+.modalHead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.iconBtn{height:34px;width:34px;border:1px solid var(--line);background:var(--brand);color:#fff;border-radius:10px;display:grid;place-items:center;box-shadow:var(--shadow-sm);cursor:pointer}
+.closeX{height:34px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 12px;font:700 13px/34px 'Russo One';cursor:pointer}
+.big{position:relative;padding-top:56%;background:#e7f4ee;border-radius:12px;overflow:hidden}.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.navBtn{position:absolute;top:50%;transform:translateY(-50%);height:48px;min-width:48px;padding:0 12px;border-radius:14px;border:1px solid var(--line);background:#ffffffdd;color:#065f46;font-weight:900;font-size:26px;line-height:46px;cursor:pointer;box-shadow:var(--shadow-sm)}.navPrev{left:8px}.navNext{right:8px}
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:900px){.specs{grid-template-columns:repeat(2,1fr)}}.spec{background:#f4fbf7;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:13px}.h{font:700 14px/1 "Russo One";margin:10px 0 6px}
+.pager{display:flex;justify-content:center;margin:16px 0 12px}.btn{height:42px;border:none;border-radius:12px;background:var(--brand);color:#fff;font:700 16px/42px "Russo One";padding:0 18px;cursor:pointer;box-shadow:var(--shadow-sm)}.btn:active{transform:translateY(1px);background:var(--brand-press)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:150}.overlay.on{display:flex}
+.modal{width:min(960px,96vw);max-height:88vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-lg)}
+label{font-size:12px;font-weight:800;opacity:.92;display:block;margin:0 0 6px;color:#0b3b2d}
+.input,.select{width:100%;height:46px;border-radius:12px;border:1px solid var(--line);background:#edf7f1;color:#064e3b;padding:0 12px;font-size:14px;outline:none}textarea.input{height:auto;padding:10px}
+.preloader{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:9999}.pl-ring{width:140px;height:140px;border-radius:50%;border:12px solid #e7f4ee;border-top-color:#10b981;animation:spin 1.2s linear infinite}.pl-sub{font:800 16px/1.2 "Montserrat";color:#0b3b2d}@keyframes spin{to{transform:rotate(360deg)}}
+.helpFab{position:fixed;right:14px;bottom:14px;width:54px;height:54px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;border:1px solid #0e9f76;box-shadow:0 10px 25px rgba(1,60,44,.2);z-index:160;cursor:pointer;font:900 22px/1 'Russo One'}
+</style>
 </head>
-<body>
-  <header class="topbar">
-    <button id="btnSearch" class="pill">Пошук</button>
-    <div id="visitors" class="counter"><span id="vis">0</span>&nbsp;користувачів</div>
-    <div class="grow"></div>
-    <!-- Іконка "+" ведёт в бот -->
-    <a class="btnPlus" id="btnPlus" href="https://t.me/kolotop_bot" target="_blank" rel="noopener">+</a>
-  </header>
+<body class="modal-open">
+<!-- preloader -->
+<div id="preloader" class="preloader"><div class="pl-ring"></div><div class="pl-sub">Дошка оголошень №1 в Україні 😊</div></div>
 
-  <main class="container">
-    <!-- Банер (клик по баннеру ничего не открывает; кнопка рядом ведёт в бота) -->
-    <section class="adWrap">
-      <div class="adBox">
-        <img id="adImg" class="adImg" alt="реклама">
-        <div class="adActions">
-          <a class="adBtn" href="https://t.me/kolotop_bot" target="_blank" rel="noopener">Замовити рекламу</a>
-        </div>
-      </div>
-    </section>
+<header class="topbar">
+  <div class="pill" id="tabSearch">Пошук</div>
+  <div class="visitors"><span id="visCount">20000</span> користувачів</div>
+  <div class="grow"></div>
+  <button class="btnPlus" id="tabSell">+</button>
+</header>
 
-    <!-- HOT -->
-    <section id="hot" class="panel" style="display:none">
-      <div class="hotHead"><div class="hotTag">HOT</div></div>
-      <div id="hotGrid" class="hotGrid"></div>
-    </section>
-
-    <!-- Список -->
-    <section class="grid" id="grid"></section>
-    <div class="pager"><button id="btnMore" class="btn" style="display:none">Показати ще</button></div>
-  </main>
-
-  <!-- Деталь -->
-  <div id="detail" class="detail" aria-hidden="true">
-    <div class="sheet">
-      <div class="dHead">
-        <div id="dTitle" class="title" style="font:900 20px/1.2 'Russo One'">...</div>
-        <div class="grow"></div>
-        <button id="dShare" class="btn" title="Поділитися">⬆</button>
-        <button id="dClose" class="btn" style="background:#e2e8f0;color:#0f172a">Закрити</button>
-      </div>
-      <div class="big" id="dBig"></div>
-      <div id="dSpecs" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px"></div>
-      <div style="height:1px;background:var(--line);margin:10px 0"></div>
-      <div id="dDesc" style="opacity:.9"></div>
-      <div style="height:1px;background:var(--line);margin:10px 0"></div>
-      <div id="dSeller"></div>
-    </div>
+<main class="container">
+  <div class="adWrap">
+    <div class="adBanner"><img id="adBannerImg" alt="реклама"></div>
+    <div class="adNote"><button class="pill" id="btnAds">Замовити рекламу</button></div>
   </div>
 
+  <section id="hotPanel" class="panel" style="display:none">
+    <div class="hotHead"><div class="tagHot">HOT</div></div>
+    <div class="grid" id="hotGrid"></div>
+  </section>
+
+  <section class="panel" style="margin-top:10px">
+    <div style="display:flex;gap:10px;align-items:center">
+      <input class="input" id="fltQuery" placeholder="Знайти…">
+      <button class="btn" id="btnApply">Знайти</button>
+      <div class="grow"></div>
+    </div>
+  </section>
+
+  <section class="grid" id="grid" style="margin-top:12px"></section>
+  <div class="pager"><button class="btn" id="btnMore" style="display:none">Показати ще</button></div>
+</main>
+
+<!-- DETAIL -->
+<div id="detail" class="detail" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="modalHead">
+      <button class="iconBtn" id="dShare" title="Поділитися">▣</button>
+      <button class="iconBtn" id="dLike" title="Лайк">❤</button><span id="dLikeCnt" style="font-weight:800"></span>
+      <div class="grow"></div>
+      <button class="closeX" id="dClose">Закрити</button>
+    </div>
+    <div id="dHeader" style="display:flex;gap:10px;align-items:center;margin-bottom:8px"></div>
+    <div id="dGal"></div>
+    <div class="specs" id="dSpecs" style="margin-top:10px"></div>
+    <div class="h">Опис</div><div id="dDesc" style="opacity:.9"></div>
+    <div class="h">Продавець</div><div class="spec" id="dSeller" style="background:#fff"></div>
+  </div>
+</div>
+
+<!-- SELL -->
+<div class="overlay" id="sellOverlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sellTitle">
+    <div class="modalHead">
+      <h3 id="sellTitle" style="margin:0;font:700 18px/1 'Russo One'">Додати оголошення</h3>
+      <div class="grow"></div><button class="closeX" id="sellClose">Закрити</button>
+    </div>
+    <div class="actions" style="margin-bottom:8px">
+      <span id="sellModeBadge" class="pill">Звичайне</span>
+      <button class="pill" id="setNormal">Звичайне</button>
+      <button class="pill" id="setHot" style="background:#ff4d4f;color:#fff;border-color:#ff6567">HOT</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div><label>Область</label><input class="input" id="sRegion"></div>
+      <div><label>Місто</label><input class="input" id="sCity"></div>
+      <div><label>Категорія</label>
+        <select class="select" id="sCat">
+          <option>Транспорт</option><option>Електроніка</option><option>Нерухомість</option>
+          <option>Меблі</option><option>Побутова техніка</option><option>Велосипеди</option>
+          <option>Тварини</option><option>Послуги</option><option>Дім і сад</option>
+        </select></div>
+      <div style="grid-column:1/-1"><label>Заголовок</label><input class="input" id="sTitle"></div>
+      <div><label>Стан</label><select class="select" id="sCond"><option>Нове</option><option>Вживане</option><option>Після ремонту</option></select></div>
+      <div><label>Ціна, ₴</label><input class="input" id="sPrice" inputmode="numeric"></div>
+      <div><label>Телефон</label><input class="input" id="sPhone" placeholder="+380"></div>
+      <div><label>Ім'я</label><input class="input" id="sName" placeholder="Ваше ім'я"></div><div></div><div></div>
+      <div style="grid-column:1/-1"><label>Опис</label><textarea class="input" id="sDesc" rows="3"></textarea></div>
+      <div style="grid-column:1/-1">
+        <label>Фото (до 5)</label>
+        <input id="sImages" type="file" accept="image/*" multiple style="display:none">
+        <button class="pill" id="btnPickImages" type="button">Додати фото</button>
+        <span id="imgCount" style="margin-left:8px;opacity:.8;font-weight:700"></span>
+        <div id="thumbs" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
+      </div>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn" id="sSave">Опублікувати</button>
+      <span style="opacity:.8">Після відправки з’явиться вікно оплати та модерації 💳</span>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT -->
+<div class="helpFab" id="helpFab">?</div>
+<div class="overlay" id="helpOverlay">
+  <div class="modal">
+    <div class="modalHead"><h3 style="margin:0">Підтримка</h3><div class="grow"></div><button class="closeX" id="helpClose">Закрити</button></div>
+    <div id="helpLog" style="max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;margin-bottom:8px"></div>
+    <div style="display:flex;gap:8px">
+      <input class="input" id="helpText" placeholder="Напишіть повідомлення…"><button class="btn" id="helpSend">Надіслати</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/*** === НАСТРОЙКА API: ВСТАВЬ СВОЙ URL ТУТ === ***/
-const API_BASE = 'https://emma-bloomberg-completed-lamps.trycloudflare.com'; // например: 'http://127.0.0.1:8000'
-/*** ============================================ ***/
+// ===== УКАЖИ URL СЕРВЕРА =====
+const API = "https://fountain-doc-envelope-gcc.trycloudflare.com"; // <= вставь свой адрес сервера/туннеля
 
 const $=s=>document.querySelector(s);
-const grid=$("#grid"), hotGrid=$("#hotGrid"), btnMore=$("#btnMore");
-const adImg=$("#adImg");
+const LOG=(extra={})=>fetch(`${API}/track`,{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({page:location.pathname,...extra})}).catch(()=>{});
 
-const IMG_FALLBACK = (t)=> {
-  const c=document.createElement('canvas'); c.width=800;c.height=500;
-  const g=c.getContext('2d'); g.fillStyle="#e9f7f1"; g.fillRect(0,0,800,500);
-  g.fillStyle="#0f172a"; g.font="bold 28px Montserrat"; g.fillText(t.slice(0,28),20,60);
-  return c.toDataURL();
+// счётчик 1..3/15с у всех одинаково
+const VIS_BASE=20000,TICK_MS=15000;
+const epochDay=()=>{const n=new Date();return Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());}
+const tickNow=()=>Math.floor((Date.now()-epochDay())/TICK_MS);
+const incByTick=t=>((t*1103515245+12345)>>>0)%3+1;
+function visitorsNow(){let add=0,tn=tickNow();for(let i=0;i<=tn;i++)add+=incByTick(i);return VIS_BASE+add;}
+
+const fmtUA=d=>new Date(d).toLocaleDateString('uk-UA');
+const elImg=(src,alt)=>{const i=new Image();i.loading="lazy";i.alt=alt||"";i.referrerPolicy="no-referrer";i.src=src||"";return i;}
+let adsImgs=[],page=0,pageSize=24;
+
+// админский бот нам не нужен на фронте. «Замовити рекламу» — просто открываем окно поддержки:
+$("#btnAds").onclick=()=>{$("#helpOverlay").classList.add('on');document.body.classList.add('modal-open');};
+
+// visitors UI
+const updVisitors=()=>$("#visCount").textContent=visitorsNow().toLocaleString('uk-UA');
+
+// preloader
+setTimeout(()=>{$("#preloader").style.display='none';document.body.classList.remove('modal-open');}, 1500);
+
+// banner
+async function loadConfig(){
+  const js = await fetch(`${API}/config`).then(r=>r.json()).catch(()=>({}));
+  adsImgs = js.ads?.images||[];
+  if(adsImgs.length){
+    let i=0; const b=$("#adBannerImg");
+    const set=()=>{ b.src=adsImgs[i%adsImgs.length]; i++; };
+    set(); setInterval(set, 5000);
+  }
+}
+
+// HOT + grid
+async function loadHot(){
+  const js = await fetch(`${API}/listings/hot`).then(r=>r.json()).catch(()=>({items:[]}));
+  const items = js.items||[];
+  const grid=$("#hotGrid"); grid.innerHTML="";
+  if(!items.length){ $("#hotPanel").style.display="none"; return; }
+  $("#hotPanel").style.display="block";
+  items.forEach(renderCardTo(grid));
+}
+
+function renderCardTo(container){
+  return (it)=>{
+    const el=document.createElement('article'); el.className='card'; el.onclick=()=>openDetail(it.id);
+    const th=document.createElement('div'); th.className='thumb';
+    if(it.hot){const hot=document.createElement('div');hot.className='hotPill';hot.textContent='HOT';th.appendChild(hot);}
+    const price=document.createElement('div');price.className='badge';price.textContent=`${(it.price||0).toLocaleString('uk-UA')} ${it.currency||"₴"}`;th.appendChild(price);
+    th.appendChild(elImg((it.images&&it.images[0])||"", it.title));
+    el.appendChild(th);
+    const body=document.createElement('div');body.className='body';
+    body.innerHTML=`<div class="title">${it.title}</div><div class="meta">${it.cat} • ${it.cond}</div><div class="meta">${it.region} • ${it.city}</div>`;
+    el.appendChild(body);
+    container.appendChild(el);
+  }
+}
+
+let lastTotal=0;
+async function applyFilters(reset=true){
+  if(reset){ page=0; $("#grid").innerHTML=""; }
+  const q=$("#fltQuery").value.trim();
+  const js = await fetch(`${API}/listings?search=${encodeURIComponent(q)}&page=${page}&size=${pageSize}`).then(r=>r.json()).catch(()=>({total:0,items:[]}));
+  lastTotal = js.total||0;
+  (js.items||[]).forEach(renderCardTo($("#grid")));
+  const hasMore=((page+1)*pageSize<lastTotal);
+  $("#btnMore").style.display = hasMore? "inline-flex":"none";
+}
+
+$("#btnMore").onclick=()=>{page++;applyFilters(false);};
+$("#btnApply").onclick=()=>applyFilters(true);
+
+// ===== DETAIL
+let current=null, galImgs=[],galIdx=0;
+const dLikeBtn=$("#dLike"), dLikeCnt=$("#dLikeCnt"), dShareBtn=$("#dShare");
+
+async function openDetail(id){
+  const q=$("#fltQuery").value.trim();
+  const js = await fetch(`${API}/listings?search=${encodeURIComponent(q)}&page=0&size=9999`).then(r=>r.json()).catch(()=>({items:[]}));
+  current=(js.items||[]).find(x=>x.id===id); if(!current) return;
+  fetch(`${API}/listings/${id}/view`,{method:"POST"}).catch(()=>{});
+  const d=$("#detail"); d.classList.add('active'); d.setAttribute('aria-hidden','false'); document.body.classList.add('modal-open');
+  $("#dClose").onclick=()=>{ d.classList.remove('active'); d.setAttribute('aria-hidden','true'); document.body.classList.remove('modal-open'); };
+
+  const head=document.createElement('div'); head.style.display='flex'; head.style.alignItems='center'; head.style.gap='10px';
+  head.innerHTML=`<div class="title" style="font:700 20px/1.2 'Russo One'">${current.title}</div>
+                  <div class="pill" style="background:#10b981;color:#fff">₴ ${(current.price||0).toLocaleString('uk-UA')}</div>`;
+  $("#dHeader").innerHTML=""; $("#dHeader").appendChild(head);
+
+  galImgs=(current.images&&current.images.length)?current.images:[""]; galIdx=0; renderGallery(current.title);
+
+  $("#dSpecs").innerHTML =
+    `<div class="spec"><div class="h">Категорія</div>${current.cat}</div>
+     <div class="spec"><div class="h">Стан</div>${current.cond}</div>
+     <div class="spec"><div class="h">Область</div>${current.region}</div>
+     <div class="spec"><div class="h">Місто</div>${current.city}</div>
+     <div class="spec"><div class="h">Опубліковано</div>${fmtUA(current.created||Date.now())}</div>`;
+
+  $("#dDesc").textContent = current.desc||"";
+  $("#dSeller").innerHTML = `<b>${current.contact?.name||"Продавець"}</b><br>${current.contact?.phone||""}`;
+  dLikeCnt.textContent = current.likes||0;
+
+  dLikeBtn.onclick=(e)=>{e.preventDefault();e.stopPropagation();fetch(`${API}/listings/${id}/like`,{method:"POST"}).then(r=>r.json()).then(js=>{dLikeCnt.textContent=js.likes}).catch(()=>{});};
+  dShareBtn.onclick=()=>{const url=location.origin+location.pathname+"#"+id; if(navigator.share) navigator.share({title:current.title,url}).catch(()=>{}); else {navigator.clipboard?.writeText(url); alert("Посилання скопійовано");}};
+}
+
+function renderGallery(title){
+  const gal=$("#dGal"); gal.innerHTML=`<div class="big"><button class="navBtn navPrev">‹</button><button class="navBtn navNext">›</button></div>`;
+  const big=gal.querySelector(".big"); big.appendChild(elImg(galImgs[galIdx]||"", title));
+  gal.querySelector(".navPrev").onclick=()=>{galIdx=(galIdx-1+galImgs.length)%galImgs.length; renderGallery(title);}
+  gal.querySelector(".navNext").onclick=()=>{galIdx=(galIdx+1)%galImgs.length; renderGallery(title);}
+}
+
+// ===== SELL =====
+const inputImages=$("#sImages"), btnPick=$("#btnPickImages"), thumbs=$("#thumbs"), imgCount=$("#imgCount");
+let pickedImgs=[]; btnPick.onclick=()=>inputImages.click();
+inputImages.onchange=async()=>{const files=[...(inputImages.files||[])].slice(0,5); for(const f of files){const b=await fileToDataURL(f); pickedImgs.push(b);} renderThumbs(); inputImages.value="";}
+function renderThumbs(){imgCount.textContent=pickedImgs.length?`${pickedImgs.length}/5`:"";thumbs.innerHTML="";pickedImgs.forEach(src=>{const im=elImg(src,"");im.style.cssText="width:72px;height:52px;object-fit:cover;border-radius:10px;border:1px solid var(--line)";thumbs.appendChild(im);});}
+function fileToDataURL(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file);});}
+
+let postMode="normal"; const modeBadge=$("#sellModeBadge");
+$("#setNormal").onclick=()=>{postMode="normal";modeBadge.textContent="Звичайне";modeBadge.style.background="#fff";modeBadge.style.color="#0f172a";}
+$("#setHot").onclick=()=>{postMode="hot";modeBadge.textContent="HOT";modeBadge.style.background="#ff4d4f";modeBadge.style.color="#fff";}
+
+function openSell(){ $("#sellOverlay").classList.add('on'); $("#sellOverlay").setAttribute('aria-hidden','false'); document.body.classList.add('modal-open'); }
+$("#tabSell").onclick=openSell;
+$("#sellClose").onclick=()=>{ $("#sellOverlay").classList.remove('on'); $("#sellOverlay").setAttribute('aria-hidden','true'); document.body.classList.remove('modal-open'); }
+
+$("#sSave").onclick=async ()=>{
+  const region=$("#sRegion").value.trim(), city=$("#sCity").value.trim(), cat=$("#sCat").value, title=$("#sTitle").value.trim();
+  const cond=$("#sCond").value, price=+($("#sPrice").value||0), phone=$("#sPhone").value.trim(), name=$("#sName").value.trim()||"Продавець", desc=$("#sDesc").value.trim();
+  if(!region||!city||!cat||!title||!desc||price<0) return alert("Заповніть усі поля і коректну ціну.");
+  const images=pickedImgs.slice(0,5);
+  const body={region,city,cat,cond,title,price, currency:"₴", desc, contact:{name,phone}, images, mode:postMode};
+  const js = await fetch(`${API}/submit`,{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()).catch(()=>({ok:false}));
+  if(js.ok){
+    // окно модерации и оплаты
+    const sid = js.sid;
+    alert(`✅ Заявку відправлено!\n\nНомер замовлення: ${sid}\n\nУ призначенні платежу ОБОВ'ЯЗКОВО вкажіть: ${sid}\n\nПісля оплати очікуйте підтвердження модератора.`);
+    window.open("https://www.privat24.ua/send/3g9dp","_blank");
+  }else{
+    alert("Помилка відправки. Спробуйте ще раз.");
+  }
+  pickedImgs=[]; renderThumbs(); $("#sellOverlay").classList.remove('on'); document.body.classList.remove('modal-open');
 };
 
-let ADS = []; let adIdx=0;
-async function loadConfig(){
-  try{
-    const r = await fetch(API_BASE+"/config"); const j = await r.json();
-    ADS = j.ads||[];
-    if(ADS.length){ adImg.src = ADS[0]; setInterval(()=>{adIdx=(adIdx+1)%ADS.length; adImg.src=ADS[adIdx];}, 5000); }
-  }catch(e){}
+// ===== SUPPORT =====
+const SID_SUPPORT = localStorage.getItem("kolo_support_sid") || "";
+async function ensureSupportSid(){
+  let sid = localStorage.getItem("kolo_support_sid");
+  if(!sid){
+    const js = await fetch(`${API}/support/open`,{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({sid:null})}).then(r=>r.json()).catch(()=>({}));
+    if(js.sid){ sid=js.sid; localStorage.setItem("kolo_support_sid", sid); }
+  }
 }
-
-async function trackVisit(){
-  try{
-    await fetch(API_BASE+"/track", {method:"POST"});
-  }catch(e){}
+function addHelpLine(who, text){
+  const row=document.createElement("div");
+  row.style.cssText="margin:6px 0;"; row.innerHTML = `<b>${who==='admin'?'KOLO':'Я'}:</b> ${text}`;
+  $("#helpLog").appendChild(row); $("#helpLog").scrollTop = 1e9;
 }
-async function visitors(){
-  try{
-    const r = await fetch(API_BASE+"/visitors"); const j=await r.json();
-    $("#vis").textContent = (j.count||0).toLocaleString('uk-UA');
-  }catch(e){}
+async function pullHelp(){
+  const sid = localStorage.getItem("kolo_support_sid"); if(!sid) return;
+  const js = await fetch(`${API}/support/inbox?sid=${encodeURIComponent(sid)}`).then(r=>r.json()).catch(()=>({items:[]}));
+  $("#helpLog").innerHTML=""; (js.items||[]).forEach(m=>addHelpLine(m.who,m.text));
 }
-setInterval(visitors, 2000);
+$("#helpFab").onclick=()=>{$("#helpOverlay").classList.add('on');document.body.classList.add('modal-open');pullHelp();};
+$("#helpClose").onclick=()=>{$("#helpOverlay").classList.remove('on');document.body.classList.remove('modal-open');};
+$("#helpSend").onclick=async()=>{const t=$("#helpText").value.trim(); if(!t) return; await ensureSupportSid(); const sid=localStorage.getItem("kolo_support_sid"); await fetch(`${API}/support/send`,{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({sid,text:t})}); $("#helpText").value=""; addHelpLine('user',t);};
 
-let page=0, pageSize=24, cache=[];
-function left(){ return Math.max(0, cache.length - page*pageSize); }
-function showMore(){
-  const slice = cache.slice(page*pageSize,(page+1)*pageSize);
-  slice.forEach(renderCard); page++;
-  btnMore.style.display = left()>0 ? "inline-flex" : "none";
-}
-
-async function loadListings(){
-  const r = await fetch(`${API_BASE}/listings?search=&page=0&size=10000`);
-  const j = await r.json();
-  cache = j.items||[];
-  cache.sort((a,b)=>b.created-a.created);
-  page=0; grid.innerHTML=""; showMore();
-  renderHot(cache.filter(x=>x.hot).slice(0,10));
-}
-function renderHot(items){
-  const has = items && items.length;
-  $("#hot").style.display = has ? "block":"none";
-  hotGrid.innerHTML = "";
-  if(!has) return;
-  items.forEach(it=>{
-    const el=document.createElement('div'); el.className="hotCard"; el.onclick=()=>openDetail(it);
-    const th=document.createElement('div'); th.className="hotThumb";
-    th.innerHTML = `<div class="hotBadge">HOT</div><div class="hotPrice">${it.price.toLocaleString('uk-UA')} ₴</div>`;
-    const img=document.createElement('img'); img.alt=it.title; img.referrerPolicy="no-referrer";
-    img.onerror=()=>{img.src=IMG_FALLBACK(it.title)};
-    img.src=(it.images&&it.images[0])||IMG_FALLBACK(it.title);
-    img.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover";
-    th.appendChild(img);
-    const body=document.createElement('div'); body.style.padding="8px"; body.innerHTML = `<div class="title">${it.title}</div><div class="meta">${it.city} • ${it.cat}</div>`;
-    el.appendChild(th); el.appendChild(body); hotGrid.appendChild(el);
-  });
-}
-
-function renderCard(it){
-  const el=document.createElement('article'); el.className="card"; el.onclick=()=>openDetail(it);
-  const th=document.createElement('div'); th.className="thumb";
-  if(it.hot){ const h=document.createElement('div'); h.className="pillHot"; h.textContent="HOT"; th.appendChild(h); }
-  const pr=document.createElement('div'); pr.className="price"; pr.textContent = `${(it.price||0).toLocaleString('uk-UA')} ₴`;
-  th.appendChild(pr);
-  const img=document.createElement('img'); img.alt=it.title; img.referrerPolicy="no-referrer";
-  img.onerror=()=>{img.src=IMG_FALLBACK(it.title)}; img.src=(it.images&&it.images[0])||IMG_FALLBACK(it.title);
-  th.appendChild(img);
-  const body=document.createElement('div'); body.className="body";
-  body.innerHTML = `<div class="title">${it.title}</div>
-                    <div class="meta">${it.cat} • ${it.cond}</div>
-                    <div class="meta">${it.region} • ${it.city}</div>`;
-  el.appendChild(th); el.appendChild(body); grid.appendChild(el);
-}
-
-function openDetail(it){
-  const d=$("#detail"); d.classList.add("on"); d.setAttribute("aria-hidden","false");
-  $("#dClose").onclick=()=>{ d.classList.remove("on"); d.setAttribute("aria-hidden","true"); };
-  $("#dTitle").textContent = it.title;
-
-  const big=$("#dBig"); big.innerHTML="";
-  const img=document.createElement('img'); img.src=(it.images&&it.images[0])||IMG_FALLBACK(it.title); img.alt="photo"; img.referrerPolicy="no-referrer";
-  img.onerror=()=>{img.src=IMG_FALLBACK(it.title)};
-  big.appendChild(img);
-  // overlays
-  const like=document.createElement('div'); like.className='ovLike'; like.textContent=`❤ ${(it.likes||0)}`;
-  const views=document.createElement('div'); views.className='ovViews'; views.textContent=`👁 ${(it.views||0)}`;
-  const price=document.createElement('div'); price.className='ovPrice'; price.textContent=`${(it.price||0).toLocaleString('uk-UA')} ₴`;
-  big.appendChild(like); big.appendChild(views); big.appendChild(price);
-
-  $("#dSpecs").innerHTML = `
-    <div class="pill" style="height:auto">${it.cat}</div>
-    <div class="pill" style="height:auto">${it.cond}</div>
-    <div class="pill" style="height:auto">${it.region}</div>
-    <div class="pill" style="height:auto">${it.city}</div>
-    <div class="pill" style="height:auto">${new Date(it.created).toLocaleDateString('uk-UA')}</div>
-  `;
-  $("#dDesc").textContent = it.desc||"";
-  $("#dSeller").innerHTML = `<div style="font-weight:900">Продавець</div>
-                             <div>${it.contact?.name||"—"}</div>
-                             <div>${it.contact?.phone||"—"}</div>`;
-  $("#dShare").onclick=()=> {
-    const url = location.origin + location.pathname + '#' + it.id;
-    if(navigator.share){ navigator.share({title: it.title, url}).catch(()=>{}); }
-    else { navigator.clipboard?.writeText(url); alert("Посилання скопійовано"); }
-  };
-}
-
-document.addEventListener('DOMContentLoaded', async ()=>{
-  await loadConfig();
-  await trackVisit();
-  await visitors();
-  await loadListings();
-  btnMore.onclick=showMore;
-  $("#btnSearch").onclick=()=>alert("Пошук поки що простий: поле скоро повернеться 🙂");
-});
+// ===== init =====
+(async function init(){
+  LOG(); updVisitors(); setInterval(updVisitors,1000);
+  await loadConfig(); await loadHot(); await applyFilters(true);
+  if(location.hash && location.hash.length>1){ const id=location.hash.slice(1); setTimeout(()=>openDetail(id),600); }
+  $("#tabSearch").onclick=()=>{ alert("Пошук поки що простий: поле зверху вже працює 😊"); };
+})();
 </script>
 </body>
 </html>
