@@ -5,7 +5,7 @@
 <title>KOLO — дошка оголошень</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#10b981">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23fff' stroke-width='6'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-family='Russo One,Arial' font-size='22' fill='%23fff'%3EKOLO%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23fff' stroke-width='6'/%3E%3Ctext x='50' y='58' text-anchor='middle' font-family='Russo One,Arial' font-size='22' fill='%23fff'%3EKOLO%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
 <style>
@@ -120,7 +120,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
     </div>
 
     <div id="banner" class="banner">
-      <img id="bannerImg" src="https://picsum.photos/seed/kolo-banner/1200/160" alt="banner">
+      <img id="bannerImg" src="https://https://i.ibb.co/qFpKrh7z/42.png" alt="banner">
       <a href="#" id="bannerLink" class="adlink">Замовити рекламу</a>
     </div>
   </div>
@@ -188,7 +188,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
   </div>
   <div class="inprow">
     <input class="inp" id="f_region" placeholder="Область">
-    <input class="inp" id="f_phone" value="+380" placeholder="+380">
+    <input class="inp" id="f_phone" placeholder="+380">
   </div>
   <textarea class="inp" id="f_desc" placeholder="Опис" rows="4" style="height:110px"></textarea>
   <input type="file" id="f_imgs" accept="image/*" multiple hidden>
@@ -214,18 +214,22 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = localStorage.getItem('kolo_server_url') || 'https://dishes-displayed-economies-pollution.trycloudflare.com';
+/* сервер = тот же origin, откуда открыт сайт */
+const SERVER = 'https://divine-composer-midwest-phd.trycloudflare.com';
+
 setTimeout(()=>document.getElementById('splash').style.display='none', 5000);
 const $ = s=>document.querySelector(s);
 const socket = io(SERVER, {transports:['websocket'], auth:{uid: localStorage.getItem('kolo_uid')||''}});
 const ME = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
-let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null, bannerImgs=[], bannerIdx=0, bannerTimer=null, pending=null;
 
-// свернуть баннер при скролле
+let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null,
+    bannerImgs=[], bannerIdx=0, bannerTimer=null, pending=null;
+
+/* свернуть баннер при скролле */
 const bannerEl = $('#banner');
 window.addEventListener('scroll', ()=>{ if(window.scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
 
-// sockets
+/* sockets */
 socket.on('visitors', n=>$('#visitors').textContent = n+' відвідувачів');
 socket.on('banner', b=>{
   if(!b) return;
@@ -236,13 +240,12 @@ socket.on('banner', b=>{
 });
 socket.on('listings', d=>{ ALL=d; page=1; draw(); });
 socket.on('chat', m=>{
-  // пришёл ответ админа — убрать «ожидание»
   if(pending){ pending.remove(); pending=null; }
   addMsg((m.from==='admin'?'Адмін':'Користувач')+' #'+m.id, m.text, m.from==='admin'?'other':'me');
 });
 socket.on('payresult', m=>{ if(m.uid===ME){ alert('Оплата успішна!'); hideAdd(); }});
 
-// render
+/* render */
 function mkCard(ad){
   return `<div class="card" onclick="openDetail('${ad.id}')">
     ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
@@ -262,7 +265,7 @@ function draw(){
   $('#btnMore').style.display = ALL.normal.length>slice.length ? 'inline-block':'none';
 }
 
-// detail
+/* detail */
 window.openDetail = (id)=>{
   CUR = [...ALL.hot,...ALL.normal].find(a=>a.id===id); if(!CUR) return;
   $('#modTitle').textContent = CUR.title.toUpperCase();
@@ -288,7 +291,7 @@ $('#btnLike').onclick = async ()=>{
   if(j && j.likes!==undefined){ $('#lNum').textContent=j.likes; draw(); }
 };
 
-// chooser/add form
+/* chooser/add form */
 function showChooser(){ $('#chooser').style.display='flex';
   function outside(evt){ if(evt.target.id==='chooser') hideChooser(); }
   $('#chooser').addEventListener('click', outside, {once:true});
@@ -303,12 +306,14 @@ $('#btnPlus').onclick=showChooser;
 $('#chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); showAdd();}
 $('#chooseHot').onclick=()=>{ADD_TYPE='hot'; hideChooser(); showAdd();}
 
-// заказ банера по ссылке
-$('#bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; hideChooser(); showAdd(); $('#f_price').value=999; $('#f_city').value=''; $('#f_region').value=''; $('#f_title').value='Рекламний банер'; };
+/* заказ банера — без автозаполнений полей */
+$('#bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; hideChooser(); showAdd(); };
 
+/* превью выбранного фото */
 $('#imgPh').onclick=()=>$('#f_imgs').click();
 $('#f_imgs').onchange=()=>{ const f=$('#f_imgs').files[0]; if(f){ const u=URL.createObjectURL(f); $('#imgPh').innerHTML=`<img src="${u}">`; } };
 
+/* публикация */
 $('#btnPay').onclick=async ()=>{
   const fd=new FormData();
   fd.append('type', ADD_TYPE);
@@ -323,7 +328,7 @@ $('#btnPay').onclick=async ()=>{
   if(!(j && j.status==='ok')) alert('Сервер недоступний');
 };
 
-// поиск
+/* поиск */
 function showSearch(){ $('#searchBox').style.display='flex'; $('#q').focus();
   function outside(evt){ if(evt.target.id==='searchBox') hideSearch(); }
   $('#searchBox').addEventListener('click', outside, {once:true});
@@ -336,21 +341,20 @@ $('#go').onclick=()=>{ const k=($('#q').value||'').toLowerCase(); hideSearch(); 
   fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>ALL=j.data);
 };
 
-// чат
+/* чат */
 const chatWrap=$('#chatWrap');
 $('#chatFab').onclick=()=>{ chatWrap.style.display='block'; };
 chatWrap.addEventListener('click', (e)=>{ if(e.target===chatWrap) chatWrap.style.display='none'; });
 function addMsg(who,text,cls){ const d=document.createElement('div'); d.style.padding='8px 10px'; d.style.borderRadius='12px'; d.style.background=cls==='other'?'#f3f4f6':'#e8fff5'; d.textContent=who+': '+text; $('#msgs').appendChild(d); $('#msgs').scrollTop=99999; }
 $('#send').onclick=()=>{ const v=$('#msg').value.trim(); if(!v) return; $('#msg').value='';
   socket.emit('chat',{from:'user',uid:ME,text:v}); addMsg('Я',v,'me');
-  // индикатор ожидания
   pending=document.createElement('div'); pending.className='typing'; pending.style.margin='8px 10px'; $('#msgs').appendChild(pending); $('#msgs').scrollTop=99999;
 };
 
-// more
+/* more */
 $('#btnMore').onclick=()=>{ page++; draw(); };
 
-// init
+/* init */
 fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ ALL=j.data; draw(); });
 </script>
 </body>
