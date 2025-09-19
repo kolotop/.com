@@ -51,17 +51,15 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
 .priceBtn{position:absolute;right:16px;bottom:14px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:8px 16px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit}
 
-/* stat pills in modal */
+/* modal */
 .pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
 .pillStat svg{width:16px;height:16px}
 .pillStat.green{background:var(--g);color:#fff}
 .pillStat.green svg{fill:#fff}
 .pillStat b{font-family:inherit}
-
-/* detail modal */
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
-dialog::backdrop{background:rgba(0,0,0,.68)} /* темніше */
-#modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28);transition:opacity .2s ease}
+dialog::backdrop{background:rgba(0,0,0,.68)}
+#modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .modHead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #edf3f0}
 .modTitle{flex:1}
 .carousel{position:relative;border-bottom:1px solid #edf3f0;background:#fff}
@@ -77,7 +75,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)} /* темніше */
 .chip{background:#eefaf5;color:#0b1720;border-radius:12px;padding:10px 12px}
 
 /* chooser/add/search */
-#chooser,#addForm,#searchBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50;transition:opacity .2s ease}
+#chooser,#addForm,#searchBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50}
 .chooseBox{position:relative;width:90%;max-width:420px;background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .chooseBtn{width:100%;padding:16px;border:none;border-radius:12px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);font-family:inherit}
 .chooseBtn.green{background:var(--g);color:#fff}
@@ -119,7 +117,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
     </div>
 
     <div id="banner" class="banner">
-      <img id="bannerImg" src="https://i.ibb.co/qFpKrh7z/42.png" alt="banner">
+      <img id="bannerImg" src="" alt="banner" onerror="this.style.display='none'">
       <a href="#" id="bannerLink" class="adlink" style="display:block;text-align:right;font-size:12px;color:#2b7;margin-top:6px">Замовити рекламу</a>
     </div>
   </div>
@@ -207,40 +205,58 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://booth-determines-carlos-ratios.trycloudflare.com';
+const SERVER = 'https://defensive-girls-senators-harley.trycloudflare.com';
+const $ = s=>document.querySelector(s);
 
 /* Splash 5s */
 setTimeout(()=>document.getElementById('splash').style.display='none',5000);
-const $ = s=>document.querySelector(s);
 
-/* сокет */
+/* socket */
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
 const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 
-/* банер стиск — не зникає */
+/* banner shrink */
 const bannerEl = $('#banner');
 window.addEventListener('scroll', ()=>{ if(window.scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
 
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
+let bannerList=[], bannerIdx=0, bannerTimer=null;
 
-/* сокет події */
+/* sockets */
 socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
-socket.on('banner', b=>{
-  if(!b) return;
-  const img = (b.images && b.images.length ? b.images[0] : (b.image || ''));
-  if(img){ $('#bannerImg').src=img; $('#bannerLink').href=b.link||'#'; }
-});
+socket.on('banner', b=>{ setBanner(b); });
 socket.on('listings', d=>{ ALL=d; page=1; draw(); });
-socket.on('payresult', m=>{ if(m.uid===uidLocal){ alert('Оплата успішна!'); hideAdd(); }});
+socket.on('payresult', m=>{ if(m.uid===uidLocal || !m.uid){ alert('Оплата успішна!'); hideAdd(); }});
 
-/* початкове завантаження — підстрахуємо банер */
+/* initial data */
 fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{
   ALL=j.data||ALL; draw();
-  const b=j.banner||{};
-  const img=(b.images&&b.images.length?b.images[0]:(b.image||'')); if(img){ $('#bannerImg').src=img; $('#bannerLink').href=b.link||'#'; }
+  setBanner(j.banner||{});
 });
 
-/* карточки без лайків/переглядів — показуємо зображення та заголовок */
+/* banner rotator */
+function setBanner(b){
+  const imgEl = document.getElementById('bannerImg');
+  const linkEl = document.getElementById('bannerLink');
+  bannerList = (b && b.images && b.images.length)? b.images.slice() : (b && b.image?[b.image]:[]);
+  linkEl.href = (b && b.link) ? b.link : '#';
+
+  if(bannerTimer){ clearInterval(bannerTimer); bannerTimer=null; }
+  if(!bannerList.length){ imgEl.style.display='none'; return; }
+
+  bannerIdx = 0;
+  imgEl.style.display='block';
+  imgEl.src = bannerList[bannerIdx];
+
+  if(bannerList.length>1){
+    bannerTimer = setInterval(()=>{
+      bannerIdx = (bannerIdx+1)%bannerList.length;
+      imgEl.src = bannerList[bannerIdx];
+    }, 5000);
+  }
+}
+
+/* cards (no likes/views on grid) */
 function mkCard(ad){
   const img = (ad.images && ad.images[0]) ? ad.images[0] : '';
   return `<div class="card" onclick="openDetail('${ad.id}')">
@@ -251,19 +267,20 @@ function mkCard(ad){
   </div>`;
 }
 function draw(){
-  $('#hotGrid').innerHTML = (ALL.hot||[]).map(mkCard).join('');
+  document.getElementById('hotGrid').innerHTML = (ALL.hot||[]).map(mkCard).join('');
   const slice = (ALL.normal||[]).slice(0,page*6);
-  $('#listGrid').innerHTML = slice.map(mkCard).join('');
-  $('#btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
+  document.getElementById('listGrid').innerHTML = slice.map(mkCard).join('');
+  document.getElementById('btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
 }
 
-/* деталь */
+/* detail */
 window.openDetail = (id)=>{
   CUR = [...(ALL.hot||[]),...(ALL.normal||[])].find(a=>a.id===id); if(!CUR) return;
-  $('#modTitle').textContent = (CUR.title||'').toUpperCase();
-  $('#vNum').textContent = CUR.views||0; $('#lNum').textContent = CUR.likes||0;
-  $('#modDesc').textContent = CUR.desc||'';
-  $('#chips').innerHTML = [
+  document.getElementById('modTitle').textContent = (CUR.title||'').toUpperCase();
+  document.getElementById('vNum').textContent = CUR.views||0; 
+  document.getElementById('lNum').textContent = CUR.likes||0;
+  document.getElementById('modDesc').textContent = CUR.desc||'';
+  document.getElementById('chips').innerHTML = [
     'Код: '+(CUR.code||'00000'),
     'Телефон: '+(CUR.phone||'+380'),
     'Місто: '+(CUR.city||'-'),
@@ -271,20 +288,20 @@ window.openDetail = (id)=>{
     'Ціна: '+((CUR.price||0).toLocaleString('uk-UA'))+' ₴',
     'Дата публікації: '+(new Date().toLocaleDateString('uk-UA')),
   ].map(t=>`<div class="chip">${t}</div>`).join('');
-  $('#btnCall').onclick=()=>location.href='tel:'+(CUR.phone||'');
+  document.getElementById('btnCall').onclick=()=>location.href='tel:'+(CUR.phone||'');
 
-  CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800']; idx=0; renderCar(true);
+  CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800']; 
+  idx=0; renderCar(true);
 
-  const dlg=$('#dlgDetail'); dlg.showModal();
+  const dlg=document.getElementById('dlgDetail'); dlg.showModal();
   dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
 
-  /* перегляд: локально + сервер */
-  $('#vNum').textContent = (parseInt($('#vNum').textContent,10)||0)+1;
+  /* views */
+  document.getElementById('vNum').textContent = (parseInt(document.getElementById('vNum').textContent,10)||0)+1;
   CUR.views = (CUR.views||0)+1; draw();
-  fetch(SERVER+`/api/view/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
+  fetch(SERVER+`/api/view/${encodeURIComponent(CUR.id)}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
 };
 
-/* плавна карусель без "стрибків" */
 function renderCar(initial=false){
   const st = document.getElementById('carStage');
   if(initial){
@@ -293,15 +310,24 @@ function renderCar(initial=false){
     const imgs = [...st.querySelectorAll('img')];
     imgs.forEach((im,i)=>im.classList.toggle('show', i===idx));
   }
-  $('#carCount').textContent = `${idx+1}/${CAR.length}`;
+  document.getElementById('carCount').textContent = `${idx+1}/${CAR.length}`;
 }
 window.car = d=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(false); };
 
-/* Лайк */
+/* like — одномоментний клік з uid */
 document.getElementById('likeTop').onclick = async ()=>{
   if(!CUR) return;
-  const j = await fetch(SERVER+`/api/like/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json());
-  if(j && j.likes!==undefined){ document.getElementById('lNum').textContent=j.likes; CUR.likes=j.likes; draw(); }
+  try{
+    const j = await fetch(SERVER+`/api/like/${encodeURIComponent(CUR.id)}`,{
+      method:'POST',
+      headers:{'X-KOLO-UID':uidLocal,'Content-Type':'text/plain'}
+    }).then(r=>r.json());
+    if(j && j.likes!==undefined){ 
+      document.getElementById('lNum').textContent=j.likes; 
+      CUR.likes=j.likes; 
+      draw(); 
+    }
+  }catch(e){}
 };
 
 /* chooser/add */
@@ -316,10 +342,10 @@ document.getElementById('btnPlus').onclick=showChooser;
 document.getElementById('chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); showAdd();}
 document.getElementById('chooseHot').onclick=()=>{ADD_TYPE='hot'; hideChooser(); showAdd();}
 
-/* банер-замовлення */
+/* banner order -> addForm */
 document.getElementById('bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; hideChooser(); showAdd(); };
 
-/* прев’ю фото (макс 5) */
+/* photos preview (max 5) */
 let chosenFiles=[];
 document.getElementById('imgPh').onclick=()=>document.getElementById('f_imgs').click();
 document.getElementById('f_imgs').onchange=()=>{
@@ -327,7 +353,7 @@ document.getElementById('f_imgs').onchange=()=>{
   if (fs[0]) { const u=URL.createObjectURL(fs[0]); document.getElementById('imgPh').innerHTML=`<img src="${u}">`; }
 };
 
-/* публікація + LiqPay відкриття */
+/* publish + open LiqPay/demo */
 document.getElementById('btnPay').onclick=async ()=>{
   const fd=new FormData();
   fd.append('type', ADD_TYPE);
@@ -341,10 +367,10 @@ document.getElementById('btnPay').onclick=async ()=>{
 
   const j = await fetch(SERVER+'/pay/start',{method:'POST',body:fd,headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json()).catch(()=>({}));
   if(!(j && j.status==='ok')){ alert('Сервер недоступний'); return; }
-  if(j.checkout_url){ window.open(j.checkout_url, '_blank'); } // відкриваємо LiqPay/демо-сторінку
+  if(j.checkout_url){ window.open(j.checkout_url, '_blank'); }
 };
 
-/* пошук */
+/* search */
 function showSearch(){ document.getElementById('searchBox').style.display='flex'; document.getElementById('q').focus(); }
 function hideSearch(){ document.getElementById('searchBox').style.display='none'; }
 document.getElementById('searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
@@ -358,7 +384,7 @@ document.getElementById('go').onclick=()=>{ const k=(document.getElementById('q'
 /* more */
 document.getElementById('btnMore').onclick=()=>{ page++; draw(); };
 
-/* закриття detail кліком поза модалкою */
+/* close detail by click outside */
 document.getElementById('dlgDetail').addEventListener('click',e=>{ if(e.target.id==='dlgDetail') document.getElementById('dlgDetail').close(); });
 </script>
 </body>
