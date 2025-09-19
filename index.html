@@ -1,321 +1,309 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <title>KOLO — дошка оголошень</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
-  <meta name="format-detection" content="telephone=no"/>
-  <meta name="theme-color" content="#10b981"/>
-  <meta name="description" content="KOLO: додай оголошення за хвилину. Фільтри, HOT-ТОП, галерея, лайки та перегляди.">
+<meta charset="utf-8">
+<title>KOLO — дошка оголошень</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#10b981">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#10b981; --green2:#0b7d60; --red:#e94251; --bg:#f4f6f7; --txt:#0b1720;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Montserrat,system-ui,Arial;background:#fff;color:var(--txt)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:10px 14px}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+/* Topbar */
+header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:2px solid #10b9811a}
+.topbar{
+  display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{width:36px;height:36px}
+.pill{background:var(--green);color:#fff;border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px}
+.btn{border:none;background:var(--green);color:#fff;border-radius:12px;padding:10px 16px;font-weight:800;cursor:pointer}
+.btn.search{border-radius:10px}
+.btn.plus{background:#fff;color:var(--green);border:3px solid var(--green);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
 
-  <style>
-    :root{--green:#10b981;--dark:#0b7d60;--red:#ef4444;--bg:#f7f7f7;--txt:#111}
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:Montserrat,system-ui,Arial;background:#fff;color:var(--txt)}
-    a{color:inherit;text-decoration:none}
-    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #eee}
-    .wrap{max-width:1100px;margin:0 auto;padding:12px 16px}
-    .top{display:flex;align-items:center;gap:14px}
-    .logo{display:flex;align-items:center;gap:12px;font-weight:800}
-    .logo svg{width:42px;height:42px}
-    .pill{background:var(--green);color:#fff;padding:6px 10px;border-radius:999px;font-size:12px}
-    .search-row{display:grid;grid-template-columns:1fr 120px 120px 120px;gap:10px;margin-top:10px}
-    .search-row input,.search-row select{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;font-size:14px}
-    .btn{background:var(--green);color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#eafaf3;color:#066}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .card{border:1px solid #eee;border-radius:16px;overflow:hidden;background:#fff;display:flex;flex-direction:column;cursor:pointer}
-    .tag{position:absolute;left:8px;top:8px;background:var(--red);color:#fff;padding:4px 8px;border-radius:10px;font-size:12px;font-weight:800}
-    .imgbox{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:#f0f0f0}
-    .imgbox img{width:100%;height:100%;object-fit:cover;display:block}
-    .ct{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-    .title{font-weight:700;line-height:1.2}
-    .price{display:inline-flex;align-items:center}
-    .chip{background:#f1fff9;border:1px solid #d7f3e9;color:#066;padding:4px 8px;border-radius:10px;font-size:12px;font-weight:700}
-    .meta{display:flex;gap:12px;font-size:12px;color:#666}
-    .meta .dot::before{content:'•';margin:0 6px;color:#ddd}
-    .actions{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px}
-    .actions button{border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
-    footer{padding:40px 0;margin-top:30px;border-top:1px solid #eee;background:#fafafa}
+/* Banner */
+.banner{margin:8px 0;border-top:2px solid #10b98120;border-bottom:2px solid #10b98120;padding:6px 0}
+.banner img{width:100%;display:block;border-radius:6px}
+.banner .adlink{display:block;text-align:right;font-size:12px;color:#2b7; margin-top:4px}
 
-    .banner{position:relative;border:2px dashed #e2e8f0;border-radius:16px;margin:12px 0;overflow:hidden;background:#f8fffc}
-    .banner img{width:100%;display:block}
+/* Section headers */
+.hsec{display:inline-block;background:#e83b3b;color:#fff;padding:8px 14px;border-radius:8px;font-weight:800;margin:12px 0}
 
-    dialog{border:none;border-radius:16px;max-width:680px;width:96%;padding:0;}
-    .modal{padding:16px}
-    .modal h3{margin:0 0 12px}
-    .modal .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .modal input,.modal textarea,.modal select{width:100%;border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;font-size:14px}
-    .modal textarea{min-height:100px}
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{
+  border:3px solid var(--green); border-radius:12px; background:#fff; padding:10px; position:relative; cursor:pointer;
+}
+.badge-hot{
+  position:absolute;right:10px;top:10px;background:var(--red);color:#fff;font-weight:800;border-radius:8px;padding:4px 10px;font-size:12px
+}
+.card .title{font-weight:800;margin:2px 0 8px}
+.card .ph{
+  border:3px solid var(--green); border-radius:8px; height:150px; display:flex;align-items:center;justify-content:center; font-weight:800; color:#000;
+}
+.priceBtn{
+  position:absolute; right:16px; bottom:14px; background:var(--green); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-weight:800;
+}
 
-    .detail{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
-    .carousel{position:relative;border:1px solid #eee;border-radius:12px;overflow:hidden}
-    .carousel img{width:100%;aspect-ratio:4/3;object-fit:cover}
-    .carousel .nav{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center}
-    .carousel .nav button{background:rgba(255,255,255,.9);border:none;border-radius:999px;padding:8px 10px;margin:8px}
+/* Detail modal (dialog) */
+dialog{border:none;border-radius:12px;padding:0;width:96%;max-width:720px}
+#modalBox{border:3px solid var(--green); border-radius:12px; overflow:hidden; background:#fff}
+.modHead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:3px solid var(--green)}
+.modTitle{font-weight:800}
+.modStats{display:flex;gap:10px}
+.st{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;font-weight:800;border-radius:8px;padding:4px 8px;font-size:13px}
+.carousel{position:relative;border-bottom:3px solid var(--green);background:#fff}
+.carousel img{width:100%;max-height:360px;object-fit:contain;background:#fff}
+.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:#fff;color:var(--green);border:3px solid var(--green);font-weight:900;border-radius:8px;width:38px;height:32px;display:flex;align-items:center;justify-content:center}
+.navbtn.left{left:10px} .navbtn.right{right:10px}
+.modPrice{display:flex;justify-content:flex-end;padding:12px 14px}
+.modPrice .btn{border-radius:8px}
+.modBody{padding:14px;border-top:3px solid var(--green)}
+.blockTitle{background:var(--green);color:#fff;border-radius:10px;padding:16px;text-align:center;font-weight:800;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--green);color:#fff;border-radius:10px;padding:8px 12px;font-weight:800}
 
-    .chat-fab{position:fixed;right:14px;bottom:14px;background:var(--green);color:#fff;width:58px;height:58px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:40}
-    .chat{position:fixed;right:14px;bottom:86px;width:320px;max-height:60vh;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden;display:none;flex-direction:column;z-index:40}
-    .chat header{position:unset;border-bottom:1px solid #eee}
-    .chat .msgs{padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-    .msg{padding:8px 10px;border-radius:12px;max-width:80%}
-    .msg.me{background:#e8fff5;align-self:flex-end}
-    .msg.other{background:#f3f4f6}
-    .chat .inp{display:flex;gap:8px;padding:10px;border-top:1px solid #eee}
-    .chat .inp input{flex:1;border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+/* Add-flow overlays */
+#chooser,#addForm{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:40}
+.chooseBox{width:90%;max-width:420px;background:#fff;border:3px solid var(--green);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.chooseBtn{width:100%;padding:16px;border:none;font-weight:800;border-radius:10px;cursor:pointer}
+.chooseBtn.green{background:var(--green);color:#fff}
+.chooseBtn.red{background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff}
 
-    #splash{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:50}
-    .loader{position:relative;width:160px;height:160px;border-radius:50%;border:10px solid #e5f4ef;border-top-color:var(--green);animation:spin 1s linear infinite}
-    .loader span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--green);font-size:28px;letter-spacing:1px}
-    @keyframes spin{to{transform:rotate(360deg)}}
+/* Add form */
+.formBox{width:92%;max-width:540px;background:#fff;border:3px solid var(--green);border-radius:12px;padding:16px;position:relative}
+.formTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.badgeSmall{background:var(--green);color:#fff;border-radius:8px;padding:6px 10px;font-weight:800}
+.imagePh{border:3px solid var(--green);border-radius:8px;height:180px;display:flex;align-items:center;justify-content:center;font-weight:800;margin:8px 0}
+.inp{background:var(--green);color:#fff;border:none;border-radius:10px;padding:12px 14px;width:100%;font-weight:800;margin-top:10px}
+.inprow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formBox .btnPub{width:100%;margin-top:14px;border-radius:10px}
 
-    @media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.detail{grid-template-columns:1fr}}
-    @media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.search-row{grid-template-columns:1fr 1fr 1fr}.search-row select:nth-child(4){grid-column:1/-1}}
-    @media (max-width:460px){.grid{grid-template-columns:1fr}.search-row{grid-template-columns:1fr 1fr}.search-row select:nth-child(3){grid-column:1/-1}}
-  </style>
+/* Splash 5s */
+#splash{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:50}
+.loader{position:relative;width:140px;height:140px;border-radius:50%;border:10px solid #dff5ec;border-top-color:var(--green);animation:spin 1s linear infinite}
+.loader span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--green)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* More */
+.moreWrap{display:flex;justify-content:center;margin:18px 0}
+.more{border:3px solid var(--green);background:#fff;color:var(--green);border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer}
+
+/* Footer */
+footer{border-top:2px solid #10b9811a;padding:18px 0;margin-top:20px;color:#0b1720a0}
+
+/* Responsive tighten */
+@media(max-width:420px){
+  .pill{padding:6px 10px}
+  .btn.search{padding:8px 12px}
+  .card .ph{height:130px}
+}
+</style>
 </head>
 <body>
-  <!-- Splash 5s -->
-  <div id="splash"><div class="loader"><span>KOLO</span></div></div>
+<!-- Splash -->
+<div id="splash"><div class="loader"><span>KOLO</span></div></div>
 
-  <header>
-    <div class="wrap">
-      <div class="top">
-        <div class="logo" aria-label="KOLO">
-          <!-- SVG логотип -->
-          <svg viewBox="0 0 100 100" aria-hidden="true">
-            <circle cx="50" cy="50" r="48" fill="#10b981"/>
-            <circle cx="50" cy="50" r="40" fill="none" stroke="#fff" stroke-width="6"/>
-            <text x="50" y="58" font-size="36" font-weight="800" text-anchor="middle" fill="#fff" font-family="Montserrat,Arial">KOLO</text>
-          </svg>
-          <span>KOLO — дошка оголошень</span>
-          <span class="pill" id="visitors">користувачів: —</span>
-        </div>
-        <div style="margin-left:auto;display:flex;gap:8px">
-          <button class="btn" id="btnAdd">Додати оголошення</button>
-          <button class="btn secondary" id="btnTop">HOT-ТОП</button>
-        </div>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="logo">
+        <!-- SVG logo -->
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="48" fill="#10b981"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#fff" stroke-width="6"/>
+          <text x="50" y="59" font-size="32" font-weight="800" text-anchor="middle" fill="#fff" font-family="Montserrat,Arial">KOLO</text>
+        </svg>
       </div>
-
-      <div class="banner" id="bannerBox" hidden>
-        <a id="bannerLink" target="_blank" rel="noopener"><img id="bannerImg" alt="Рекламний банер"></a>
-      </div>
-
-      <div class="search-row">
-        <input id="q" placeholder="" autocomplete="off" aria-label="Ключове слово"/>
-        <select id="cat">
-          <option value="">Категорія</option>
-          <option>Транспорт</option><option>Нерухомість</option><option>Електроніка</option><option>Дім і сад</option>
-          <option>Дитячий світ</option><option>Хобі та спорт</option><option>Тварини</option><option>Бізнес і послуги</option>
-          <option>Робота</option><option>Мода і стиль</option><option>Запчастини</option><option>Безкоштовно</option>
-        </select>
-        <select id="region">
-          <option value="">Область</option>
-          <option>Одеська</option><option>Київська</option><option>Львівська</option><option>Харківська</option>
-          <option>Дніпропетровська</option><option>Запорізька</option><option>Миколаївська</option><option>Херсонська</option>
-          <option>Волинська</option><option>Вінницька</option><option>Черкаська</option><option>Чернігівська</option>
-          <option>Чернівецька</option><option>Полтавська</option><option>Сумська</option><option>Кіровоградська</option>
-          <option>Івано-Франківська</option><option>Рівненська</option><option>Тернопільська</option><option>Закарпатська</option>
-          <option>Житомирська</option><option>Хмельницька</option><option>Луганська</option><option>Донецька</option>
-        </select>
-        <button class="btn" id="btnSearch">Пошук</button>
-      </div>
+      <div><span id="visitors" class="pill">27369 відвідувачів</span></div>
+      <button class="btn plus" id="btnPlus">+</button>
+      <button class="btn search" id="btnSearch">ПОШУК</button>
     </div>
-  </header>
 
-  <main class="wrap">
-    <h2 style="margin:12px 0">HOT пропозиції</h2>
-    <div class="grid" id="hotGrid"></div>
-
-    <h2 style="margin:22px 0 12px">Нові оголошення</h2>
-    <div class="grid" id="listGrid"></div>
-  </main>
-
-  <footer>
-    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-      <div>© KOLO, 2025</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <span class="chip">Звичайне — 39 грн/30 днів</span>
-        <span class="chip" style="background:#ffecec;border-color:#ffd1d1;color:#a10000">HOT — 299 грн/7 днів</span>
-        <span class="chip">Банер — 999 грн/7 днів</span>
-      </div>
+    <div class="banner">
+      <img id="bannerImg" src="https://picsum.photos/seed/kolo-banner/1200/120" alt="banner">
+      <a href="#" id="bannerLink" class="adlink">Замовити рекламу</a>
     </div>
-  </footer>
-
-  <!-- Деталі -->
-  <dialog id="dlgDetail"><div class="modal"><div id="detail"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button class="btn secondary" onclick="document.getElementById('dlgDetail').close()">Закрити</button></div>
-  </div></dialog>
-
-  <!-- Додавання -->
-  <dialog id="dlgAdd">
-    <div class="modal">
-      <h3>Додати оголошення</h3>
-      <div class="row">
-        <input id="f_title" placeholder="Заголовок">
-        <input id="f_price" type="number" min="0" step="1" placeholder="Ціна, грн">
-        <select id="f_cat">
-          <option>Транспорт</option><option>Нерухомість</option><option>Електроніка</option><option>Дім і сад</option>
-          <option>Дитячий світ</option><option>Хобі та спорт</option><option>Тварини</option><option>Бізнес і послуги</option>
-          <option>Робота</option><option>Мода і стиль</option><option>Запчастини</option><option>Безкоштовно</option>
-        </select>
-        <input id="f_city" placeholder="Місто">
-      </div>
-      <textarea id="f_desc" placeholder="Опис"></textarea>
-      <div class="row">
-        <input id="f_phone" placeholder="+380" value="+380">
-        <select id="f_type">
-          <option value="normal">Звичайне — 39 грн / 30 днів</option>
-          <option value="hot">HOT — 299 грн / 7 днів</option>
-        </select>
-      </div>
-      <div style="margin:8px 0">Фото: <input id="f_imgs" type="file" accept="image/*" multiple></div>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
-        <button class="btn secondary" onclick="document.getElementById('dlgAdd').close()">Скасувати</button>
-        <button class="btn" id="btnPay">Оплатити через LiqPay</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- Чат -->
-  <div class="chat" id="chatBox">
-    <header class="wrap" style="padding:10px">Онлайн-чат KOLO</header>
-    <div class="msgs" id="msgs"></div>
-    <div class="inp"><input id="msg" placeholder="Ваше повідомлення..."><button class="btn" id="send">Надіслати</button></div>
   </div>
-  <div class="chat-fab" id="fab">💬</div>
+</header>
 
-  <!-- Socket.IO клієнт -->
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-6H0b7mV8N2c3b7s6qg7mO2i3i8b8q1oG6T6D9sS3m7G6O/5D4o7s1b" crossorigin="anonymous"></script>
+<main class="wrap">
+  <div class="hsec">ТОП пропозицій</div>
+  <div id="hotGrid" class="grid"></div>
 
-  <script>
-  // ===== CONFIG =====
-  // Зміни тут на свій тунель (наприклад https://твій-сабдомен.trycloudflare.com)
-  const SERVER = localStorage.getItem('kolo_server_url') || 'https://rated-perl-printers-bike.trycloudflare.com';
+  <div class="hsec" style="background:#10b981;margin-top:22px">Нові оголошення</div>
+  <div id="listGrid" class="grid"></div>
+  <div class="moreWrap"><button id="btnMore" class="more">Показати ще</button></div>
+</main>
 
-  // ===== SPLASH (5s) =====
-  setTimeout(()=>{ document.getElementById('splash').style.display='none' }, 5000);
+<footer><div class="wrap">© KOLO, 2025</div></footer>
 
-  // ===== Helpers =====
-  const $ = s => document.querySelector(s);
-  const fmtPrice = n => n ? new Intl.NumberFormat('uk-UA').format(n) + ' грн' : 'Безкоштовно';
-
-  // ===== Socket.IO =====
-  const socket = io(SERVER, {transports:['websocket']});
-  const ME = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid', 'u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
-
-  socket.on('connect', ()=> socket.emit('hello', {uid:ME}));
-  socket.on('visitors', n => $('#visitors').textContent = 'користувачів: '+n);
-  socket.on('banner', b => renderBanner(b));
-  socket.on('listings', data => renderAll(data));
-  socket.on('chat', m => addMsg(m.from==='admin'?'Адмін':'Користувач', m.text, m.from==='me'?'me':'other'));
-  socket.on('payresult', m => { if(m.uid===ME) { alert('Оплата успішна! Оголошення опубліковано.'); $('#dlgAdd').close(); }});
-
-  // ===== Banner =====
-  function renderBanner(b){
-    const box = $('#bannerBox');
-    if(!b || !b.enabled){ box.hidden = true; return; }
-    box.hidden = false; $('#bannerImg').src = b.image; $('#bannerLink').href = b.link || '#';
-  }
-
-  // ===== Listings =====
-  let ALL = {hot:[], normal:[]};
-  function renderAll(d){ ALL=d; drawGrids(); }
-  function drawGrids(){
-    const mk = (ad)=>`
-      <div class="card" onclick="openDetail('${ad.id}')">
-        <div class="imgbox">${ad.type==='hot'?'<div class="tag">HOT</div>':''}<img src="${ad.images[0]}" alt="${ad.title}"></div>
-        <div class="ct">
-          <div class="title">${ad.title}</div>
-          <div class="price"><span class="chip">${fmtPrice(ad.price)}</span></div>
-          <div class="meta"><span>${ad.city}</span><span class="dot"></span><span>👁️ ${ad.views||0}</span><span class="dot"></span><span>❤ ${ad.likes||0}</span></div>
-        </div>
-      </div>`;
-    $('#hotGrid').innerHTML = ALL.hot.map(mk).join('');
-    $('#listGrid').innerHTML = ALL.normal.map(mk).join('');
-  }
-
-  window.openDetail = async function(id){
-    const ad = [...ALL.hot, ...ALL.normal].find(a=>a.id===id); if(!ad) return;
-    const imgs = ad.images.map((src,i)=>`<img src="${src}" ${i?'style="display:none"':''}>`).join('');
-    $('#detail').innerHTML = `<div class='detail'>
-      <div class='carousel' id='car'>${imgs}
-        <div class='nav'><button onclick='car(-1)'>◀</button><button onclick='car(1)'>▶</button></div>
+<!-- DETAIL -->
+<dialog id="dlgDetail">
+  <div id="modalBox">
+    <div class="modHead">
+      <div class="modTitle" id="modTitle">ЗАГОЛОВОК</div>
+      <div class="modStats">
+        <div class="st" id="modViews">👁️ 0</div>
+        <div class="st" id="modLikes">❤ 0</div>
       </div>
-      <div>
-        <h3 style='margin-top:0'>${ad.title} ${ad.type==='hot'?'<span class="chip" style="background:#ffecec;border-color:#ffd1d1;color:#a10000">HOT</span>':''}</h3>
-        <div class='chip'>${fmtPrice(ad.price)}</div>
-        <p style='margin:10px 0;white-space:pre-wrap'>${ad.desc}</p>
-        <div class='meta' style='margin:10px 0'>Категорія: ${ad.cat} — ${ad.city}</div>
-        <div class='meta'>Перегляди: <b>${ad.views||0}</b> · Лайки: <b id='lk_${ad.id}'>${ad.likes||0}</b></div>
-        <div style='display:flex;gap:8px;margin-top:10px'>
-          <button class='btn' onclick="likeAd('${ad.id}');event.stopPropagation()">❤ Подобається</button>
-          <a class='btn secondary' href='tel:${ad.phone}'>📞 Подзвонити</a>
-        </div>
-      </div>
-    </div>`;
-    document.getElementById('dlgDetail').showModal();
-    fetch(SERVER+`/api/view/${ad.id}`, {method:'POST'});
-  }
+    </div>
+    <div class="carousel">
+      <button class="navbtn left" onclick="car(-1)"><</button>
+      <div id="carImgs"></div>
+      <button class="navbtn right" onclick="car(1)">></button>
+    </div>
+    <div class="modPrice"><button class="btn" id="btnCall">Ціна</button></div>
+    <div class="modBody">
+      <div class="blockTitle">ОПИСАННЯ</div>
+      <div id="modDesc" style="margin-bottom:12px;white-space:pre-wrap"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</dialog>
 
-  window.car = function(dir){
-    const box = document.getElementById('car');
-    const arr = [...box.querySelectorAll('img')];
-    let i = arr.findIndex(x=>x.style.display!=='none'); if(i<0) i=0;
-    arr[i].style.display='none'; i = (i+dir+arr.length)%arr.length; arr[i].style.display='block';
-  }
+<!-- CHOOSER (звичайне / HOT) -->
+<div id="chooser">
+  <div class="chooseBox">
+    <button class="chooseBtn green" id="chooseNormal">Звичайне оголошення</button>
+    <button class="chooseBtn red" id="chooseHot">HOT оголошення</button>
+  </div>
+</div>
 
-  window.likeAd = async function(id){
-    const r = await fetch(SERVER+`/api/like/${id}`,{method:'POST'}).then(x=>x.json());
-    if(r && r.likes!==undefined){ const el=document.getElementById('lk_'+id); if(el) el.textContent=r.likes; }
-  }
+<!-- ADD FORM -->
+<div id="addForm">
+  <div class="formBox">
+    <div class="formTop">
+      <div class="badgeSmall">Додати фото</div>
+      <div id="hotBadge" class="badgeSmall" style="background:#e94251;display:none">HOT</div>
+    </div>
+    <div class="imagePh" id="imgPh">КАРТИНКА оголошення</div>
+    <input class="inp" id="f_title" placeholder="Заголовок">
+    <div class="inprow">
+      <input class="inp" id="f_price" placeholder="Ціна, грн">
+      <input class="inp" id="f_city" placeholder="Місто">
+    </div>
+    <div class="inprow">
+      <input class="inp" id="f_cat" placeholder="Категорія">
+      <input class="inp" id="f_phone" value="+380" placeholder="+380">
+    </div>
+    <textarea class="inp" id="f_desc" placeholder="Опис" rows="4" style="height:110px"></textarea>
+    <input type="file" id="f_imgs" accept="image/*" multiple hidden>
+    <button class="btn btnPub" id="btnPublish">Опублікувати</button>
+  </div>
+</div>
 
-  // Додавання
-  document.getElementById('btnAdd').onclick = ()=> document.getElementById('dlgAdd').showModal();
-  document.getElementById('btnTop').onclick = ()=>{ document.getElementById('cat').value=''; document.getElementById('region').value=''; document.getElementById('q').value=''; window.scrollTo({top:0,behavior:'smooth'}); };
-  document.getElementById('btnSearch').onclick = ()=> doSearch();
+<script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
+<script>
+// ===== CONFIG =====
+const SERVER = localStorage.getItem('kolo_server_url') || 'https://alter-ordering-finish-dept.trycloudflare.com';
 
-  function doSearch(){
-    const q=document.getElementById('q').value.toLowerCase(), c=document.getElementById('cat').value, r=document.getElementById('region').value;
-    const F = a => (!q || a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q)) && (!c || a.cat===c) && (!r || (a.region||'')===r);
-    const data = {hot:ALL.hot.filter(F), normal:ALL.normal.filter(F)}; renderAll(data);
-    fetch(SERVER+'/api/list'); // оновити повні дані після фільтру
-  }
+// ===== Splash 5s =====
+setTimeout(()=>{ document.getElementById('splash').style.display='none' }, 5000);
 
-  document.getElementById('btnPay').onclick = async ()=>{
-    const fd = new FormData();
-    fd.append('title',document.getElementById('f_title').value.trim());
-    fd.append('price',document.getElementById('f_price').value||0);
-    fd.append('cat',document.getElementById('f_cat').value);
-    fd.append('city',document.getElementById('f_city').value.trim());
-    fd.append('desc',document.getElementById('f_desc').value.trim());
-    fd.append('phone',document.getElementById('f_phone').value.trim());
-    fd.append('type',document.getElementById('f_type').value);
-    const files = document.getElementById('f_imgs').files; for(const f of files) fd.append('images', f);
-    const r = await fetch(SERVER+'/pay/start', {method:'POST', body:fd});
-    const j = await r.json();
-    if(j.status==='ok'){ alert('Тестова оплата ініційована (без LiqPay).'); }
-  }
+// ===== STATE =====
+const $ = s => document.querySelector(s);
+const socket = io(SERVER, {transports:['websocket']});
+const ME = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid', 'u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
+let ALL = {hot:[], normal:[]}, page = 1;
 
-  // Чат
-  document.getElementById('fab').onclick = ()=>{
-    const b=document.getElementById('chatBox'); b.style.display = b.style.display==='flex' ? 'none' : 'flex';
-  };
-  document.getElementById('send').onclick = ()=>{
-    const v=document.getElementById('msg').value.trim(); if(!v) return; document.getElementById('msg').value='';
-    socket.emit('chat', {from:'user', uid:ME, text:v}); addMsg('Я', v, 'me');
-  };
-  function addMsg(who, text, cls){
-    const d=document.createElement('div'); d.className='msg '+cls; d.textContent=who+': '+text;
-    const m=document.getElementById('msgs'); m.appendChild(d); m.scrollTop=99999;
-  }
+// ===== SOCKET EVENTS =====
+socket.on('connect', ()=> socket.emit('hello',{uid:ME}));
+socket.on('visitors', n => $('#visitors').textContent = n+' відвідувачів');
+socket.on('banner', b => { if(b && b.enabled){ $('#bannerImg').src=b.image; $('#bannerLink').href=b.link||'#'; }});
+socket.on('listings', data => { ALL=data; page=1; draw(); });
+socket.on('payresult', m => { if(m.uid===ME){ alert('Опубліковано!'); hideAdd(); }});
+socket.on('chat', _=>{}); // unused here
 
-  // Первинне завантаження
-  fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ renderAll(j.data); renderBanner(j.banner); });
-  </script>
+// ===== RENDER =====
+function draw(){
+  const h = ALL.hot.map(mkCard).join('');
+  const nAll = ALL.normal;
+  const nSlice = nAll.slice(0, page*6);
+  $('#hotGrid').innerHTML = h;
+  $('#listGrid').innerHTML = nSlice.map(mkCard).join('');
+  $('#btnMore').style.display = nAll.length>nSlice.length ? 'inline-block':'none';
+}
+function mkCard(ad){
+  return `<div class="card" onclick="openDetail('${ad.id}')">
+    ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
+    <div class="title">ЗАГОЛОВОК</div>
+    <div class="ph">КАРТИНКА оголошення</div>
+    <button class="priceBtn">Ціна</button>
+  </div>`;
+}
+
+// ===== DETAIL =====
+let CAR = [], idx = 0, CUR=null;
+window.openDetail = (id)=>{
+  CUR = [...ALL.hot,...ALL.normal].find(a=>a.id===id); if(!CUR) return;
+  $('#modTitle').textContent = CUR.title.toUpperCase();
+  $('#modViews').textContent = '👁️ '+(CUR.views||0);
+  $('#modLikes').textContent = '❤ '+(CUR.likes||0);
+  $('#modDesc').textContent = CUR.desc || '';
+  const chips = [
+    'категорія: '+(CUR.cat||'-'),
+    'Стан: '+(CUR.state||'вживаний'),
+    'дата публікації: '+(new Date().toLocaleDateString('uk-UA')),
+    'Номер: '+(CUR.phone||'+380'),
+    'місто: '+(CUR.city||'-'),
+    'область: '+(CUR.region||'-'),
+  ].map(t=>`<div class="chip">${t}</div>`).join('');
+  $('#chips').innerHTML = chips;
+  $('#btnCall').onclick = ()=> window.location.href = 'tel:'+(CUR.phone||'');
+  CAR = CUR.images && CUR.images.length ? CUR.images : ['https://picsum.photos/seed/1/1000/700'];
+  idx = 0; renderCar();
+  document.getElementById('dlgDetail').showModal();
+  fetch(SERVER+`/api/view/${CUR.id}`,{method:'POST'});
+};
+function renderCar(){
+  $('#carImgs').innerHTML = `<img src="${CAR[idx]}" alt="">`;
+}
+window.car = (d)=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(); };
+
+// ===== ADD FLOW =====
+let ADD_TYPE = 'normal';
+function showChooser(){ $('#chooser').style.display='flex'; }
+function hideChooser(){ $('#chooser').style.display='none'; }
+function showAdd(){ $('#addForm').style.display='flex'; $('#hotBadge').style.display = ADD_TYPE==='hot' ? 'inline-block':'none'; }
+function hideAdd(){ $('#addForm').style.display='none'; }
+
+$('#btnPlus').onclick = showChooser;
+$('#chooseNormal').onclick = ()=>{ ADD_TYPE='normal'; hideChooser(); showAdd(); };
+$('#chooseHot').onclick = ()=>{ ADD_TYPE='hot'; hideChooser(); showAdd(); };
+
+$('#imgPh').onclick = ()=> $('#f_imgs').click();
+$('#f_imgs').onchange = ()=>{ const f=$('#f_imgs').files[0]; if(f){ $('#imgPh').textContent = f.name; } };
+
+$('#btnPublish').onclick = async ()=>{
+  const fd = new FormData();
+  fd.append('type', ADD_TYPE);
+  fd.append('title', ($('#f_title').value||'Оголошення'));
+  fd.append('price', ($('#f_price').value||0));
+  fd.append('cat', ($('#f_cat').value||''));
+  fd.append('city', ($('#f_city').value||''));
+  fd.append('desc', ($('#f_desc').value||''));
+  fd.append('phone', ($('#f_phone').value||'+380'));
+  const files = $('#f_imgs').files; for(const f of files) fd.append('images', f);
+  const r = await fetch(SERVER+'/pay/start',{method:'POST',body:fd,headers:{'X-KOLO-UID':ME}});
+  const j = await r.json();
+  if(j.status==='ok'){ /* сервер сам розішле payresult */ }
+};
+
+// ===== MORE =====
+$('#btnMore').onclick = ()=>{ page++; draw(); };
+
+// ===== INIT =====
+fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ ALL=j.data; draw(); });
+</script>
 </body>
 </html>
