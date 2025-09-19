@@ -16,25 +16,33 @@ a{color:inherit;text-decoration:none}
 .wrap{max-width:1140px;margin:0 auto;padding:10px 14px}
 
 /* splash */
-#splash{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:60}
+#splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60}
 .loader{position:relative;width:220px;height:220px;border-radius:50%;border:12px solid #e6faf2;border-top-color:var(--g);animation:spin 1s linear infinite}
 .loader span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--g);font-size:38px}
+#splash .sub{margin-top:18px;color:#0b1720aa}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* header */
 header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.topbar{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center}
-.logo svg{width:44px;height:44px} /* больше — как + */
+.topbar{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:10px;align-items:center}
+.logo svg{width:44px;height:44px}
 .pill{background:var(--g);color:#fff;border-radius:12px;padding:8px 14px;font-size:13px}
 .btn{border:none;background:var(--g);color:#fff;border-radius:12px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.25);font-family:inherit}
-.btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none} /* высота как у кнопок */
+.btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
+
+/* support */
+.btn.supp{background:#fff;color:var(--g);border:3px solid var(--g)}
 
 /* banner */
-.banner{margin:8px 0;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:170px}
-.banner img{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
-/* на телефонах — как на ПК (без обрезки слева/справа) */
-@media(max-width:760px){ .banner img{object-fit:contain;height:160px;background:#0001} }
-.banner.min{max-height:0;opacity:0;margin:0} /* сворачивается полностью */
+.banner{margin:8px 0;position:relative;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:180px}
+.banner img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+/* ТОЛЬКО телефон: картинка строго как есть, без серых полей */
+@media(max-width:760px){
+  .banner{max-height:none}
+  .banner img{height:auto;object-fit:cover;background:transparent}
+}
+.banner .adlink{position:absolute;right:10px;bottom:8px;font-size:12px;color:#2b7;background:#fff;border-radius:8px;padding:4px 8px;opacity:.92}
+.banner.min{max-height:0;opacity:0;margin:0}
 
 /* sections */
 .hsec{display:flex;align-items:center;gap:8px;color:#fff;padding:8px 14px;border-radius:12px;margin:12px 0;box-shadow:0 6px 14px rgba(0,0,0,.06)}
@@ -48,11 +56,11 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transition:transform .12s ease}
 .card:hover{transform:translateY(-2px)}
 .card .ph{position:relative;border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
-.card .ph img{width:100%;height:100%;object-fit:cover}
+.card .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .badge-hot{position:absolute;right:12px;top:12px;background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff;border-radius:12px;padding:4px 10px;font-size:12px;z-index:3}
 .card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
-/* цена прямо на фото, внизу справа */
-.priceTag{position:absolute;right:10px;bottom:10px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:6px 12px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit;z-index:3}
+/* цена — НЕ ссылка, не звонит */
+.priceTag{position:absolute;right:10px;bottom:10px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:6px 12px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit;z-index:3;pointer-events:none}
 
 /* modal */
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
@@ -63,27 +71,28 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .closeX{border:none;background:#fff;color:var(--g);border:3px solid var(--g);width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer}
 
 /* карусель */
-.carousel{position:relative;border-bottom:1px solid #edf3f0;background:#0003}
+.carousel{position:relative;border-bottom:1px solid #edf3f0;background:#000}
 #carStage{position:relative;height:520px;max-height:52vh}
-#carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .25s ease;background:#0002}
+#carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;pointer-events:none}
 #carStage img.show{opacity:1}
-/* белые толстые стрелки поверх фото */
-.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;border-radius:0;width:auto;height:auto;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none}
+/* стрелки поверх и кликабельные всегда */
+.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;width:auto;height:auto;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none;z-index:5}
 .navbtn.left{left:10px}.navbtn.right{right:10px}
-#carCount{position:absolute;right:10px;bottom:10px;background:#000b;color:#fff;border-radius:10px;padding:4px 8px;font-size:12px}
-/* лайки+просмотры вверху справа поверх фото */
-.statOverlay{position:absolute;right:10px;top:10px;display:flex;gap:8px;z-index:4}
+#carCount{position:absolute;right:10px;bottom:10px;background:#000b;color:#fff;border-radius:10px;padding:4px 8px;font-size:12px;z-index:4}
+/* лайки/просмотры/цена — общий размер цифры одинаковый */
+.statOverlay{position:absolute;right:10px;top:10px;display:flex;gap:8px;z-index:6}
+.statLeft{position:absolute;left:10px;top:10px;display:flex;gap:8px;z-index:6}
 .pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.25);font-family:'Russo One',Arial,system-ui;background:var(--g);color:#fff}
 .pillStat svg{width:16px;height:16px;fill:#fff}
-.pillStat b{font-family:'Russo One',Arial,system-ui}
+.pillStat b{font-family:'Russo One',Arial,system-ui;font-size:14px}
 
-.modPrice{display:flex;justify-content:flex-end;padding:12px 14px}
+/* описание сразу под фото */
 .modBody{padding:14px}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{background:#eefaf5;color:#0b1720;border-radius:12px;padding:10px 12px}
 
 /* chooser/add/search */
-#chooser,#addForm,#searchBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50}
+#chooser,#addForm,#searchBox,#supportBox,#payBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50}
 .chooseBox{position:relative;width:90%;max-width:420px;background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .chooseBtn{width:100%;padding:16px;border:none;border-radius:12px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);font-family:inherit}
 .chooseBtn.green{background:var(--g);color:#fff}
@@ -92,27 +101,46 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .formTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 .badgeSmall.gray{background:#eef3f0;color:#0b1720}
-.imagePh{border-radius:12px;height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
+.imagePh{border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
 .imagePh img{width:100%;height:100%;object-fit:contain}
 .inp{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 14px;width:100%;margin-top:10px;caret-color:#fff;font-family:inherit}
 .inprow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 ::placeholder{color:#fff;opacity:.9}
 .btnPub{width:100%;margin-top:14px;border-radius:12px;font-family:inherit}
 
-/* search box */
-.searchInner{background:#fff;border-radius:16px;padding:12px;width:92%;max-width:560px;display:flex;gap:8px;box-shadow:0 18px 40px rgba(0,0,0,.28)}
+/* search box — сверху, не скроллит */
+#searchBox{align-items:flex-start}
+.searchInner{background:#fff;border-radius:16px;padding:12px;width:92%;max-width:560px;display:flex;gap:8px;box-shadow:0 18px 40px rgba(0,0,0,.28);margin:14px auto}
 .searchInner input{flex:1;border:2px solid #e3f4ef;border-radius:12px;padding:12px 14px;font-family:inherit}
 
+/* pay box */
+.payInner{background:#fff;border-radius:16px;padding:16px 16px 20px;width:92%;max-width:520px;box-shadow:0 18px 40px rgba(0,0,0,.28);position:relative}
+.payHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.copy{cursor:pointer;border:2px solid #e3f4ef;border-radius:8px;padding:6px 8px}
+.payRow{display:flex;justify-content:space-between;gap:10px;margin:8px 0;padding:10px;border:2px solid #e3f4ef;border-radius:12px}
+.payBtn{width:100%;margin-top:12px}
+
+/* support box */
+.supInner{background:#fff;border-radius:16px;padding:16px;width:92%;max-width:520px;box-shadow:0 18px 40px rgba(0,0,0,.28);position:relative}
+.supInner .inp{background:#eefaf5;color:#0b1720}
+.supInner .inp::placeholder{color:#6aa}
+.supInner .closeX{position:absolute;right:12px;top:12px}
+
+/* footer */
 footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 .tagline{margin-top:6px}
 </style>
 </head>
 <body>
-<div id="splash"><div class="loader"><span>KOLO</span></div></div>
+<div id="splash">
+  <div class="loader"><span>KOLO</span></div>
+  <div class="sub">Дошка оголошень №1 в Україні</div>
+</div>
 
 <header>
   <div class="wrap">
     <div class="topbar">
+      <button class="btn supp" id="btnSupport">ПІДТРИМКА</button>
       <div class="logo">
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <circle cx="50" cy="50" r="48" fill="#10b981"/>
@@ -127,14 +155,13 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
     <div id="banner" class="banner">
       <img id="bannerImg" src="" alt="banner" onerror="this.style.display='none'">
-      <a href="#" id="bannerLink" class="adlink" style="display:block;text-align:right;font-size:12px;color:#2b7;margin-top:6px">Замовити рекламу</a>
+      <a href="#" id="bannerLink" class="adlink">Замовити рекламу</a>
     </div>
   </div>
 </header>
 
 <main class="wrap">
   <div class="hsec top">
-    <!-- белый огонёк -->
     <svg viewBox="0 0 24 24"><path d="M12 2c2 3 6 5.5 6 10.2A6 6 0 0 1 6 12.2C6 8 9 5 11 3.2c-.2 2.1.8 3.5 2.5 4.8C14 6.5 13 4.2 12 2Z"/></svg>
     <span>ТОП пропозицій</span>
   </div>
@@ -160,6 +187,8 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
       <button class="closeX" id="closeDetail" title="Закрити">✕</button>
     </div>
     <div class="carousel">
+      <!-- лево: цена; право: просмотры/лайки -->
+      <div class="statLeft"><div class="pillStat" id="priceTop"></div></div>
       <div class="statOverlay">
         <div class="pillStat" title="Перегляди">
           <svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
@@ -175,7 +204,6 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
       <div id="carCount">1/1</div>
       <button class="navbtn right" id="navRight" aria-label="Наступне">›</button>
     </div>
-    <div class="modPrice"><button class="btn" id="btnCall">Ціна</button></div>
     <div class="modBody">
       <div id="modDesc" style="margin-bottom:12px;white-space:pre-wrap"></div>
       <div class="chips" id="chips"></div>
@@ -186,7 +214,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 <!-- CHOOSER -->
 <div id="chooser"><div class="chooseBox" id="chooseBox">
   <button class="chooseBtn green" id="chooseNormal">Звичайне оголошення — 39 грн / 30 днів</button>
-  <button class="chooseBtn red" id="chooseHot">HOT оголошення — 299 грн / 7 днів</button>
+  <button class="chooseBtn red" id="chooseHot">HOT оголошення — 299 грн / 30 днів</button>
 </div></div>
 
 <!-- ADD FORM -->
@@ -221,30 +249,58 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
   <button class="btn" id="go">Пошук</button>
 </div></div>
 
+<!-- SUPPORT -->
+<div id="supportBox"><div class="supInner">
+  <button class="closeX" id="closeSupport">✕</button>
+  <h3 style="margin:0 0 8px 0">Підтримка</h3>
+  <input class="inp" id="s_name" placeholder="Ім'я">
+  <input class="inp" id="s_phone" placeholder="+380">
+  <textarea class="inp" id="s_msg" placeholder="Опишіть проблему" rows="4" style="height:110px"></textarea>
+  <button class="btn" id="s_send" style="width:100%;margin-top:10px">Надіслати</button>
+</div></div>
+
+<!-- PAY BOX (Privat24) -->
+<div id="payBox"><div class="payInner">
+  <div class="payHead">
+    <div style="font-size:18px">Оплата оголошення</div>
+    <button class="closeX" id="closePay">✕</button>
+  </div>
+  <div id="payLines" style="font-size:14px;margin-bottom:8px"></div>
+  <div class="payRow"><div>Картка для оплати</div><div id="cardNum">5168 7451 9757 8328</div></div>
+  <div class="payRow"><div>Сума</div><div id="amt">0</div></div>
+  <div class="payRow"><div>Призначення</div><div id="purpose" class="copy" title="Скопіювати">—</div></div>
+  <button class="btn payBtn" id="goPrivat">Сплатити</button>
+  <div style="font-size:12px;color:#0b1720aa;margin-top:8px">Обов'язково вкажіть номер оголошення у призначенні платежу.</div>
+</div></div>
+
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://puzzles-prices-shaped-packages.trycloudflare.com';
+const SERVER = 'https://heater-health-looking-lawrence.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
-/* Splash 5s */
-setTimeout(()=>document.getElementById('splash').style.display='none',5000);
+/* Splash 5s (без скролла) */
+document.body.style.overflow='hidden';
+setTimeout(()=>{
+  document.getElementById('splash').style.display='none';
+  document.body.style.overflow='';
+},5000);
 
 /* socket */
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
 const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 
-/* баннер — сворачивается полностью */
+/* баннер — аккуратно сворачивается */
 const bannerEl = $('#banner');
 window.addEventListener('scroll', ()=>{ if(window.scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
 
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
 let bannerList=[], bannerIdx=0, bannerTimer=null;
+let lastPublished = null; // для окна оплаты
 
 /* sockets */
 socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
 socket.on('banner', b=>{ setBanner(b); });
 socket.on('listings', d=>{ ALL=d; page=1; draw(); });
-socket.on('payresult', m=>{ if(m.uid===uidLocal || !m.uid){ alert('Оплата успішна!'); hideAdd(); enableScroll(); }});
 
 /* initial data */
 fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{
@@ -257,7 +313,7 @@ function setBanner(b){
   const imgEl = document.getElementById('bannerImg');
   const linkEl = document.getElementById('bannerLink');
   bannerList = (b && b.images && b.images.length)? b.images.slice() : (b && b.image?[b.image]:[]);
-  linkEl.href = (b && b.link) ? b.link : '#';
+  linkEl.onclick = (e)=>{ e.preventDefault(); openBannerOrder(); };
 
   if(bannerTimer){ clearInterval(bannerTimer); bannerTimer=null; }
   if(!bannerList.length){ imgEl.style.display='none'; return; }
@@ -300,16 +356,15 @@ window.openDetail = (id)=>{
   document.getElementById('modTitle').textContent = (CUR.title||'').toUpperCase();
   document.getElementById('vNum').textContent = CUR.views||0; 
   document.getElementById('lNum').textContent = CUR.likes||0;
+  document.getElementById('priceTop').textContent = ((CUR.price||0).toLocaleString('uk-UA'))+' ₴';
   document.getElementById('modDesc').textContent = CUR.desc||'';
   document.getElementById('chips').innerHTML = [
     'Код: '+(CUR.code||'00000'),
     'Телефон: '+(CUR.phone||'+380'),
     'Місто: '+(CUR.city||'-'),
     'Область: '+(CUR.region||'-'),
-    'Ціна: '+((CUR.price||0).toLocaleString('uk-UA'))+' ₴',
     'Дата публікації: '+(new Date().toLocaleDateString('uk-UA')),
   ].map(t=>`<div class="chip">${t}</div>`).join('');
-  document.getElementById('btnCall').onclick=()=>location.href='tel:'+(CUR.phone||'');
 
   CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800']; 
   idx=0; renderCar(true);
@@ -317,10 +372,9 @@ window.openDetail = (id)=>{
   const dlg=document.getElementById('dlgDetail'); dlg.showModal(); disableScroll();
   dlg.addEventListener('click', e=>{ if(e.target===dlg){ dlg.close(); enableScroll(); }});
 
-  // +1 view (UI) и на сервер
-  document.getElementById('vNum').textContent = (parseInt(document.getElementById('vNum').textContent,10)||0)+1;
-  CUR.views = (CUR.views||0)+1; draw();
+  // +1 перегляд на сервер
   fetch(SERVER+`/api/view/${encodeURIComponent(CUR.id)}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
+  CUR.views = (CUR.views||0)+1; document.getElementById('vNum').textContent=CUR.views; draw();
 };
 
 document.getElementById('closeDetail').onclick=()=>{ document.getElementById('dlgDetail').close(); enableScroll(); };
@@ -334,15 +388,15 @@ function renderCar(initial=false){
     imgs.forEach((im,i)=>im.classList.toggle('show', i===idx));
   }
   document.getElementById('carCount').textContent = `${idx+1}/${CAR.length}`;
-  // стрелки — только если фото >1
   document.getElementById('navLeft').style.display = document.getElementById('navRight').style.display = (CAR.length>1)?'flex':'none';
 }
 window.car = d=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(false); };
 document.getElementById('navLeft').onclick=()=>window.car(-1);
 document.getElementById('navRight').onclick=()=>window.car(1);
 
-/* like */
-document.getElementById('likeTop').onclick = async ()=>{
+/* like — работает всегда */
+document.getElementById('likeTop').onclick = async (e)=>{
+  e.stopPropagation();
   if(!CUR) return;
   try{
     const j = await fetch(SERVER+`/api/like/${encodeURIComponent(CUR.id)}`,{
@@ -370,8 +424,15 @@ document.getElementById('btnPlus').onclick=showChooser;
 document.getElementById('chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); showAdd();}
 document.getElementById('chooseHot').onclick=()=>{ADD_TYPE='hot'; hideChooser(); showAdd();}
 
-/* banner order -> addForm */
-document.getElementById('bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; hideChooser(); showAdd(); };
+/* banner order window */
+function openBannerOrder(){
+  ADD_TYPE='banner';
+  hideChooser();
+  // подсказываем про размер
+  alert('Розмір банера має бути 1200×200. Додайте зображення у формі + Опублікувати.');
+  showAdd();
+}
+document.getElementById('bannerLink').onclick=(e)=>{ e.preventDefault(); openBannerOrder(); };
 
 /* photos preview (max 5) */
 let chosenFiles=[];
@@ -389,7 +450,7 @@ document.getElementById('btnAddPhoto').onclick=()=>fInput.click();
 imgPh.onclick=()=>fInput.click();
 fInput.onchange=()=>{ chosenFiles=[...fInput.files].slice(0,5); redrawPreview(); };
 
-/* publish + open LiqPay/demo */
+/* publish -> сервер сохраняет; затем наше окно оплаты (Privat24) */
 document.getElementById('btnPay').onclick=async ()=>{
   const fd=new FormData();
   fd.append('type', ADD_TYPE);
@@ -401,12 +462,14 @@ document.getElementById('btnPay').onclick=async ()=>{
   fd.append('phone', (document.getElementById('f_phone').value||'+380'));
   chosenFiles.slice(0,5).forEach(f=>fd.append('images',f));
 
-  const j = await fetch(SERVER+'/pay/start',{method:'POST',body:fd,headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json()).catch(()=>({}));
-  if(!(j && j.status==='ok')){ alert('Сервер недоступний'); return; }
-  if(j.checkout_url){ window.open(j.checkout_url, '_blank'); }
+  const j = await fetch(SERVER+'/api/create',{method:'POST',body:fd,headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json()).catch(()=>({}));
+  if(!(j && j.ok)){ alert('Сервер недоступний'); return; }
+  lastPublished = j; // {kind, code, amount, title}
+  openPayBox(j.kind, j.code, j.amount);
+  hideAdd();
 };
 
-/* search — не скроллит страницу вниз */
+/* search — сверху, без скролла страницы */
 function showSearch(e){ if(e) e.preventDefault(); document.getElementById('searchBox').style.display='flex'; document.getElementById('q').focus({preventScroll:true}); disableScroll(); }
 function hideSearch(){ document.getElementById('searchBox').style.display='none'; enableScroll(); }
 document.getElementById('searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
@@ -420,8 +483,35 @@ document.getElementById('go').onclick=()=>{ const k=(document.getElementById('q'
 /* more */
 document.getElementById('btnMore').onclick=()=>{ page++; draw(); };
 
-/* close detail by click outside */
-document.getElementById('dlgDetail').addEventListener('click',e=>{ if(e.target.id==='dlgDetail'){ document.getElementById('dlgDetail').close(); enableScroll(); }});
+/* SUPPORT */
+document.getElementById('btnSupport').onclick=()=>{ document.getElementById('supportBox').style.display='flex'; disableScroll(); };
+document.getElementById('closeSupport').onclick=()=>{ document.getElementById('supportBox').style.display='none'; enableScroll(); };
+document.getElementById('s_send').onclick=async ()=>{
+  const payload = {name:$('#s_name').value||'', phone:$('#s_phone').value||'', msg:$('#s_msg').value||''};
+  await fetch(SERVER+'/api/support',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  alert('Дякуємо! Звернення надіслано.'); document.getElementById('supportBox').style.display='none'; enableScroll();
+};
+
+/* PAY BOX (Privat24) */
+function openPayBox(kind, code, amount){
+  const pb = document.getElementById('payBox');
+  const lines = document.getElementById('payLines');
+  const purp = (kind==='banner'?'Банер ':'') + (kind==='hot'?'HOT ':'Звичайне ') + 'оголошення №'+code;
+  document.getElementById('purpose').textContent = purp;
+  document.getElementById('amt').textContent = amount+' грн';
+  lines.innerHTML = `Ваш номер оголошення: <b>№${code}</b> — виконайте оплату на вказану картку.`;
+  pb.style.display='flex'; disableScroll();
+}
+document.getElementById('closePay').onclick=()=>{ document.getElementById('payBox').style.display='none'; enableScroll(); };
+document.getElementById('purpose').onclick=async (e)=>{
+  const txt = e.target.textContent; try{ await navigator.clipboard.writeText(txt); alert('Призначення скопійовано'); }catch{}
+};
+document.getElementById('goPrivat').onclick=async ()=>{
+  if(!lastPublished) return;
+  // логируем заказ
+  await fetch(SERVER+'/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lastPublished)});
+  window.open('https://www.privat24.ua/send/3g9dp','_blank');
+};
 </script>
 </body>
 </html>
