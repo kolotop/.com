@@ -35,8 +35,10 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .adlink{display:block;text-align:right;font-size:12px;color:#2b7;margin-top:6px}
 
 /* sections */
-.hsec{display:flex;align-items:center;gap:8px;background:var(--g);color:#fff;padding:8px 14px;border-radius:12px;margin:12px 0;box-shadow:0 6px 14px rgba(16,185,129,.25)}
+.hsec{display:flex;align-items:center;gap:8px;color:#fff;padding:8px 14px;border-radius:12px;margin:12px 0;box-shadow:0 6px 14px rgba(0,0,0,.06)}
 .hsec svg{width:18px;height:18px;fill:#fff}
+.hsec.top{background:linear-gradient(90deg,#ff4d4d,#ff7a1a)}     /* КРАСНО-ОРАНЖЕВЫЙ */
+.hsec.new{background:var(--g)}                                   /* ЗЕЛЕНАЯ */
 
 /* cards */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -48,22 +50,22 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .priceBtn{position:absolute;right:16px;bottom:14px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:8px 16px;box-shadow:0 8px 18px rgba(16,185,129,.25)}
 
 /* stat pills */
-.pillStat{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:18px;padding:4px 8px;box-shadow:0 6px 14px rgba(0,0,0,.06);color:#0b1720}
+.pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
 .pillStat svg{width:16px;height:16px}
+.pillStat.green{background:var(--g);color:#fff}                   /* белые иконки на зелёном */
+.pillStat.green svg{fill:#fff}
 
 /* detail */
-dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:820px}
+dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
 #modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .modHead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #edf3f0}
 .modTitle{flex:1}
-.stat{margin-left:6px}
 .carousel{position:relative;border-bottom:1px solid #edf3f0;background:#fff}
-.carousel img{width:100%;max-height:420px;object-fit:contain;background:#fff}
+.carousel img{width:100%;max-height:520px;object-fit:contain;background:#fff}
 .navbtn{position:absolute;top:50%;transform:translateY(-50%);background:#fff;color:var(--g);border:2px solid var(--g);border-radius:10px;width:38px;height:32px;display:flex;align-items:center;justify-content:center}
 .navbtn.left{left:10px}.navbtn.right{right:10px}
 .modPrice{display:flex;justify-content:flex-end;padding:12px 14px}
 .modBody{padding:14px}
-.blockTitle{background:var(--g);color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px;box-shadow:0 8px 18px rgba(16,185,129,.25)}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{background:#eefaf5;color:#0b1720;border-radius:12px;padding:10px 12px}
 
@@ -92,11 +94,8 @@ dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:820px}
 #chatWrap{position:fixed;inset:0;display:none;z-index:54;background:transparent}
 #chatBox{position:absolute;right:14px;bottom:84px;width:320px;max-height:60vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 #msgs{padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.typing{display:inline-block;min-width:32px}
-.typing:after{content:'...';animation:dots 1s steps(3,end) infinite}
-@keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
-
-/* footer */
+.typing{display:none;color:#777;padding:0 10px 8px}
+.typing.on{display:block}
 footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 .tagline{margin-top:6px}
 </style>
@@ -120,20 +119,20 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
     </div>
 
     <div id="banner" class="banner">
-      <img id="bannerImg" src="https://https://i.ibb.co/qFpKrh7z/42.png" alt="banner">
+      <img id="bannerImg" src="https://i.ibb.co/qFpKrh7z/42.png" alt="banner">
       <a href="#" id="bannerLink" class="adlink">Замовити рекламу</a>
     </div>
   </div>
 </header>
 
 <main class="wrap">
-  <div class="hsec">
+  <div class="hsec top">
     <svg viewBox="0 0 24 24"><path d="M13 3s5 4 5 9a6 6 0 0 1-12 0c0-3 2-6 5-9l1 3 1-3Z"/></svg>
     <span>ТОП пропозицій</span>
   </div>
   <div id="hotGrid" class="grid"></div>
 
-  <div class="hsec" style="background:#fff;color:#0b1720;box-shadow:0 6px 14px rgba(0,0,0,.06)">Нові оголошення</div>
+  <div class="hsec new">Нові оголошення</div>
   <div id="listGrid" class="grid"></div>
   <div style="display:flex;justify-content:center;margin:18px 0"><button id="btnMore" class="btn" style="background:#fff;color:#10b981;border:2px solid #10b981">Показати ще</button></div>
 </main>
@@ -148,8 +147,10 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
   <div id="modalBox">
     <div class="modHead">
       <div class="modTitle" id="modTitle">ОГОЛОШЕННЯ</div>
-      <div class="pillStat"><svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg><b id="vNum">0</b></div>
-      <div class="pillStat stat"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg><b id="lNum">0</b></div>
+      <!-- ГЛАЗ (просмотры) -->
+      <div class="pillStat green" title="Перегляди"><svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg><b id="vNum">0</b></div>
+      <!-- СЕРДЦЕ (лайк) — именно ЭТА кнопка -->
+      <button class="pillStat green" id="likeTop" style="border:none;cursor:pointer"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg><b id="lNum">0</b></button>
     </div>
     <div class="carousel">
       <button class="navbtn left" onclick="car(-1)">&lt;</button>
@@ -158,12 +159,8 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
     </div>
     <div class="modPrice"><button class="btn" id="btnCall">Ціна</button></div>
     <div class="modBody">
-      <div class="blockTitle">ОПИСАННЯ</div>
       <div id="modDesc" style="margin-bottom:12px;white-space:pre-wrap"></div>
       <div class="chips" id="chips"></div>
-      <div style="margin-top:12px">
-        <button class="btn" id="btnLike" title="Лайк">❤</button>
-      </div>
     </div>
   </div>
 </dialog>
@@ -206,6 +203,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 <div id="chatWrap"><div id="chatBox">
   <div style="padding:8px 10px;border-bottom:1px solid #edf3f0">Онлайн-чат</div>
   <div id="msgs"></div>
+  <div class="typing" id="typing">Адмін друкує<span>...</span></div>
   <div style="display:flex;gap:8px;padding:8px;border-top:1px solid #edf3f0">
     <input id="msg" placeholder="Ваше повідомлення..." style="flex:1;border:2px solid #e3f4ef;border-radius:12px;padding:8px 10px">
     <button class="btn" id="send">OK</button>
@@ -214,44 +212,45 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-/* сервер = тот же origin, откуда открыт сайт */
-const SERVER = 'https://divine-composer-midwest-phd.trycloudflare.com';
+/* === URL сервера === */
+const SERVER = window.location.origin;
 
-setTimeout(()=>document.getElementById('splash').style.display='none', 5000);
+/* Splash 5s */
+setTimeout(()=>document.getElementById('splash').style.display='none',5000);
 const $ = s=>document.querySelector(s);
-const socket = io(SERVER, {transports:['websocket'], auth:{uid: localStorage.getItem('kolo_uid')||''}});
-const ME = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
 
-let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null,
-    bannerImgs=[], bannerIdx=0, bannerTimer=null, pending=null;
+/* сокет */
+const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
+const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 
-/* свернуть баннер при скролле */
+/* баннер — сворачивать при скролле */
 const bannerEl = $('#banner');
 window.addEventListener('scroll', ()=>{ if(window.scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
 
-/* sockets */
-socket.on('visitors', n=>$('#visitors').textContent = n+' відвідувачів');
+let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
+
+/* сокет-ивенты */
+socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
 socket.on('banner', b=>{
   if(!b) return;
   const imgs = (b.images && b.images.length? b.images : (b.image? [b.image]:[]));
-  bannerImgs = imgs; bannerIdx=0; if(imgs.length){ $('#bannerImg').src=imgs[0]; $('#bannerLink').href=b.link||'#'; }
-  if(bannerTimer) clearInterval(bannerTimer);
-  if(imgs.length>1){ bannerTimer=setInterval(()=>{ bannerIdx=(bannerIdx+1)%imgs.length; $('#bannerImg').src=imgs[bannerIdx]; }, 5000); }
+  if(imgs.length){ $('#bannerImg').src=imgs[0]; $('#bannerLink').href=b.link||'#'; }
 });
 socket.on('listings', d=>{ ALL=d; page=1; draw(); });
 socket.on('chat', m=>{
-  if(pending){ pending.remove(); pending=null; }
+  /* ответ админа показываем; индикатор снимаем */
+  $('#typing').classList.remove('on');
   addMsg((m.from==='admin'?'Адмін':'Користувач')+' #'+m.id, m.text, m.from==='admin'?'other':'me');
 });
-socket.on('payresult', m=>{ if(m.uid===ME){ alert('Оплата успішна!'); hideAdd(); }});
+socket.on('payresult', m=>{ if(m.uid===uidLocal){ alert('Оплата успішна!'); hideAdd(); }});
 
-/* render */
+/* карточка */
 function mkCard(ad){
   return `<div class="card" onclick="openDetail('${ad.id}')">
     ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
     <div style="display:flex;gap:8px;margin-bottom:8px">
-      <div class="pillStat"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg><b>${ad.likes||0}</b></div>
-      <div class="pillStat"><svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg><b>${ad.views||0}</b></div>
+      <div class="pillStat green"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg><b>${ad.likes||0}</b></div>
+      <div class="pillStat green"><svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg><b>${ad.views||0}</b></div>
     </div>
     <div class="title">ЗАГОЛОВОК</div>
     <div class="ph">КАРТИНКА оголошення</div>
@@ -265,7 +264,7 @@ function draw(){
   $('#btnMore').style.display = ALL.normal.length>slice.length ? 'inline-block':'none';
 }
 
-/* detail */
+/* деталь */
 window.openDetail = (id)=>{
   CUR = [...ALL.hot,...ALL.normal].find(a=>a.id===id); if(!CUR) return;
   $('#modTitle').textContent = CUR.title.toUpperCase();
@@ -278,35 +277,35 @@ window.openDetail = (id)=>{
     'дата публікації: '+(new Date().toLocaleDateString('uk-UA')),
   ].map(t=>`<div class="chip">${t}</div>`).join('');
   $('#btnCall').onclick=()=>location.href='tel:'+(CUR.phone||'');
-  CAR=(CUR.images&&CUR.images.length)?CUR.images:['https://picsum.photos/seed/1/1000/700']; idx=0; renderCar();
+  CAR=(CUR.images&&CUR.images.length)?CUR.images:['https://picsum.photos/seed/1/1200/800']; idx=0; renderCar();
   const dlg=$('#dlgDetail'); dlg.showModal();
-  dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); }, {once:true});
-  fetch(SERVER+`/api/view/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':ME}});
+  /* Закрыть кликом вне окна */
+  dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
+  /* отправить просмотр */
+  fetch(SERVER+`/api/view/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
 };
 function renderCar(){ $('#carImgs').innerHTML = `<img src="${CAR[idx]}" alt="">`; }
 window.car = d=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(); };
-$('#btnLike').onclick = async ()=>{
+/* Лайк — именно верхняя зелёная пилюля */
+$('#likeTop').onclick = async ()=>{
   if(!CUR) return;
-  const j = await fetch(SERVER+`/api/like/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':ME}}).then(r=>r.json());
+  const j = await fetch(SERVER+`/api/like/${CUR.id}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json());
   if(j && j.likes!==undefined){ $('#lNum').textContent=j.likes; draw(); }
 };
 
-/* chooser/add form */
-function showChooser(){ $('#chooser').style.display='flex';
-  function outside(evt){ if(evt.target.id==='chooser') hideChooser(); }
-  $('#chooser').addEventListener('click', outside, {once:true});
-}
+/* chooser/add (закрытие кликом вне) */
+function showChooser(){ $('#chooser').style.display='flex'; }
 function hideChooser(){ $('#chooser').style.display='none'; }
-function showAdd(){ $('#addForm').style.display='flex'; $('#hotBadge').style.display = ADD_TYPE==='hot'?'inline-block':'none';
-  function outside(evt){ if(evt.target.id==='addForm') hideAdd(); }
-  $('#addForm').addEventListener('click', outside, {once:true});
-}
+function showAdd(){ $('#addForm').style.display='flex'; $('#hotBadge').style.display = ADD_TYPE==='hot'?'inline-block':'none'; }
 function hideAdd(){ $('#addForm').style.display='none'; }
+$('#chooser').addEventListener('click',e=>{ if(e.target.id==='chooser') hideChooser(); });
+$('#addForm').addEventListener('click',e=>{ if(e.target.id==='addForm') hideAdd(); });
+
 $('#btnPlus').onclick=showChooser;
 $('#chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); showAdd();}
 $('#chooseHot').onclick=()=>{ADD_TYPE='hot'; hideChooser(); showAdd();}
 
-/* заказ банера — без автозаполнений полей */
+/* заказ банера */
 $('#bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; hideChooser(); showAdd(); };
 
 /* превью выбранного фото */
@@ -324,16 +323,14 @@ $('#btnPay').onclick=async ()=>{
   fd.append('desc', ($('#f_desc').value||''));
   fd.append('phone', ($('#f_phone').value||'+380'));
   for(const f of $('#f_imgs').files) fd.append('images',f);
-  const j = await fetch(SERVER+'/pay/start',{method:'POST',body:fd,headers:{'X-KOLO-UID':ME}}).then(r=>r.json()).catch(()=>({}));
+  const j = await fetch(SERVER+'/pay/start',{method:'POST',body:fd,headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json()).catch(()=>({}));
   if(!(j && j.status==='ok')) alert('Сервер недоступний');
 };
 
 /* поиск */
-function showSearch(){ $('#searchBox').style.display='flex'; $('#q').focus();
-  function outside(evt){ if(evt.target.id==='searchBox') hideSearch(); }
-  $('#searchBox').addEventListener('click', outside, {once:true});
-}
+function showSearch(){ $('#searchBox').style.display='flex'; $('#q').focus(); }
 function hideSearch(){ $('#searchBox').style.display='none'; }
+$('#searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
 $('#btnSearch').onclick=showSearch;
 $('#go').onclick=()=>{ const k=($('#q').value||'').toLowerCase(); hideSearch(); if(!k){ draw(); return; }
   const F=a=>(a.title+a.desc+a.city+a.region).toLowerCase().includes(k);
@@ -342,17 +339,21 @@ $('#go').onclick=()=>{ const k=($('#q').value||'').toLowerCase(); hideSearch(); 
 };
 
 /* чат */
-const chatWrap=$('#chatWrap');
+const chatWrap=$('#chatWrap'); const chatBox=$('#chatBox');
 $('#chatFab').onclick=()=>{ chatWrap.style.display='block'; };
 chatWrap.addEventListener('click', (e)=>{ if(e.target===chatWrap) chatWrap.style.display='none'; });
 function addMsg(who,text,cls){ const d=document.createElement('div'); d.style.padding='8px 10px'; d.style.borderRadius='12px'; d.style.background=cls==='other'?'#f3f4f6':'#e8fff5'; d.textContent=who+': '+text; $('#msgs').appendChild(d); $('#msgs').scrollTop=99999; }
 $('#send').onclick=()=>{ const v=$('#msg').value.trim(); if(!v) return; $('#msg').value='';
-  socket.emit('chat',{from:'user',uid:ME,text:v}); addMsg('Я',v,'me');
-  pending=document.createElement('div'); pending.className='typing'; pending.style.margin='8px 10px'; $('#msgs').appendChild(pending); $('#msgs').scrollTop=99999;
+  socket.emit('chat',{from:'user',uid:uidLocal,text:v}); addMsg('Я',v,'me');
+  /* аккуратный индикатор — без перерисовки всего окна */
+  $('#typing').classList.add('on');
 };
 
 /* more */
 $('#btnMore').onclick=()=>{ page++; draw(); };
+
+/* закрывать диалог-деталь кликом вне окна */
+$('#dlgDetail').addEventListener('click',e=>{ if(e.target.id==='dlgDetail') $('#dlgDetail').close(); });
 
 /* init */
 fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ ALL=j.data; draw(); });
