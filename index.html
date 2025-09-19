@@ -24,15 +24,17 @@ a{color:inherit;text-decoration:none}
 /* header */
 header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.04)}
 .topbar{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center}
-.logo svg{width:36px;height:36px}
+.logo svg{width:44px;height:44px} /* больше — как + */
 .pill{background:var(--g);color:#fff;border-radius:12px;padding:8px 14px;font-size:13px}
 .btn{border:none;background:var(--g);color:#fff;border-radius:12px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.25);font-family:inherit}
-.btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
+.btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none} /* высота как у кнопок */
 
 /* banner */
-.banner{margin:8px 0;overflow:hidden;transition:max-height .35s ease, opacity .35s ease;max-height:170px}
+.banner{margin:8px 0;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:170px}
 .banner img{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
-.banner.min{max-height:70px;opacity:.95}
+/* на телефонах — как на ПК (без обрезки слева/справа) */
+@media(max-width:760px){ .banner img{object-fit:contain;height:160px;background:#0001} }
+.banner.min{max-height:0;opacity:0;margin:0} /* сворачивается полностью */
 
 /* sections */
 .hsec{display:flex;align-items:center;gap:8px;color:#fff;padding:8px 14px;border-radius:12px;margin:12px 0;box-shadow:0 6px 14px rgba(0,0,0,.06)}
@@ -45,30 +47,36 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
 .card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transition:transform .12s ease}
 .card:hover{transform:translateY(-2px)}
-.badge-hot{position:absolute;right:12px;top:12px;background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff;border-radius:12px;padding:4px 10px;font-size:12px}
-.card .ph{border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
+.card .ph{position:relative;border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
 .card .ph img{width:100%;height:100%;object-fit:cover}
+.badge-hot{position:absolute;right:12px;top:12px;background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff;border-radius:12px;padding:4px 10px;font-size:12px;z-index:3}
 .card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
-.priceBtn{position:absolute;right:16px;bottom:14px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:8px 16px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit}
+/* цена прямо на фото, внизу справа */
+.priceTag{position:absolute;right:10px;bottom:10px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:6px 12px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit;z-index:3}
 
 /* modal */
-.pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06);font-family:'Russo One',Arial,system-ui}
-.pillStat svg{width:16px;height:16px}
-.pillStat.green{background:var(--g);color:#fff}
-.pillStat.green svg{fill:#fff}
-.pillStat b{font-family:'Russo One',Arial,system-ui}
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
 dialog::backdrop{background:rgba(0,0,0,.68)}
 #modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .modHead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #edf3f0}
 .modTitle{flex:1}
-.carousel{position:relative;border-bottom:1px solid #edf3f0;background:#fff}
+.closeX{border:none;background:#fff;color:var(--g);border:3px solid var(--g);width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer}
+
+/* карусель */
+.carousel{position:relative;border-bottom:1px solid #edf3f0;background:#0003}
 #carStage{position:relative;height:520px;max-height:52vh}
-#carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .25s ease}
+#carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .25s ease;background:#0002}
 #carStage img.show{opacity:1}
-.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:var(--g);color:#fff;border:none;border-radius:10px;width:38px;height:32px;display:flex;align-items:center;justify-content:center}
+/* белые толстые стрелки поверх фото */
+.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;border-radius:0;width:auto;height:auto;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none}
 .navbtn.left{left:10px}.navbtn.right{right:10px}
 #carCount{position:absolute;right:10px;bottom:10px;background:#000b;color:#fff;border-radius:10px;padding:4px 8px;font-size:12px}
+/* лайки+просмотры вверху справа поверх фото */
+.statOverlay{position:absolute;right:10px;top:10px;display:flex;gap:8px;z-index:4}
+.pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.25);font-family:'Russo One',Arial,system-ui;background:var(--g);color:#fff}
+.pillStat svg{width:16px;height:16px;fill:#fff}
+.pillStat b{font-family:'Russo One',Arial,system-ui}
+
 .modPrice{display:flex;justify-content:flex-end;padding:12px 14px}
 .modBody{padding:14px}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
@@ -82,7 +90,8 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .chooseBtn.red{background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff}
 .formBox{width:92%;max-width:560px;background:#fff;border-radius:16px;padding:16px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .formTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px}
+.badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
+.badgeSmall.gray{background:#eef3f0;color:#0b1720}
 .imagePh{border-radius:12px;height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
 .imagePh img{width:100%;height:100%;object-fit:contain}
 .inp{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 14px;width:100%;margin-top:10px;caret-color:#fff;font-family:inherit}
@@ -125,7 +134,8 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <main class="wrap">
   <div class="hsec top">
-    <svg viewBox="0 0 24 24"><path d="M13 3s5 4 5 9a6 6 0 0 1-12 0c0-3 2-6 5-9l1 3 1-3Z"/></svg>
+    <!-- белый огонёк -->
+    <svg viewBox="0 0 24 24"><path d="M12 2c2 3 6 5.5 6 10.2A6 6 0 0 1 6 12.2C6 8 9 5 11 3.2c-.2 2.1.8 3.5 2.5 4.8C14 6.5 13 4.2 12 2Z"/></svg>
     <span>ТОП пропозицій</span>
   </div>
   <div id="hotGrid" class="grid"></div>
@@ -147,20 +157,23 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
   <div id="modalBox">
     <div class="modHead">
       <div class="modTitle" id="modTitle">ОГОЛОШЕННЯ</div>
-      <div class="pillStat green" title="Перегляди">
-        <svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
-        <b id="vNum">0</b>
-      </div>
-      <button class="pillStat green" id="likeTop" style="border:none;cursor:pointer">
-        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg>
-        <b id="lNum">0</b>
-      </button>
+      <button class="closeX" id="closeDetail" title="Закрити">✕</button>
     </div>
     <div class="carousel">
-      <button class="navbtn left" onclick="car(-1)">&lt;</button>
+      <div class="statOverlay">
+        <div class="pillStat" title="Перегляди">
+          <svg viewBox="0 0 24 24"><path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7Zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
+          <b id="vNum">0</b>
+        </div>
+        <button class="pillStat" id="likeTop" style="border:none;cursor:pointer" title="Лайк">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.35-10-8.5C.5 8.5 3 5 6.5 5 8.7 5 10 6.2 12 8c2-1.8 3.3-3 5.5-3C21 5 23.5 8.5 22 12.5 19.5 16.7 12 21 12 21Z"/></svg>
+          <b id="lNum">0</b>
+        </button>
+      </div>
+      <button class="navbtn left" id="navLeft" aria-label="Попереднє">‹</button>
       <div id="carStage"></div>
       <div id="carCount">1/1</div>
-      <button class="navbtn right" onclick="car(1)">&gt;</button>
+      <button class="navbtn right" id="navRight" aria-label="Наступне">›</button>
     </div>
     <div class="modPrice"><button class="btn" id="btnCall">Ціна</button></div>
     <div class="modBody">
@@ -179,10 +192,15 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 <!-- ADD FORM -->
 <div id="addForm"><div class="formBox" id="addInner">
   <div class="formTop">
-    <div class="badgeSmall">Додати фото</div>
-    <div id="hotBadge" class="badgeSmall" style="background:#e94251;display:none">HOT</div>
+    <div class="badgeSmall" id="btnAddPhoto">Додати фото <span id="phCnt">0/5</span></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div id="hotBadge" class="badgeSmall" style="background:#e94251;display:none">HOT</div>
+      <button class="closeX" id="closeAdd" title="Закрити">✕</button>
+    </div>
   </div>
-  <div class="imagePh" id="imgPh"><span>КАРТИНКА оголошення</span></div>
+  <div class="imagePh" id="imgPh"></div>
+  <input type="file" id="f_imgs" accept="image/*" multiple hidden>
+
   <input class="inp" id="f_title" placeholder="Заголовок">
   <div class="inprow">
     <input class="inp" id="f_price" placeholder="Ціна, грн">
@@ -193,7 +211,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
     <input class="inp" id="f_phone" placeholder="+380">
   </div>
   <textarea class="inp" id="f_desc" placeholder="Опис" rows="4" style="height:110px"></textarea>
-  <input type="file" id="f_imgs" accept="image/*" multiple hidden>
+
   <button class="btn btnPub" id="btnPay">Опублікувати</button>
 </div></div>
 
@@ -205,7 +223,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://programmer-meanwhile-province-inspector.trycloudflare.com';
+const SERVER = 'https://puzzles-prices-shaped-packages.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
 /* Splash 5s */
@@ -215,7 +233,7 @@ setTimeout(()=>document.getElementById('splash').style.display='none',5000);
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
 const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 
-/* banner shrink */
+/* баннер — сворачивается полностью */
 const bannerEl = $('#banner');
 window.addEventListener('scroll', ()=>{ if(window.scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
 
@@ -226,7 +244,7 @@ let bannerList=[], bannerIdx=0, bannerTimer=null;
 socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
 socket.on('banner', b=>{ setBanner(b); });
 socket.on('listings', d=>{ ALL=d; page=1; draw(); });
-socket.on('payresult', m=>{ if(m.uid===uidLocal || !m.uid){ alert('Оплата успішна!'); hideAdd(); }});
+socket.on('payresult', m=>{ if(m.uid===uidLocal || !m.uid){ alert('Оплата успішна!'); hideAdd(); enableScroll(); }});
 
 /* initial data */
 fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{
@@ -249,10 +267,7 @@ function setBanner(b){
   imgEl.src = bannerList[bannerIdx];
 
   if(bannerList.length>1){
-    bannerTimer = setInterval(()=>{
-      bannerIdx = (bannerIdx+1)%bannerList.length;
-      imgEl.src = bannerList[bannerIdx];
-    }, 5000);
+    bannerTimer = setInterval(()=>{ bannerIdx = (bannerIdx+1)%bannerList.length; imgEl.src = bannerList[bannerIdx]; }, 5000);
   }
 }
 
@@ -260,10 +275,12 @@ function setBanner(b){
 function mkCard(ad){
   const img = (ad.images && ad.images[0]) ? ad.images[0] : '';
   return `<div class="card" onclick="openDetail('${ad.id}')">
-    ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
-    <div class="ph">${img?`<img src="${img}" alt="">`:'КАРТИНКА оголошення'}</div>
+    <div class="ph">
+      ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
+      ${img?`<img src="${img}" alt="">`:'КАРТИНКА оголошення'}
+      <div class="priceTag">${(ad.price||0).toLocaleString('uk-UA')} ₴</div>
+    </div>
     <div class="ttl">${(ad.title||'Оголошення').toUpperCase()}</div>
-    <button class="priceBtn">${(ad.price||0).toLocaleString('uk-UA')} ₴</button>
   </div>`;
 }
 function draw(){
@@ -272,6 +289,10 @@ function draw(){
   document.getElementById('listGrid').innerHTML = slice.map(mkCard).join('');
   document.getElementById('btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
 }
+
+/* scroll lock helpers */
+function disableScroll(){ document.body.style.overflow='hidden'; }
+function enableScroll(){ document.body.style.overflow=''; }
 
 /* detail */
 window.openDetail = (id)=>{
@@ -293,13 +314,16 @@ window.openDetail = (id)=>{
   CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800']; 
   idx=0; renderCar(true);
 
-  const dlg=document.getElementById('dlgDetail'); dlg.showModal();
-  dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
+  const dlg=document.getElementById('dlgDetail'); dlg.showModal(); disableScroll();
+  dlg.addEventListener('click', e=>{ if(e.target===dlg){ dlg.close(); enableScroll(); }});
 
+  // +1 view (UI) и на сервер
   document.getElementById('vNum').textContent = (parseInt(document.getElementById('vNum').textContent,10)||0)+1;
   CUR.views = (CUR.views||0)+1; draw();
   fetch(SERVER+`/api/view/${encodeURIComponent(CUR.id)}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
 };
+
+document.getElementById('closeDetail').onclick=()=>{ document.getElementById('dlgDetail').close(); enableScroll(); };
 
 function renderCar(initial=false){
   const st = document.getElementById('carStage');
@@ -310,8 +334,12 @@ function renderCar(initial=false){
     imgs.forEach((im,i)=>im.classList.toggle('show', i===idx));
   }
   document.getElementById('carCount').textContent = `${idx+1}/${CAR.length}`;
+  // стрелки — только если фото >1
+  document.getElementById('navLeft').style.display = document.getElementById('navRight').style.display = (CAR.length>1)?'flex':'none';
 }
 window.car = d=>{ idx=(idx+d+CAR.length)%CAR.length; renderCar(false); };
+document.getElementById('navLeft').onclick=()=>window.car(-1);
+document.getElementById('navRight').onclick=()=>window.car(1);
 
 /* like */
 document.getElementById('likeTop').onclick = async ()=>{
@@ -330,12 +358,13 @@ document.getElementById('likeTop').onclick = async ()=>{
 };
 
 /* chooser/add */
-function showChooser(){ document.getElementById('chooser').style.display='flex'; }
-function hideChooser(){ document.getElementById('chooser').style.display='none'; }
-function showAdd(){ document.getElementById('addForm').style.display='flex'; document.getElementById('hotBadge').style.display = ADD_TYPE==='hot'?'inline-block':'none'; }
-function hideAdd(){ document.getElementById('addForm').style.display='none'; }
+function showChooser(){ document.getElementById('chooser').style.display='flex'; disableScroll(); }
+function hideChooser(){ document.getElementById('chooser').style.display='none'; enableScroll(); }
+function showAdd(){ document.getElementById('addForm').style.display='flex'; document.getElementById('hotBadge').style.display = ADD_TYPE==='hot'?'inline-block':'none'; disableScroll(); }
+function hideAdd(){ document.getElementById('addForm').style.display='none'; enableScroll(); }
 document.getElementById('chooser').addEventListener('click',e=>{ if(e.target.id==='chooser') hideChooser(); });
 document.getElementById('addForm').addEventListener('click',e=>{ if(e.target.id==='addForm') hideAdd(); });
+document.getElementById('closeAdd').onclick=hideAdd;
 
 document.getElementById('btnPlus').onclick=showChooser;
 document.getElementById('chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); showAdd();}
@@ -346,11 +375,19 @@ document.getElementById('bannerLink').onclick=(e)=>{ e.preventDefault(); ADD_TYP
 
 /* photos preview (max 5) */
 let chosenFiles=[];
-document.getElementById('imgPh').onclick=()=>document.getElementById('f_imgs').click();
-document.getElementById('f_imgs').onchange=()=>{
-  const fs=[...document.getElementById('f_imgs').files].slice(0,5); chosenFiles=fs;
-  if (fs[0]) { const u=URL.createObjectURL(fs[0]); document.getElementById('imgPh').innerHTML=`<img src="${u}">`; }
-};
+const fInput = document.getElementById('f_imgs');
+const imgPh = document.getElementById('imgPh');
+const phCnt = document.getElementById('phCnt');
+
+function redrawPreview(){
+  imgPh.innerHTML = chosenFiles.length
+    ? chosenFiles.map(f=>`<img src="${URL.createObjectURL(f)}">`).slice(0,1).join('')
+    : '';
+  phCnt.textContent = `${chosenFiles.length}/5`;
+}
+document.getElementById('btnAddPhoto').onclick=()=>fInput.click();
+imgPh.onclick=()=>fInput.click();
+fInput.onchange=()=>{ chosenFiles=[...fInput.files].slice(0,5); redrawPreview(); };
 
 /* publish + open LiqPay/demo */
 document.getElementById('btnPay').onclick=async ()=>{
@@ -369,9 +406,9 @@ document.getElementById('btnPay').onclick=async ()=>{
   if(j.checkout_url){ window.open(j.checkout_url, '_blank'); }
 };
 
-/* search */
-function showSearch(){ document.getElementById('searchBox').style.display='flex'; document.getElementById('q').focus(); }
-function hideSearch(){ document.getElementById('searchBox').style.display='none'; }
+/* search — не скроллит страницу вниз */
+function showSearch(e){ if(e) e.preventDefault(); document.getElementById('searchBox').style.display='flex'; document.getElementById('q').focus({preventScroll:true}); disableScroll(); }
+function hideSearch(){ document.getElementById('searchBox').style.display='none'; enableScroll(); }
 document.getElementById('searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
 document.getElementById('btnSearch').onclick=showSearch;
 document.getElementById('go').onclick=()=>{ const k=(document.getElementById('q').value||'').toLowerCase(); hideSearch();
@@ -384,7 +421,7 @@ document.getElementById('go').onclick=()=>{ const k=(document.getElementById('q'
 document.getElementById('btnMore').onclick=()=>{ page++; draw(); };
 
 /* close detail by click outside */
-document.getElementById('dlgDetail').addEventListener('click',e=>{ if(e.target.id==='dlgDetail') document.getElementById('dlgDetail').close(); });
+document.getElementById('dlgDetail').addEventListener('click',e=>{ if(e.target.id==='dlgDetail'){ document.getElementById('dlgDetail').close(); enableScroll(); }});
 </script>
 </body>
 </html>
