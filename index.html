@@ -3,130 +3,115 @@
 <head>
   <meta charset="utf-8" />
   <title>KOLO — барахолка оголошень</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
   <meta name="format-detection" content="telephone=no"/>
   <meta name="theme-color" content="#10b981"/>
 
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Open Graph -->
+  <meta property="og:title" content="KOLO — барахолка оголошень">
+  <meta property="og:description" content="KOLO: додай оголошення за хвилину. HOT та звичайні.">
+  <meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%2310b981'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial Black,Arial' font-size='96' fill='white'>KOLO</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='14' ry='14' width='64' height='64' fill='%2310b981'/><circle cx='32' cy='32' r='14' fill='white'/></svg>">
 
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#f6fbf8;
-      --paper:#ffffff; --ink:#0f172a;
-      --muted:#64748b;
-      --brand:#0ea371; --brand-press:#0c8f63;
-      --line:#d6e8de;
-      --top:56px;
-      --hotRed:#ff4d4f;
-      --thumb-ph:#e7f4ee;
-      --shadow-sm: 0 4px 12px rgba(2,44,34,.08);
-      --shadow-lg: 0 14px 40px rgba(2,44,34,.14);
+      --bg:#f6fbf8; --paper:#fff; --ink:#0f172a; --muted:#64748b;
+      --brand:#10b981; --brand-press:#0c8f63; --hot:#ff4d4f; --line:#d6e8de;
+      --thumb-ph:#e7f4ee; --shadow-sm:0 4px 12px rgba(2,44,34,.08); --shadow-lg:0 14px 40px rgba(2,44,34,.14);
+      --top:60px;
     }
-    html{-webkit-text-size-adjust:100%}
-    *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{height:100%}
-    body{margin:0; background:var(--bg); color:var(--ink); font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif; overflow-x:hidden}
-    body.modal-open{overflow:hidden}
-
-    /* ===== PRELOADER ===== */
-    .preloader{position:fixed; inset:0; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:9999}
-    .pl-wrap{position:relative; width:220px; height:220px; display:grid; place-items:center}
-    .pl-ring{position:absolute; inset:0; border-radius:50%; border:12px solid #e7f4ee; border-top-color:#10b981; animation:spin 1.2s linear infinite}
-    .pl-inner{width:160px; height:160px; border-radius:50%; background:#10b981; outline:8px solid #e7f4ee; display:grid; place-items:center}
-    .pl-logo{font:900 38px/1 "Russo One"; color:#fff; letter-spacing:2px; user-select:none}
-    .pl-sub{font:800 16px/1 "Montserrat"; white-space:nowrap; color:#0b3b2d; opacity:.95}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Topbar (без логотипов) */
-    .topbar{position:sticky; top:0; z-index:100; height:var(--top); display:flex; align-items:center; gap:10px; padding:8px 12px; background:#ffffffcc; backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line)}
-    .pill{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:700; color:#0f172a}
-    .pill.green{background:var(--brand); color:#fff; border-color:transparent; font-family:"Russo One"; text-transform:uppercase; box-shadow:var(--shadow-sm); text-shadow:0 1px 0 rgba(0,0,0,.35)}
-    .pill.green:active{transform:translateY(1px); background:var(--brand-press)}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+    /* --- Top bar --- */
+    .topbar{position:sticky;top:0;z-index:50;height:var(--top);display:flex;gap:10px;align-items:center;padding:10px 12px;background:#ffffffcc;backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--line)}
+    .pill{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:800;color:#0f172a}
     .grow{flex:1}
-    .visitors{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:#fff; font-weight:800; color:#0b3b2d}
+    /* + button: square with rounded corners */
+    .plus{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--brand);color:#fff;border:none;box-shadow:var(--shadow-sm)}
+    .plus:active{transform:translateY(1px);background:var(--brand-press)}
+    .plusIcon{width:22px;height:22px;filter:brightness(0) invert(1)}
+    .visitors{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;color:#0b3b2d;white-space:nowrap}
 
-    /* Кнопка "+" квадратная с закруглёнными углами */
-    .btnPlus{
-      width:44px; height:44px; border-radius:12px;
-      display:inline-flex; align-items:center; justify-content:center;
-      background:var(--brand); color:#fff; border:none; box-shadow:var(--shadow-sm);
-      font:900 22px/1 "Russo One"; cursor:pointer;
-    }
-    .btnPlus:active{transform:translateY(1px); background:var(--brand-press)}
+    .container{max-width:1200px;margin:10px auto;padding:0 12px}
+    .panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-sm)}
 
-    .container{max-width:1200px; margin:10px auto; padding:0 12px;}
-    .panel{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-sm);}
-
-    /* Реклама — один баннер, 2 картинки, автосмена, адаптивная высота */
+    /* --- Ad banner: single, responsive, cycles every 5s --- */
     .adWrap{margin:6px 0 10px}
-    .adBar{height:clamp(140px, 24vw, 220px); border:1px solid var(--line); border-radius:14px; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center}
-    .adBar img{width:100%; height:100%; object-fit:cover; display:block; pointer-events:none} /* клики по баннеру отключены */
-    .adNote{font-size:12px; opacity:.85; text-align:right; margin-top:6px; padding:0 4px; cursor:pointer}
-    .adNote:hover{opacity:1; text-decoration:underline}
-
-    /* HOT strip */
+    .adBox{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+    .adImg{display:block;width:100%;height:168px;object-fit:cover}
+    @media (min-width:640px){ .adImg{height:220px} }
+    @media (min-width:1024px){ .adImg{height:260px} }
+    .adFoot{display:flex;justify-content:flex-end;margin-top:6px}
+    .adBtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:800}
+    .adBtn:active{transform:translateY(1px)}
+    /* --- HOT strip --- */
     .hotWrap{margin:10px 0 6px}
-    .hotHead{display:flex; align-items:center; gap:12px; margin-bottom:8px; color:#0e3a2a}
-    .hotHead .tag{display:inline-flex; align-items:center; gap:6px; background:var(--hotRed); padding:8px 12px; border-radius:12px; font:700 14px/1 "Russo One"; color:#fff; box-shadow:0 0 0 1px #ff6567 inset}
-    .hotHead .tag img{width:14px; height:14px; filter:brightness(0) invert(1)}
-    .hotGrid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px}
-    @media (max-width:1024px){ .hotGrid{grid-template-columns:repeat(3,1fr);} }
-    @media (max-width:640px){ .hotGrid{grid-template-columns:repeat(2,1fr);} }
-    .hotCard{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; cursor:pointer; box-shadow:var(--shadow-sm)}
-    .hotCard .thumb{position:relative; padding-top:56%; background:var(--thumb-ph); overflow:hidden;}
-    .hotBadge{position:absolute; left:8px; top:8px; background:var(--hotRed); padding:4px 8px; border-radius:999px; font:800 12px/1 "Russo One"; color:#fff; border:1px solid #ff6062; z-index:2}
-    .hotPrice{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border:0; padding:6px 8px; border-radius:10px; font-weight:800; font-size:12px; z-index:2; white-space:nowrap; max-width:60%; overflow:hidden; text-overflow:ellipsis}
-    .hotBody{padding:8px; font-size:13px}
-    .hotTTL{font:700 14px/1.2 "Russo One"; color:#0f172a}
-    .hotSplit{height:1px; background:var(--line); margin:14px 0 6px; border-radius:1px}
+    .hotHead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .hotTag{display:inline-flex;align-items:center;gap:6px;background:var(--hot);padding:8px 12px;border-radius:12px;color:#fff;font:800 14px/1 "Russo One";box-shadow:0 0 0 1px #ff6567 inset}
+    .hotGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    @media (max-width:1024px){ .hotGrid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:640px){ .hotGrid{grid-template-columns:repeat(2,1fr)} }
+    .hotCard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;box-shadow:var(--shadow-sm)}
+    .hotThumb{position:relative;padding-top:56%;background:var(--thumb-ph);overflow:hidden}
+    .hotThumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .badgeHOT{position:absolute;left:8px;top:8px;background:var(--hot);color:#fff;border:1px solid #ff6567;border-radius:999px;padding:4px 8px;font:800 11px/1 "Russo One"}
+    .priceChip{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:10px;padding:4px 8px;font:800 12px/1 "Russo One"}
+    .hotBody{padding:8px;font-size:13px}
 
-    /* Grid — 2 колонки на мобилке */
-    .topline{display:flex; align-items:center; gap:10px; margin:14px 0;}
-    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
-    @media (max-width:1024px){ .grid{grid-template-columns:repeat(2,1fr);} }
-    @media (max-width:640px){ .grid{grid-template-columns:repeat(2,1fr);} }
+    /* --- Grid --- */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:1024px){ .grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:640px){ .grid{grid-template-columns:repeat(2,1fr)} } /* два стовпці на телефоні */
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;box-shadow:var(--shadow-sm)}
+    .thumb{position:relative;padding-top:62%;background:var(--thumb-ph);overflow:hidden}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .pillHOT{position:absolute;left:8px;top:8px;background:var(--hot);color:#fff;border:1px solid #ff6567;border-radius:999px;padding:4px 8px;font:800 11px/1 "Russo One"}
+    .price{position:absolute;right:8px;bottom:8px;background:var(--brand);color:#fff;border-radius:10px;padding:4px 8px;font:800 12px/1 "Russo One";max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .meta{color:var(--muted)}
+    .body{padding:10px;display:flex;flex-direction:column;gap:6px}
+    .title{font:800 16px/1.2 "Russo One";letter-spacing:.3px}
 
-    .card{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; cursor:pointer; transition:box-shadow .08s ease; box-shadow:var(--shadow-sm)}
-    .card:active{box-shadow:var(--shadow-lg)}
-    .thumb{position:relative; padding-top:62%; background:var(--thumb-ph); overflow:hidden;}
-    .thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-    .hotPill{position:absolute; left:8px; top:8px; background:var(--hotRed); color:#fff; border:1px solid #ff6567; border-radius:999px; padding:4px 8px; font:800 11px/1 "Russo One"; z-index:2}
+    /* --- Detail modal --- */
+    .detail{position:fixed;inset:0;z-index:120;display:none;background:rgba(0,0,0,.35)}
+    .detail.active{display:block}
+    .sheet{position:absolute;left:50%;top:6vh;transform:translateX(-50%);width:min(1080px,96vw);max-height:88vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow-lg)}
+    .closeX{height:38px;border:1px solid var(--line);background:#fff;border-radius:12px;font:800 13px/38px 'Russo One';padding:0 12px;cursor:pointer}
+    .iconBtn{display:inline-grid;place-items:center;height:34px;min-width:34px;border-radius:10px;border:1px solid var(--line);background:var(--brand);box-shadow:var(--shadow-sm)}
+    .iconBtn img{width:16px;height:16px;filter:brightness(0) invert(1)}
+    .big{position:relative;padding-top:56%;background:var(--thumb-ph);border-radius:12px;overflow:hidden}
+    .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .navBtn{position:absolute;top:50%;transform:translateY(-50%);height:48px;min-width:48px;padding:0 12px;border-radius:14px;border:1px solid var(--line);background:#ffffffdd;color:#065f46;font-weight:900;font-size:26px;line-height:46px;cursor:pointer;box-shadow:var(--shadow-sm);backdrop-filter:saturate(110%) blur(3px)}
+    .navPrev{left:8px}.navNext{right:8px}
+    /* Счётчики и цена прямо на фото в деталке */
+    .dLike{position:absolute;left:8px;top:8px}
+    .dViews{position:absolute;right:8px;top:8px}
+    .dPrice{position:absolute;right:8px;bottom:8px}
+    .divider{height:1px;background:var(--line);margin:10px 0;border-radius:1px}
+    .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    @media (max-width:900px){ .specs{grid-template-columns:repeat(2,1fr)} }
+    .spec{background:#f4fbf7;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:13px}
+    .h{font:800 14px/1 "Russo One";margin-bottom:6px;color:#0b3b2d}
 
-    /* только цена на плитке */
-    .badge{position:absolute; right:8px; bottom:8px; background:var(--brand); color:#fff; border-radius:10px; padding:4px 8px; font:800 12px/1 "Russo One"; z-index:2; white-space:nowrap; max-width:65%; overflow:hidden; text-overflow:ellipsis}
+    /* Pager */
+    .pager{display:flex;justify-content:center;margin:16px 0 12px}
+    .btn{height:42px;border:none;border-radius:12px;background:var(--brand);color:#fff;font:800 14px/42px "Russo One";padding:0 16px;cursor:pointer;box-shadow:var(--shadow-sm)}
+    .btn:active{transform:translateY(1px);background:var(--brand-press)}
 
-    .body{padding:10px; display:flex; flex-direction:column; gap:6px}
-    .title{font:700 16px/1.2 "Russo One"; letter-spacing:.4px; color:#0f172a}
-
-    /* Detail */
-    .detail{position:fixed; inset:0; z-index:120; display:none; background:rgba(0,0,0,.35);}
-    .detail.active{display:block;}
-    .sheet{position:absolute; left:50%; top:6vh; transform:translateX(-50%); width:min(1080px,96vw); max-height:88vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px; box-shadow:var(--shadow-lg);}
-    .modalHead{display:flex; align-items:center; gap:10px; margin-bottom:8px}
-
-    /* Gallery + overlay badges */
-    .big{position:relative; padding-top:56%; background:var(--thumb-ph); border-radius:12px; overflow:hidden}
-    .big img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
-    .navBtn{
-      position:absolute; top:50%; transform:translateY(-50%);
-      height:44px; min-width:44px; padding:0 12px;
-      border-radius:14px; border:1px solid var(--line);
-      background:#ffffffdd; color:#065f46; font-weight:900; font-size:24px; line-height:42px;
-      cursor:pointer; box-shadow:var(--shadow-sm); backdrop-filter:saturate(110%) blur(3px);
-    }
-    .navPrev{left:8px} .navNext{right:8px}
-
-    .galLike, .galViews, .galPrice{
-      position:absolute; z-index:3; background:var(--brand); color:#fff; border-radius:10px;
-      font:800 12px/1 "Russo One"; padding:6px 8px; display:inline-flex; align-items:center; gap:6px;
-      white-space:nowrap; max-width:70%; overflow:hidden; text-overflow:ellipsis
-    }
-    .galLike{left:8px; top:8px; background:var(--hotRed); border:1px solid #ff6567}
-    .galViews{right:8px; top:8px}
-    .galPrice{right:8px; bottom:8px}
+    /* Preloader */
+    .preloader{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:9999}
+    .pl-wrap{position:relative;width:220px;height:220px;display:grid;place-items:center}
+    .pl-ring{position:absolute;inset:0;border-radius:50%;border:14px solid #e7f4ee;border-top-color:#10b981;animation:spin 1.2s linear infinite}
+    .pl-inner{width:160px;height:160px;border-radius:50%;background:#10b981;outline:10px solid #e7f4ee;display:grid;place-items:center}
+    .pl-logo{font:900 40px/1 "Russo One";color:#fff;letter-spacing:2px;user-select:none}
+    .pl-sub{font:800 14px/1 "Montserrat";color:#0b3b2d;opacity:.95;white-space:nowrap} /* одна строка, чуть больше */
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
-<body class="modal-open">
+<body>
   <!-- PRELOADER -->
   <div id="preloader" class="preloader" aria-hidden="false">
     <div class="pl-wrap">
@@ -136,310 +121,255 @@
     <div class="pl-sub">Дошка оголошень №1 в Україні</div>
   </div>
 
+  <!-- Topbar (без логотипов) -->
   <header class="topbar">
     <div class="pill" id="tabSearch">Пошук</div>
-    <div class="visitors" id="visitors"><span id="visCount">0</span> користувачів</div>
+    <div class="visitors"><span id="visCount">10000</span>&nbsp;користувачів</div>
     <div class="grow"></div>
-    <button class="btnPlus" id="tabSell" title="Додати">+</button>
+    <!-- + ведёт в бота -->
+    <a id="addBtn" class="plus" href="#" target="_blank" title="Додати">
+      <img class="plusIcon" alt="+" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z'/></svg>">
+    </a>
   </header>
 
   <main class="container">
-    <!-- РЕКЛАМА -->
-    <div class="adWrap">
-      <div class="adBar">
-        <img id="adImg" alt="реклама" referrerpolicy="no-referrer">
+    <!-- Банер: одна зона, картинка меняется каждые 5 сек; сам баннер не кликает -->
+    <section class="adWrap">
+      <div class="adBox">
+        <img id="adImg" class="adImg" alt="Реклама">
       </div>
-      <div class="adNote" id="adOrder">Замовити рекламу</div>
-    </div>
+      <div class="adFoot">
+        <a class="adBtn" id="adOrder" target="_blank">Замовити рекламу</a>
+      </div>
+    </section>
 
     <!-- HOT -->
     <section class="panel hotWrap" id="hotPanel" style="display:none">
-      <div class="hotHead">
-        <div class="tag"><img id="hotHeadIcon" alt="flame"> HOT</div>
-      </div>
+      <div class="hotHead"><div class="hotTag" id="hotTag">HOT</div></div>
       <div class="hotGrid" id="hotGrid"></div>
     </section>
-    <div class="hotSplit" id="hotSplit" style="display:none"></div>
 
-    <!-- СПИСОК -->
-    <section class="topline"><div class="grow"></div></section>
+    <!-- Список -->
     <section class="grid" id="grid"></section>
-    <div class="pager"><button class="btn pill green" id="btnMore" style="display:none">Показати ще</button></div>
+    <div class="pager"><button class="btn" id="btnMore" style="display:none">Показати ще</button></div>
   </main>
 
   <!-- DETAIL -->
   <div id="detail" class="detail" aria-hidden="true">
     <div class="sheet" role="dialog" aria-modal="true">
-      <div class="modalHead">
+      <div class="modalHead" style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="title" id="dTitle" style="font:800 20px/1.2 'Russo One'"></div>
         <div class="grow"></div>
-        <button class="pill green" id="dShare" title="Поділитися" style="height:34px;line-height:34px;padding:0 10px">
-          <img class="pillIcon" id="shareIcon" alt="share" style="width:16px;height:16px;filter:brightness(0) invert(1)">
+        <!-- только иконка share, без текста -->
+        <button class="iconBtn" id="dShare" title="Поділитися">
+          <img id="shareIcon" alt="share">
         </button>
-        <button title="Лайк" aria-label="Лайк" class="pill green" id="dLike" style="height:34px;line-height:34px;padding:0 10px;gap:8px">
-          <img class="pillIcon" id="likeIconHeader" alt="like" style="width:16px;height:16px;filter:brightness(0) invert(1)">
-          <span id="dLikeCnt">0</span>
-        </button>
-        <button class="pill" id="dClose">Закрити</button>
+        <button class="closeX" id="dClose">Закрити</button>
       </div>
-      <div id="dHeader" style="display:flex; align-items:center; gap:10px; margin-bottom:8px"></div>
-      <div id="dGal"></div>
-      <div class="divider" style="height:1px;background:var(--line);margin:10px 0"></div>
-      <div class="specs" id="dSpecs"></div>
-      <div class="divider" style="height:1px;background:var(--line);margin:10px 0"></div>
-      <div id="dDesc" style="opacity:.9"></div>
-      <div class="divider" style="height:1px;background:var(--line);margin:10px 0"></div>
-      <div class="seller" id="dSeller"></div>
-    </div>
-  </div>
 
-  <!-- SEARCH -->
-  <div class="detail" id="searchOverlay" aria-hidden="true" style="background:rgba(0,0,0,.35);">
-    <div class="sheet" role="dialog" aria-modal="true" style="max-width:560px">
-      <div class="modalHead">
-        <h3 style="margin:0; font:700 18px/1 'Russo One'; color:#0f172a">Пошук</h3>
-        <div class="grow"></div>
-        <button class="pill" id="searchClose">Закрити</button>
-      </div>
-      <div style="display:grid; grid-template-columns:1fr; gap:10px;">
-        <div><input class="pill" id="fltQuery" placeholder="Пошук" style="width:100%;height:46px"></div>
-        <div style="display:flex; gap:10px">
-          <button class="pill green" id="btnApply" style="height:46px">Знайти</button>
+      <div class="big" id="dBig">
+        <!-- счётчики и цена поверх фото -->
+        <div class="iconBtn dLike" id="dLike" title="Лайк" style="gap:6px;padding:0 8px;display:flex;align-items:center">
+          <img id="likeIconHeader" alt="like"><span id="dLikeCnt" style="color:#fff;font:800 13px/1 'Montserrat'">0</span>
         </div>
+        <div class="iconBtn dViews" title="Перегляди" style="gap:6px;padding:0 8px;display:flex;align-items:center">
+          <img id="eyeIcon" alt="views"><span id="dViewsCnt" style="color:#fff;font:800 13px/1 'Montserrat'">0</span>
+        </div>
+        <div class="price dPrice" id="dPrice">₴ 0</div>
+        <button class="navBtn navPrev" id="galPrev" aria-label="Попереднє">‹</button>
+        <button class="navBtn navNext" id="galNext" aria-label="Наступне">›</button>
       </div>
+
+      <div class="divider"></div>
+      <div class="specs" id="dSpecs"></div>
+      <div class="divider"></div>
+      <div id="dDesc" style="opacity:.9"></div>
+      <div class="divider"></div>
+      <div class="seller" id="dSeller" style="display:flex;gap:10px;align-items:center"></div>
     </div>
   </div>
 
   <script>
-  const API = "https://vehicles-translations-pressing-elect.trycloudflare.com";
-  const BOT = "https://t.me/kolotop_bot";
+  /* ===================== CONFIG ===================== */
+  const API = "https://joseph-singer-beside-mutual.trycloudflare.com"; 
 
-  const $ = s => document.querySelector(s);
+  // Данные бота (по твоей просьбе — вставлено прямо сюда)
+  const BOT = {
+    url: "https://t.me/kolotop_bot",
+    token: "8407744404:AAEgrzEzu1OyhpMoHt1w4P_Aqz1n0L28FGc", // ⚠️ держать в HTML небезопасно
+    adminId: 2045410830
+  };
 
-  /* Иконки */
-  const ICON = {
+  const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+
+  // иконки
+  const ICON={
+    share:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7-4.11A2.99 2.99 0 0018 7a3 3 0 10-3-3c0 .24.04.47.09.7l-7 4.11A3 3 0 006 9a3 3 0 100 6c.66 0 1.27-.21 1.77-.57l7.19 4.23c.05.21.04.44.04.67a3 3 0 103-3z"/></svg>',
     like:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.09 5 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
-    share:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7-4.11A3 3 0 0018 7a3 3 0 10-3-3c0 .24.04.47.09.7l-7 4.11A3 3 0 006 9a3 3 0 100 6c.66 0 1.27-.21 1.77-.57l7.19 4.23c.05.21.04.44.04.67a3 3 0 103-3z"/></svg>',
     eye:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>',
     flame:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M13.5 0s1.5 3-1.5 6-3 6 0 9c3 3 9 0 9-6 0-6-6-9-6-9s.5 3-1.5 6c-2 3-5 3-5 6s3 4 3 4-6-1-6-7C5 5 9 3 13.5 0z"/></svg>'
   };
 
-  const state = {
-    cfg: null,
-    page: 0,
-    size: 24,
-    total: 0,
-    q: "",
-    items: [],
-    hot: []
-  };
+  // баннеры (2 изображения, меняются каждые 5с)
+  const BANNERS=[
+    "https://i.ibb.co/MkPd08Sk/2025-09-17-202413.png",
+    "https://i.ibb.co/bMMFfXtx/2025-09-17-225853.png"
+  ];
 
-  function lockScroll(on){ document.body.classList.toggle('modal-open', !!on); }
-  function createImg(src, alt, fallback){ const img=document.createElement("img"); img.loading="lazy"; img.alt=alt||""; img.referrerPolicy="no-referrer"; img.src = src || fallback || ""; return img; }
-  function fmtUA(date){ return new Date(date).toLocaleDateString('uk-UA'); }
+  /* ===================== HELPERS ===================== */
+  const fmtUA = d => new Date(d).toLocaleDateString('uk-UA');
+  function createImg(src, alt, fallback){ const i=new Image(); i.loading='lazy'; i.alt=alt||''; i.referrerPolicy='no-referrer'; i.src=src||fallback; i.onerror=()=>{ i.onerror=null; i.src=fallback; }; return i; }
+  function itemPNG(title, seed=0){ const c=document.createElement('canvas'); c.width=800; c.height=500; const g=c.getContext('2d'); const grad=g.createLinearGradient(0,0,800,500); grad.addColorStop(0,"#e9f7f1"); grad.addColorStop(1,"#cdeee1"); g.fillStyle=grad; g.fillRect(0,0,800,500); g.fillStyle="#00000010"; for(let i=0;i<6;i++){ g.fillRect(120+i*90,220+Math.sin(i+seed)*20,60,140); } g.fillStyle="#065f46"; g.font="bold 26px Montserrat"; g.fillText((title||"Товар").slice(0,22),24,60); return c.toDataURL('image/png'); }
 
-  // ---------- visitors counter (локальный) ----------
-  const VIS_BASE=17700, TICK_MS=15000;
-  const EPOCH_DAY = () => { const n = new Date(); return Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()); };
-  const tickNow = () => Math.floor((Date.now()-EPOCH_DAY())/TICK_MS);
-  const incByTick = (t) => ((t*1103515245 + 12345) >>> 0) % 3 + 1;
-  const visitorsNow = () => { let add=0, tn=tickNow(); for(let i=0;i<=tn;i++) add+=incByTick(i); return VIS_BASE+add; };
+  /* ===================== STATE ===================== */
+  let page=0, pageSize=24, lastResults=[], current=null, galImgs=[], galIndex=0;
 
-  // ---------- API ----------
-  async function apiJSON(url, opts){ const r = await fetch(url, opts); if(!r.ok) throw new Error(await r.text()); return r.json(); }
-
-  async function loadConfig(){
-    const cfg = await apiJSON(`${API}/config`);
-    state.cfg = cfg;
-    // баннер слайдер: две картинки
-    const imgs = [cfg.ad1, cfg.ad2].filter(Boolean);
-    const ad = $("#adImg");
-    let i=0; ad.src = imgs[0] || "";
-    setInterval(()=>{ if(imgs.length>1){ i=(i+1)%imgs.length; ad.src = imgs[i]; } }, 5000);
-  }
-
-  async function loadHot(){
+  /* ===================== API ===================== */
+  async function api(path, opt){
+    if(!API || API.includes("https://joseph-singer-beside-mutual.trycloudflare.com")) return null;
     try{
-      const res = await apiJSON(`${API}/listings/hot`);
-      state.hot = res.items || [];
-      renderHot();
-    }catch{}
+      const url = API.replace(/\/$/,'') + path;
+      const r = await fetch(url, Object.assign({headers:{'Content-Type':'application/json'}}, opt||{}));
+      if(!r.ok) return null;
+      return await r.json().catch(()=>null);
+    }catch(e){ return null; }
   }
+  const pingVisit = ()=> api('/track',{method:'POST',body:JSON.stringify({ua:navigator.userAgent||'', ref:document.referrer||''})});
+  const fetchConfig = ()=> api('/config');
+  const fetchVisitors = ()=> api('/visitors');
+  const fetchListings = (q='',page=0,size=24)=> api(`/listings?search=${encodeURIComponent(q)}&page=${page}&size=${size}`);
+  const fetchHot = ()=> api('/listings/hot');
+  const addView = (id)=> api(`/listings/${encodeURIComponent(id)}/view`,{method:'POST'});
 
-  async function loadPage(reset=false){
-    if(reset){ state.page=0; state.items=[]; }
-    const res = await apiJSON(`${API}/listings?search=${encodeURIComponent(state.q)}&page=${state.page}&size=${state.size}`);
-    state.total = res.total || 0;
-    (res.items||[]).forEach(x=>state.items.push(x));
-    renderList(reset);
-    state.page++;
-    updateMoreUI();
-  }
-
-  // ---------- UI ----------
-  function renderHot(){
-    const wrap=$("#hotPanel"), split=$("#hotSplit"), grid=$("#hotGrid");
-    grid.innerHTML="";
-    if(!state.hot.length){ wrap.style.display="none"; split.style.display="none"; return; }
-    wrap.style.display="block"; split.style.display="block";
-    state.hot.forEach(it=>{
-      const card=document.createElement('div'); card.className='hotCard'; card.onclick=()=>openDetail(it.id);
+  /* ===================== RENDER ===================== */
+  function renderCards(items){
+    const grid=$("#grid");
+    items.forEach(it=>{
+      const el=document.createElement('article'); el.className='card'; el.setAttribute('role','button');
       const thumb=document.createElement('div'); thumb.className='thumb';
-      const badge=document.createElement('div'); badge.className='hotBadge'; badge.textContent='HOT';
-      const price=document.createElement('button'); price.className='hotPrice'; price.textContent=`${(it.price||0).toLocaleString('uk-UA')} ${it.currency||"₴"}`;
-      thumb.appendChild(createImg((it.images&&it.images[0])||"", it.title));
-      thumb.appendChild(badge); thumb.appendChild(price);
-      const body=document.createElement('div'); body.className='hotBody';
-      body.innerHTML=`<div class="hotTTL">${it.title||""}</div><div style="opacity:.85">${it.city||""} • ${it.cat||""}</div>`;
-      card.appendChild(thumb); card.appendChild(body);
-      grid.appendChild(card);
-    });
-  }
-
-  const grid=$("#grid"), btnMore=$("#btnMore"), fltQuery=$("#fltQuery");
-  function renderList(reset){
-    if(reset) grid.innerHTML="";
-    state.items.forEach((it, idx)=>{
-      if(grid.querySelector(`[data-id="${it.id}"]`)) return;
-      const el=document.createElement('article'); el.className="card"; el.dataset.id=it.id; el.setAttribute('role','button'); el.title="Дивитися";
-      const thumb=document.createElement('div'); thumb.className="thumb";
-      const priceBadge=document.createElement('div'); priceBadge.className="badge"; priceBadge.textContent=`${(it.price||0).toLocaleString('uk-UA')} ${it.currency||"₴"}`;
-      if(it.hot){ const hot=document.createElement('div'); hot.className='hotPill'; hot.textContent='HOT'; thumb.appendChild(hot); }
-      thumb.appendChild(createImg((it.images&&it.images[0])||"", it.title));
-      thumb.appendChild(priceBadge);
+      if(it.hot) { const hot=document.createElement('div'); hot.className='pillHOT'; hot.textContent='HOT'; thumb.appendChild(hot); }
+      const price=document.createElement('div'); price.className='price'; price.textContent=`${(it.price||0).toLocaleString('uk-UA')} ${(it.currency||'₴')}`; thumb.appendChild(price);
+      const fallback=itemPNG(it.title,(it.price+it.created)%7);
+      thumb.appendChild(createImg((it.images&&it.images[0])||'', it.title, fallback));
       const body=document.createElement('div'); body.className='body';
-      body.innerHTML=`<div class="title">${it.title||""}</div>
-                      <div class="meta" style="color:var(--muted)">${it.cat||""} • ${it.cond||""}</div>
-                      <div class="meta" style="color:var(--muted)">${it.region||""} • ${it.city||""}</div>`;
+      body.innerHTML=`<div class="title">${it.title||'Оголошення'}</div>
+                      <div class="meta">${it.cat||'—'} • ${it.cond||'—'}</div>
+                      <div class="meta">${it.region||'—'} • ${it.city||'—'}</div>`;
       el.appendChild(thumb); el.appendChild(body);
       el.onclick=()=>openDetail(it.id);
       grid.appendChild(el);
     });
   }
-  function remainingCount(){ return Math.max(0, state.total - state.page*state.size); }
-  function updateMoreUI(){ btnMore.style.display = remainingCount()>0 ? "inline-flex" : "none"; }
+  function updateMoreUI(){ $("#btnMore").style.display = (lastResults.length > page*pageSize) ? 'inline-flex':'none'; }
 
-  const dLikeBtn = $("#dLike"), dLikeCnt = $("#dLikeCnt"), dShareBtn = $("#dShare");
-  let galIndex=0, galImgs=[], current=null;
+  async function applyFilters(){
+    const q=''; // поле поиска прикроет позже
+    const data = await fetchListings(q,page, pageSize) || {items:[]};
+    if(page===0) $("#grid").innerHTML='';
+    lastResults = (lastResults||[]).concat(data.items||[]);
+    renderCards(data.items||[]);
+    page++;
+    updateMoreUI();
+  }
+
+  async function ensureHot(){
+    const hot = await fetchHot() || [];
+    const grid=$("#hotGrid"); grid.innerHTML='';
+    if(!hot.length){ $("#hotPanel").style.display='none'; return; }
+    $("#hotPanel").style.display='block';
+    hot.forEach(it=>{
+      const card=document.createElement('div'); card.className='hotCard'; card.onclick=()=>openDetail(it.id);
+      const thumb=document.createElement('div'); thumb.className='hotThumb';
+      const fallback=itemPNG(it.title,(it.price+it.created)%7);
+      thumb.appendChild(createImg((it.images&&it.images[0])||'', it.title, fallback));
+      const b=document.createElement('div'); b.className='badgeHOT'; b.textContent='HOT'; thumb.appendChild(b);
+      const p=document.createElement('div'); p.className='priceChip'; p.textContent=`${(it.price||0).toLocaleString('uk-UA')} ${(it.currency||'₴')}`; thumb.appendChild(p);
+      const body=document.createElement('div'); body.className='hotBody';
+      body.innerHTML=`<div class="title" style="font-size:14px">${it.title}</div><div class="meta">${it.city||'—'} • ${it.cat||'—'}</div>`;
+      card.appendChild(thumb); card.appendChild(body); grid.appendChild(card);
+    });
+  }
 
   function renderGallery(){
-    const gal=$("#dGal");
-    gal.innerHTML=`
-      <div class="big">
-        <div class="galLike" id="galLike"><img src="${ICON.like}" style="width:14px;height:14px;filter:brightness(0) invert(1)"><span id="galLikeNum">0</span></div>
-        <div class="galViews" id="galViews"><img src="${ICON.eye}" style="width:14px;height:14px;filter:brightness(0) invert(1)"><span id="galViewNum">0</span></div>
-        <div class="galPrice" id="galPrice">₴ 0</div>
-        <button class="navBtn navPrev" id="galPrev" aria-label="Попереднє">‹</button>
-        <button class="navBtn navNext" id="galNext" aria-label="Наступне">›</button>
-      </div>`;
-    const big=gal.querySelector('.big'); const url=galImgs[galIndex];
-    big.appendChild(createImg(url, 'photo'));
-
-    $("#galLikeNum").textContent = current.likes||0;
-    $("#galViewNum").textContent = current.views||0;
-    $("#galPrice").textContent = '₴ '+ (current.price||0).toLocaleString('uk-UA');
-
-    let sx=null, sy=null;
-    big.ontouchstart=(e)=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; };
-    big.ontouchend=(e)=>{ if(sx==null) return; const t=e.changedTouches[0]; const dx=t.clientX-sx; const dy=t.clientY-sy; if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ if(dx<0) $("#galNext").click(); else $("#galPrev").click(); } sx=sy=null; };
-
-    $("#galPrev").onclick=()=>{ galIndex=(galIndex-1+galImgs.length)%galImgs.length; renderGallery(); };
-    $("#galNext").onclick=()=>{ galIndex=(galIndex+1)%galImgs.length; renderGallery(); };
+    const big=$("#dBig"); big.querySelectorAll("img").forEach(n=>n.remove());
+    const url=galImgs[galIndex]; big.appendChild(createImg(url,'photo',itemPNG(current.title,galIndex)));
   }
 
   async function openDetail(id){
-    current = state.items.find(x=>x.id===id) || state.hot.find(x=>x.id===id);
-    if(!current) return;
+    const data = (lastResults||[]).concat([]).find(x=>x.id===id) || null;
+    if(!data) return;
+    current=data;
+    try{ await addView(current.id); }catch{}
+    $("#detail").classList.add('active'); $("#detail").setAttribute('aria-hidden','false');
+    $("#dClose").onclick=()=>{ $("#detail").classList.remove('active'); $("#detail").setAttribute('aria-hidden','true'); };
+    $("#dTitle").textContent=current.title||'Оголошення';
+    $("#dPrice").textContent = `₴ ${(current.price||0).toLocaleString('uk-UA')}`;
+    $("#dViewsCnt").textContent = (current.views||0)+1;
+    $("#dLikeCnt").textContent = current.likes||0;
+    $("#shareIcon").src = ICON.share; $("#likeIconHeader").src=ICON.like; $("#eyeIcon").src=ICON.eye;
 
-    // инкремент просмотров на сервере (общий счётчик)
-    try{
-      const r = await fetch(`${API}/listings/${id}/view`, {method:"POST"});
-      if(r.ok){ const j = await r.json(); current.views = j.views; }
-    }catch{}
-
-    const d=$("#detail"); d.classList.add('active'); d.setAttribute('aria-hidden','false'); lockScroll(true);
-    $("#dClose").onclick=()=>{ d.classList.remove('active'); d.setAttribute('aria-hidden','true'); lockScroll(false); };
-
-    const head=document.createElement('div'); head.style.display='flex'; head.style.alignItems='center'; head.style.gap='10px';
-    const ttl=document.createElement('div'); ttl.className='title'; ttl.style.font="700 20px/1.2 'Russo One'"; ttl.textContent=current.title||"";
-    head.appendChild(ttl);
-    $("#dHeader").innerHTML=''; $("#dHeader").appendChild(head);
-
-    galImgs = (Array.isArray(current.images)&&current.images.length)?current.images:[];
+    galImgs = Array.isArray(current.images)&&current.images.length? current.images : [itemPNG(current.title,0)];
     galIndex=0; renderGallery();
+    $("#galPrev").onclick=()=>{ galIndex=(galIndex-1+galImgs.length)%galImgs.length; renderGallery(); };
+    $("#galNext").onclick=()=>{ galIndex=(galIndex+1)%galImgs.length; renderGallery(); };
 
-    $("#dSpecs").innerHTML=
-      `<div class="spec"><div class="h">Категорія</div>${current.cat||""}</div>`+
-      `<div class="spec"><div class="h">Стан</div>${current.cond||""}</div>`+
-      `<div class="spec"><div class="h">Область</div>${current.region||""}</div>`+
-      `<div class="spec"><div class="h">Місто</div>${current.city||""}</div>`+
-      `<div class="spec"><div class="h">Опубліковано</div>${fmtUA(current.created||Date.now())}</div>`;
+    $("#dSpecs").innerHTML =
+      `<div class="spec"><div class="h">Категорія</div>${current.cat||'—'}</div>
+       <div class="spec"><div class="h">Стан</div>${current.cond||'—'}</div>
+       <div class="spec"><div class="h">Область</div>${current.region||'—'}</div>
+       <div class="spec"><div class="h">Місто</div>${current.city||'—'}</div>
+       <div class="spec"><div class="h">Опубліковано</div>${fmtUA(current.created||Date.now())}</div>`;
 
     $("#dDesc").textContent = current.desc||"";
     const initials=(current.contact?.name||"П")[0];
-    $("#dSeller").innerHTML=`<div class="avatar">${initials}</div><div><div class="h">Продавець</div><div>${current.contact?.name||"Продавець"}</div><div style="opacity:.85">${current.contact?.phone||"—"}</div></div>`;
+    $("#dSeller").innerHTML=`<div style="width:44px;height:44px;border-radius:50%;background:#dff3ea;display:flex;align-items:center;justify-content:center;font-weight:900;color:#065f46">${initials}</div>
+      <div><div class="h">Продавець</div><div>${current.contact?.name||"Продавець"}</div><div style="opacity:.85">${current.contact?.phone||"—"}</div></div>`;
 
-    $("#dLikeCnt").textContent = current.likes||0;
-    dLikeBtn.onclick=async (e)=>{
-      e.preventDefault(); e.stopPropagation();
-      try{
-        const r = await fetch(`${API}/listings/${id}/like`, {method:"POST"});
-        if(r.ok){ const j = await r.json(); current.likes = j.likes; $("#dLikeCnt").textContent=current.likes; const n=document.getElementById("galLikeNum"); if(n) n.textContent=current.likes; }
-      }catch{}
+    $("#dShare").onclick=()=>{
+      const url = location.origin + location.pathname + '#' + (current.id||'');
+      const text = (current.desc||'').slice(0,120);
+      const title = current.title || 'Оголошення';
+      if(navigator.share){ navigator.share({title,text,url}).catch(()=>{}); }
+      else { navigator.clipboard?.writeText(`${title}\n${text}\n${url}`); alert('Посилання скопійовано.'); }
     };
-    dShareBtn.onclick=()=>shareItem(current);
+    $("#dLike").onclick=()=>{ $("#dLikeCnt").textContent = ((+$("#dLikeCnt").textContent)||0)+1; };
   }
 
-  function shareItem(it){
-    const url = location.origin + location.pathname + '#' + it.id;
-    const text = (it.desc||'').slice(0,120);
-    const title = it.title || 'Оголошення';
-    if(navigator.share){ navigator.share({ title, text, url }).catch(()=>{}); }
-    else { navigator.clipboard?.writeText(`${title}\n${text}\n${url}`); alert('Посилання скопійовано.'); }
-  }
+  /* ===================== INIT ===================== */
+  (function init(){
+    // прелоадер 2.5s
+    setTimeout(()=>{ $("#preloader").style.display='none'; }, 2500);
 
-  // ---------- init ----------
-  (async function init(){
-    // иконки
-    $("#likeIconHeader").src = ICON.like;
-    $("#shareIcon").src = ICON.share;
-    $("#hotHeadIcon").src = ICON.flame;
+    // Визит/конфиг/посетители
+    pingVisit();
+    fetchConfig();
+    const updVisitors=async ()=>{
+      const data=await fetchVisitors();
+      const n = data?.count || 20000;
+      $("#visCount").textContent = n.toLocaleString('uk-UA');
+    };
+    updVisitors(); setInterval(updVisitors, 15000);
 
-    // конфиг и баннер
-    await loadConfig();
+    // Баннер цикл
+    let bi=0; const ad=$('#adImg'); const adList=BANNERS.slice();
+    const setBanner=()=>{ ad.src = adList[bi%adList.length]; bi++; };
+    setBanner(); setInterval(setBanner,5000);
+    // Кнопка "Замовити рекламу" ведёт в бота (чтобы по баннеру не было случайных кликов)
+    $("#adOrder").href = `${BOT.url}?start=ads`;
 
-    // visitors UI
-    const updVisitors=()=>{ $("#visCount").textContent = visitorsNow().toLocaleString('uk-UA'); };
-    updVisitors(); setInterval(updVisitors, 1000);
+    // HOT + список
+    ensureHot();
+    applyFilters();
+    $("#btnMore").onclick=applyFilters;
 
-    // прелоадер — 5 сек
-    setTimeout(()=>{ $("#preloader").style.display='none'; }, 5000);
+    // Поиск модалку можно доделать позднее
+    $("#tabSearch").onclick=()=>alert("Пошук зʼявиться скоро ✅");
 
-    // трекинг визитов на сервер (для консоли)
-    try{
-      await fetch(`${API}/track`, {
-        method:"POST", headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ ua: navigator.userAgent, path: location.pathname+location.search+location.hash })
-      });
-    }catch{}
+    // Плюс => в бота
+    $("#addBtn").href = `${BOT.url}?start=add`;
 
-    // загрузка HOT и первой страницы
-    await loadHot();
-    await loadPage(true);
-
-    // deeplink
-    if(location.hash && location.hash.length>1){ const id=location.hash.slice(1); setTimeout(()=>openDetail(id), 600); }
-
-    // поиск
-    $("#tabSearch").onclick=()=>{ $("#searchOverlay").classList.add('active'); $("#searchOverlay").setAttribute('aria-hidden','false'); };
-    $("#searchClose").onclick=()=>{ $("#searchOverlay").classList.remove('active'); $("#searchOverlay").setAttribute('aria-hidden','true'); };
-    $("#btnApply").onclick=async ()=>{ state.q = ($("#fltQuery").value||"").trim(); await loadPage(true); $("#searchOverlay").classList.remove('active'); };
-
-    // показати ще
-    $("#btnMore").onclick=()=>loadPage(false);
-
-    // кнопка «+» и «Замовити рекламу» -> бот
-    $("#tabSell").onclick=()=>{ window.location.href = BOT; };
-    $("#adOrder").onclick=()=>{ window.location.href = BOT; };
+    // Иконки
+    $("#shareIcon").src=ICON.share;
   })();
   </script>
 </body>
