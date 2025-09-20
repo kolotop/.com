@@ -1,4 +1,4 @@
-<!-- index.html — pending-only; smooth, resilient; search via /api/search; 12-per-click; copy on card/purpose click -->
+<!-- index.html — OG теги с авто-URL, плавные оверлеи без фризов, карусель предзагружает фото -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -6,15 +6,35 @@
 <title>KOLO — дошка оголошень</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#10b981">
+
+<!-- Open Graph (подставляется BASE на сервере) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KOLO — дошка оголошень">
+<meta property="og:title" content="KOLO — дошка оголошень">
+<meta property="og:description" content="Дошка оголошень №1 в Україні. Швидко та зручно додай оголошення.">
+<meta property="og:url" content="{{OG_URL}}">
+<meta property="og:image" content="{{OG_IMAGE}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KOLO — дошка оголошень">
+<meta name="twitter:description" content="Дошка оголошень №1 в Україні. Швидко та зручно додай оголошення.">
+<meta name="twitter:image" content="{{OG_IMAGE}}">
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23fff' stroke-width='6'/%3E%3Ctext x='50' y='58' text-anchor='middle' font-family='Russo One,Arial' font-size='22' fill='%23fff'%3EKOLO%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+
 <style>
 :root{--g:#10b981;--r:#e94251;--txt:#0b1720}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;font-family:'Russo One',Arial,system-ui;background:#f5f7f6;color:var(--txt);-webkit-font-smoothing:antialiased;max-width:100%;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1140px;margin:0 auto;padding:10px 14px}
+body.locked{overflow:hidden}
 
 /* splash */
 #splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60}
@@ -34,7 +54,7 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .btn.ghost{background:#fff;color:#10b981;border:3px solid #10b981}
 
 /* banner */
-.banner{margin:8px 0;position:relative;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:180px}
+.banner{margin:8px 0;position:relative;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:180px;will-change:max-height,opacity,margin}
 .banner img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;box-shadow:0 8px 18px rgba(0,0,0,.08)}
 @media(max-width:760px){ .banner{max-height:none} .banner img{height:auto;object-fit:cover;background:transparent} }
 .banner.min{max-height:0;opacity:0;margin:0}
@@ -58,7 +78,7 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
 .priceTag{position:absolute;right:10px;bottom:10px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:6px 12px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit;z-index:3;pointer-events:none}
 
-/* modal base */
+/* modal */
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
 dialog::backdrop{background:rgba(0,0,0,.68)}
 #modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28);transition:opacity .2s ease}
@@ -66,7 +86,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .modTitle{flex:1}
 .closeX{border:none;background:#fff;color:#10b981;border:3px solid #10b981;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;cursor:pointer}
 
-/* detail carousel */
+/* carousel */
 .carousel{position:relative;border-bottom:1px solid #edf3f0;background:#000}
 #carStage{position:relative;height:520px;max-height:52vh}
 #carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;pointer-events:none}
@@ -74,7 +94,6 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;width:auto;height:auto;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none;z-index:5}
 .navbtn.left{left:10px}.navbtn.right{right:10px}
 #carCount{position:absolute;right:10px;bottom:10px;background:#000b;color:#fff;border-radius:10px;padding:4px 8px;font-size:12px;z-index:4}
-/* overlays on photo */
 .statOverlay{position:absolute;right:10px;top:10px;display:flex;gap:8px;z-index:6}
 .statLeft{position:absolute;left:10px;top:10px;display:flex;gap:8px;z-index:6}
 .pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.25);font-family:'Russo One',Arial,system-ui;background:var(--g);color:#fff}
@@ -85,16 +104,14 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{background:#eefaf5;color:#0b1720;border-radius:12px;padding:10px 12px}
 
-/* overlays (chooser/add/search/support/pay) */
+/* overlays */
 #chooser,#addForm,#searchBox,#supportBox,#payBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;touch-action:none}
 #chooser,#addForm,#searchBox,#payBox{z-index:50}
 #supportBox{z-index:70}
-
 .chooseBox{position:relative;width:90%;max-width:420px;background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .chooseBtn{width:100%;padding:16px;border:none;border-radius:12px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);font-family:inherit}
 .chooseBtn.green{background:var(--g);color:#fff}
 .chooseBtn.red{background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff}
-
 .formBox{width:92%;max-width:560px;max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:0 16px 16px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;z-index:1;border-bottom:1px solid #edf3f0}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
@@ -107,7 +124,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 ::placeholder{color:#fff;opacity:.9}
 .btnPub{width:100%;margin-top:14px;border-radius:12px;font-family:inherit}
 
-/* search box */
+/* search */
 #searchBox{align-items:flex-start}
 .searchInner{background:#fff;border-radius:16px;padding:12px;width:92%;max-width:560px;display:flex;gap:8px;box-shadow:0 18px 40px rgba(0,0,0,.28);margin:14px auto}
 .searchInner input{flex:1;border:2px solid #e3f4ef;border-radius:12px;padding:12px 14px;font-family:inherit}
@@ -284,28 +301,38 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://directed-lie-luxury-wallpaper.trycloudflare.com';
+const SERVER = 'https://joke-principal-ssl-wellington.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
-/* overlay helpers */
+/* overlay helpers — без position:fixed (чтобы не ломать lazy-loading) */
 let LOCKY=0;
 function anyOverlayOpen(){
   return ['chooser','addForm','searchBox','supportBox','payBox'].some(id=>document.getElementById(id).style.display==='flex');
 }
-function lock(){ LOCKY = scrollY||0; document.body.style.position='fixed'; document.body.style.top=`-${LOCKY}px`; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; }
-function unlock(){ document.body.style.position=''; document.body.style.top=''; document.body.style.width=''; window.scrollTo(0,LOCKY); }
+function lock(){ LOCKY = scrollY||0; document.body.classList.add('locked'); }
+function unlock(){ document.body.classList.remove('locked'); window.scrollTo(0,LOCKY); }
 document.documentElement.style.overscrollBehavior='none';
 
-/* Splash (short & smooth) */
+/* Splash короткий */
 lock(); setTimeout(()=>{ const sp=document.getElementById('splash'); if(sp){ sp.style.display='none'; if(!anyOverlayOpen()) unlock(); } },1200);
 
 /* socket */
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
 const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 
-/* banner collapse */
+/* banner collapse — сглаживание через rAF */
 const bannerEl = $('#banner');
-addEventListener('scroll', ()=>{ if(scrollY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); });
+let lastY=0, ticking=false;
+addEventListener('scroll', ()=>{
+  lastY = window.scrollY||0;
+  if(!ticking){
+    requestAnimationFrame(()=>{
+      if(lastY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min');
+      ticking=false;
+    });
+    ticking=true;
+  }
+});
 
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
 let bannerList=[], bannerIdx=0, bannerTimer=null;
@@ -340,7 +367,7 @@ function mkCard(ad){
   return `<div class="card" onclick="openDetail('${ad.id}')">
     <div class="ph">
       ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
-      ${img?`<img src="${img}" alt="" loading="lazy">`:'КАРТИНКА оголошення'}
+      ${img?`<img src="${img}" alt="" loading="lazy" decoding="async">`:'КАРТИНКА оголошення'}
       <div class="priceTag">${(ad.price||0).toLocaleString('uk-UA')} ₴</div>
     </div>
     <div class="ttl">${(ad.title||'Оголошення').toUpperCase()}</div>
@@ -351,6 +378,16 @@ function draw(){
   const slice = (ALL.normal||[]).slice(0,page*PAGE_SIZE);
   $('#listGrid').innerHTML = slice.map(mkCard).join('');
   $('#btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
+}
+
+/* preload helper для карусели */
+function preloadImages(urls){
+  urls.forEach(u=>{
+    const im = new Image();
+    im.decoding='async';
+    im.loading='eager';
+    im.src = u;
+  });
 }
 
 /* detail */
@@ -370,6 +407,7 @@ window.openDetail = (id)=>{
   ].map(t=>`<div class="chip">${t}</div>`).join('');
 
   CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800']; 
+  preloadImages(CAR);
   idx=0; renderCar(true);
 
   const dlg=$('#dlgDetail'); dlg.showModal(); lock();
@@ -382,8 +420,11 @@ $('#closeDetail').onclick=()=>{ $('#dlgDetail').close(); if(!anyOverlayOpen()) u
 
 function renderCar(initial=false){
   const st = $('#carStage');
-  if(initial){ st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" loading="lazy">`).join(''); }
-  else { [...st.querySelectorAll('img')].forEach((im,i)=>im.classList.toggle('show', i===idx)); }
+  if(initial){
+    st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" loading="eager" decoding="async">`).join('');
+  } else {
+    [...st.querySelectorAll('img')].forEach((im,i)=>im.classList.toggle('show', i===idx));
+  }
   $('#carCount').textContent = `${idx+1}/${CAR.length}`;
   $('#navLeft').style.display = $('#navRight').style.display = (CAR.length>1)?'flex':'none';
 }
@@ -446,7 +487,7 @@ $('#btnAddPhoto').onclick=()=>fInput.click();
 imgPh.onclick=()=>fInput.click();
 fInput.onchange=()=>{ const limit=(ADD_TYPE==='banner')?1:5; chosenFiles=[...fInput.files].slice(0,limit); redrawPreview(); };
 
-/* publish -> strictly pending; never publish from client */
+/* publish -> строго pending; публикации нет */
 $('#btnPay').onclick=async ()=>{
   const fd=new FormData();
   fd.append('type', ADD_TYPE);
@@ -462,12 +503,12 @@ $('#btnPay').onclick=async ()=>{
 
   const j = await fetch(SERVER+'/api/create',{method:'POST',body:fd,headers:{'X-KOLO-UID':uidLocal}}).then(r=>r.json()).catch(()=>({}));
   if(!(j && j.ok)){ alert('Сервер недоступний'); return; }
-  lastPublished = j; // {kind, code, amount}
+  lastPublished = j;
   openPayBox(j.kind, j.code, j.amount);
   hideAdd();
 };
 
-/* search — серверная, с транслитерацией и нормализацией */
+/* search — серверный, с нормализацией/транслитом */
 function showSearch(e){ if(e) e.preventDefault(); $('#searchBox').style.display='flex'; $('#q').focus({preventScroll:true}); lock(); }
 function hideSearch(){ $('#searchBox').style.display='none'; if(!anyOverlayOpen()) unlock(); }
 $('#searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
@@ -481,7 +522,7 @@ $('#go').onclick=async ()=>{
     return;
   }
   const j = await fetch(SERVER+'/api/search?q='+encodeURIComponent(k)).then(r=>r.json()).catch(()=>null);
-  if(j && j.ok){ ALL=j.data; page=100; draw(); } // показать побольше результатов сразу
+  if(j && j.ok){ ALL=j.data; page=100; draw(); }
 };
 
 /* more */
@@ -499,7 +540,7 @@ $('#s_send').onclick=async ()=>{
   alert('Дякуємо! Звернення надіслано.'); $('#supportBox').style.display='none'; if(!anyOverlayOpen()) unlock();
 };
 
-/* PAY BOX — copy on click */
+/* PAY BOX — копирование по клику */
 function openPayBox(kind, code, amount){
   const purp = (kind==='banner'?'Банер ':'') + (kind==='hot'?'HOT ':'Звичайне ') + 'оголошення №'+code;
   $('#purpose').textContent = purp;
@@ -509,12 +550,11 @@ function openPayBox(kind, code, amount){
 }
 $('#closePay').onclick=()=>{ $('#payBox').style.display='none'; if(!anyOverlayOpen()) unlock(); };
 $('#btnSupportPay').onclick=()=>openSupport(true);
-
 async function copyText(t){ try{ await navigator.clipboard.writeText(t); }catch{} }
 $('#cardNum').onclick=()=>copyText($('#cardNum').textContent.trim());
 $('#purpose').onclick=()=>copyText($('#purpose').textContent.trim());
 
-/* Privat24 — only open & log; no publish */
+/* Privat24 — лог и открытие */
 $('#goPrivat').onclick=async ()=>{
   if(!lastPublished) return;
   await fetch(SERVER+'/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lastPublished)});
