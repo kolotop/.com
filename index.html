@@ -301,10 +301,10 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://joke-principal-ssl-wellington.trycloudflare.com';
+const SERVER = 'https://video-hoping-tile-jeremy.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
-/* overlay helpers — без position:fixed (чтобы не ломать lazy-loading) */
+/* overlay helpers — стопим прокрутку страницы аккуратно */
 let LOCKY=0;
 function anyOverlayOpen(){
   return ['chooser','addForm','searchBox','supportBox','payBox'].some(id=>document.getElementById(id).style.display==='flex');
@@ -323,16 +323,11 @@ const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 /* banner collapse — сглаживание через rAF */
 const bannerEl = $('#banner');
 let lastY=0, ticking=false;
-addEventListener('scroll', ()=>{
-  lastY = window.scrollY||0;
+addEventListener('scroll', ()=>{ lastY = window.scrollY||0;
   if(!ticking){
-    requestAnimationFrame(()=>{
-      if(lastY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min');
-      ticking=false;
-    });
+    requestAnimationFrame(()=>{ if(lastY>80) bannerEl.classList.add('min'); else bannerEl.classList.remove('min'); ticking=false; });
     ticking=true;
-  }
-});
+}}, {passive:true});
 
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
 let bannerList=[], bannerIdx=0, bannerTimer=null;
@@ -411,7 +406,7 @@ window.openDetail = (id)=>{
   idx=0; renderCar(true);
 
   const dlg=$('#dlgDetail'); dlg.showModal(); lock();
-  dlg.addEventListener('click', e=>{ if(e.target===dlg){ dlg.close(); if(!anyOverlayOpen()) unlock(); }});
+  dlg.addEventListener('click', e=>{ if(e.target===dlg){ dlg.close(); if(!anyOverlayOpen()) unlock(); }},{once:true});
 
   fetch(SERVER+`/api/view/${encodeURIComponent(CUR.id)}`,{method:'POST',headers:{'X-KOLO-UID':uidLocal}});
   CUR.views = (CUR.views||0)+1; $('#vNum').textContent=CUR.views; draw();
