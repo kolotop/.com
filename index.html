@@ -59,7 +59,7 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .pill{background:var(--g);color:#fff;border-radius:12px;padding:8px 14px;font-size:13px}
 .btn{border:none;background:var(--g);color:#fff;border-radius:12px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.25);font-family:inherit;transition:transform .12s ease, opacity .2s ease}
 .btn:active{transform:scale(.98)}
-.btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
+.btn.plus{background:#fff;color:#10b981;border:3px solid #10b981;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
 .btn.ghost{background:#fff;color:#10b981;border:3px solid #10b981}
 
 /* banner */
@@ -141,7 +141,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .chooseBtn.green{background:var(--g);color:#fff}
 .chooseBtn.red{background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff}
 .formBox.scrollable{width:92%;max-width:560px;max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:0 16px 16px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
-.formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;з-index:1;border-bottom:1px solid #edf3f0}
+.formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;z-index:1;border-bottom:1px solid #edf3f0}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 .badgeSmall.gray{background:#eefaf5;color:#0b1720}
 .imagePh{border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
@@ -329,7 +329,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://utilities-thumbzilla-visiting-february.trycloudflare.com';
+const SERVER = 'https://imperial-guitar-dimensions-melbourne.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
 /* ======= Глобальний лок фону + дозвіл скролу лише всередині .scrollable ======= */
@@ -344,7 +344,7 @@ function canScrollInside(el){
 }
 function preventScroll(e){
   if(!anyOverlayOpen()) return;
-  if(canScrollInside(e.target)) return;
+  if(canScrollInside(e.target)) return; // дозволяємо внутрішній скрол
   e.preventDefault();
 }
 function lock(){
@@ -486,7 +486,7 @@ function renderCar(initial=false){
   if(initial){
     st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" referrerpolicy="no-referrer" loading="eager" decoding="async">`).join('');
   } else {
-    [...st.querySelectorAll('img')).forEach((im,i)=>im.classList.toggle('show', i===idx));
+    [...st.querySelectorAll('img')].forEach((im,i)=>im.classList.toggle('show', i===idx)); /* ← исправлено: убрана лишняя ')' */
   }
   $('#carCount').textContent = `${idx+1}/${CAR.length}`;
   $('#navLeft').style.display = $('#navRight').style.display = (CAR.length>1)?'flex':'none';
