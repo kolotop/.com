@@ -1,4 +1,4 @@
-<!-- index.html — без автопублікації; копіювання номеру картки і призначення по кліку -->
+<!-- index.html — pending-only; smooth, resilient; search via /api/search; 12-per-click; copy on card/purpose click -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -19,7 +19,7 @@ a{color:inherit;text-decoration:none}
 /* splash */
 #splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60}
 .loader{position:relative;width:220px;height:220px;border-radius:50%;border:12px solid #e6faf2;border-top-color:var(--g);animation:spin 1s linear infinite}
-.loader span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--g);font-size:38px}
+.loader span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#10b981;font-size:38px}
 #splash .sub{margin-top:18px;color:#0b1720aa}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -28,7 +28,8 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .topbar{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center}
 .logo svg{width:44px;height:44px}
 .pill{background:var(--g);color:#fff;border-radius:12px;padding:8px 14px;font-size:13px}
-.btn{border:none;background:var(--g);color:#fff;border-radius:12px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.25);font-family:inherit}
+.btn{border:none;background:var(--g);color:#fff;border-radius:12px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.25);font-family:inherit;transition:transform .12s ease, opacity .2s ease}
+.btn:active{transform:scale(.98)}
 .btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
 .btn.ghost{background:#fff;color:#10b981;border:3px solid #10b981}
 
@@ -49,9 +50,9 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 /* cards */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transition:transform .12s ease}
-.card:hover{transform:translateY(-2px)}
-.card .ph{position:relative;border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
+.card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transition:transform .12s ease, box-shadow .2s ease, opacity .2s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 12px 22px rgba(0,0,0,.08)}
+.card .ph{position:relative;border-radius:10px;min-height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
 .card .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .badge-hot{position:absolute;right:12px;top:12px;background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff;border-radius:12px;padding:4px 10px;font-size:12px;z-index:3}
 .card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
@@ -60,7 +61,7 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 /* modal base */
 dialog{border:none;border-radius:16px;padding:0;width:96%;max-width:980px}
 dialog::backdrop{background:rgba(0,0,0,.68)}
-#modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
+#modalBox{border-radius:16px;background:#fff;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28);transition:opacity .2s ease}
 .modHead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #edf3f0}
 .modTitle{flex:1}
 .closeX{border:none;background:#fff;color:#10b981;border:3px solid #10b981;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;cursor:pointer}
@@ -87,7 +88,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 /* overlays (chooser/add/search/support/pay) */
 #chooser,#addForm,#searchBox,#supportBox,#payBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;touch-action:none}
 #chooser,#addForm,#searchBox,#payBox{z-index:50}
-#supportBox{z-index:70} /* вище оплати */
+#supportBox{z-index:70}
 
 .chooseBox{position:relative;width:90%;max-width:420px;background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.28)}
 .chooseBtn{width:100%;padding:16px;border:none;border-radius:12px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);font-family:inherit}
@@ -98,8 +99,8 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;z-index:1;border-bottom:1px solid #edf3f0}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 .badgeSmall.gray{background:#eefaf5;color:#0b1720}
-.imagePh{border-radius:12px;height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
-.imagePh.bannerPh{height:200px}
+.imagePh{border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
+.imagePh.bannerPh{min-height:200px}
 .imagePh img{max-width:100%;max-height:100%;object-fit:contain;display:block}
 .inp{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 14px;width:100%;margin-top:10px;caret-color:#fff;font-family:inherit}
 .inprow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -121,7 +122,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .payInner{background:#fff;border-radius:16px;padding:12px 16px 20px;width:92%;max-width:560px;box-shadow:0 18px 40px rgba(0,0,0,.28);position:relative}
 .payHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .payRight{display:flex;gap:8px;align-items:center}
-.copy{cursor:pointer;border:2px solid #e3f4ef;border-radius:8px;padding:6px 8px;font-size:13px}
+.copy{cursor:pointer;border:2px solid #e3f4ef;border-radius:8px;padding:6px 8px;font-size:13px;user-select:none}
 .payRow{display:grid;grid-template-columns:140px 1fr;gap:10px;margin:8px 0;padding:10px;border:2px solid #e3f4ef;border-radius:12px;align-items:center}
 .payBtn{width:100%;margin-top:12px}
 
@@ -131,15 +132,15 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 </style>
 </head>
 <body>
-<div id="splash">
-  <div class="loader"><span>KOLO</span></div>
+<div id="splash" aria-hidden="true">
+  <div class="loader" role="status" aria-live="polite"><span>KOLO</span></div>
   <div class="sub">Дошка оголошень №1 в Україні</div>
 </div>
 
 <header>
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">
+      <div class="logo" aria-label="KOLO">
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <circle cx="50" cy="50" r="48" fill="#10b981"/>
           <circle cx="50" cy="50" r="40" fill="none" stroke="#fff" stroke-width="6"/>
@@ -147,13 +148,13 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
         </svg>
       </div>
       <div><span id="visitors" class="pill">27369 відвідувачів</span></div>
-      <button class="btn plus" id="btnPlus">+</button>
+      <button class="btn plus" id="btnPlus" aria-label="Додати">+</button>
       <button class="btn" id="btnSearch">ПОШУК</button>
     </div>
 
     <div id="banner" class="banner">
       <a id="bannerLink" href="#" target="_blank" rel="noopener">
-        <img id="bannerImg" src="" alt="banner" onerror="this.style.display='none'">
+        <img id="bannerImg" src="" alt="banner" loading="lazy" onerror="this.style.display='none'">
       </a>
     </div>
     <div class="ad-under"><a href="#" id="bannerOrder">Замовити рекламу</a></div>
@@ -248,7 +249,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <!-- SEARCH -->
 <div id="searchBox"><div class="searchInner" id="searchInner">
-  <input id="q" placeholder="Ключові слова... (заголовок, опис, місто, область)">
+  <input id="q" placeholder="Код, телефон, заголовок, опис, місто чи область...">
   <button class="btn" id="go">Пошук</button>
 </div></div>
 
@@ -283,7 +284,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://maintain-logs-bio-trace.trycloudflare.com';
+const SERVER = 'https://directed-lie-luxury-wallpaper.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
 /* overlay helpers */
@@ -295,8 +296,8 @@ function lock(){ LOCKY = scrollY||0; document.body.style.position='fixed'; docum
 function unlock(){ document.body.style.position=''; document.body.style.top=''; document.body.style.width=''; window.scrollTo(0,LOCKY); }
 document.documentElement.style.overscrollBehavior='none';
 
-/* Splash */
-lock(); setTimeout(()=>{ document.getElementById('splash').style.display='none'; if(!anyOverlayOpen()) unlock(); },5000);
+/* Splash (short & smooth) */
+lock(); setTimeout(()=>{ const sp=document.getElementById('splash'); if(sp){ sp.style.display='none'; if(!anyOverlayOpen()) unlock(); } },1200);
 
 /* socket */
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
@@ -309,6 +310,7 @@ addEventListener('scroll', ()=>{ if(scrollY>80) bannerEl.classList.add('min'); e
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
 let bannerList=[], bannerIdx=0, bannerTimer=null;
 let lastPublished = null;
+const PAGE_SIZE = 12;
 
 /* sockets */
 socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
@@ -338,7 +340,7 @@ function mkCard(ad){
   return `<div class="card" onclick="openDetail('${ad.id}')">
     <div class="ph">
       ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
-      ${img?`<img src="${img}" alt="">`:'КАРТИНКА оголошення'}
+      ${img?`<img src="${img}" alt="" loading="lazy">`:'КАРТИНКА оголошення'}
       <div class="priceTag">${(ad.price||0).toLocaleString('uk-UA')} ₴</div>
     </div>
     <div class="ttl">${(ad.title||'Оголошення').toUpperCase()}</div>
@@ -346,7 +348,7 @@ function mkCard(ad){
 }
 function draw(){
   $('#hotGrid').innerHTML = (ALL.hot||[]).map(mkCard).join('');
-  const slice = (ALL.normal||[]).slice(0,page*6);
+  const slice = (ALL.normal||[]).slice(0,page*PAGE_SIZE);
   $('#listGrid').innerHTML = slice.map(mkCard).join('');
   $('#btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
 }
@@ -380,7 +382,7 @@ $('#closeDetail').onclick=()=>{ $('#dlgDetail').close(); if(!anyOverlayOpen()) u
 
 function renderCar(initial=false){
   const st = $('#carStage');
-  if(initial){ st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="">`).join(''); }
+  if(initial){ st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" loading="lazy">`).join(''); }
   else { [...st.querySelectorAll('img')].forEach((im,i)=>im.classList.toggle('show', i===idx)); }
   $('#carCount').textContent = `${idx+1}/${CAR.length}`;
   $('#navLeft').style.display = $('#navRight').style.display = (CAR.length>1)?'flex':'none';
@@ -436,7 +438,7 @@ const phCnt = $('#phCnt');
 function redrawPreview(){
   const limit = (ADD_TYPE==='banner')?1:5;
   imgPh.innerHTML = chosenFiles.length
-    ? chosenFiles.slice(0,limit).map(f=>`<img src="${URL.createObjectURL(f)}">`).slice(0,1).join('')
+    ? chosenFiles.slice(0,limit).map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).slice(0,1).join('')
     : '';
   phCnt.textContent = `${Math.min(chosenFiles.length,limit)}/${limit}`;
 }
@@ -444,7 +446,7 @@ $('#btnAddPhoto').onclick=()=>fInput.click();
 imgPh.onclick=()=>fInput.click();
 fInput.onchange=()=>{ const limit=(ADD_TYPE==='banner')?1:5; chosenFiles=[...fInput.files].slice(0,limit); redrawPreview(); };
 
-/* publish -> суто створюємо pending; сайт НІЧОГО не публікує */
+/* publish -> strictly pending; never publish from client */
 $('#btnPay').onclick=async ()=>{
   const fd=new FormData();
   fd.append('type', ADD_TYPE);
@@ -465,21 +467,27 @@ $('#btnPay').onclick=async ()=>{
   hideAdd();
 };
 
-/* search */
+/* search — серверная, с транслитерацией и нормализацией */
 function showSearch(e){ if(e) e.preventDefault(); $('#searchBox').style.display='flex'; $('#q').focus({preventScroll:true}); lock(); }
 function hideSearch(){ $('#searchBox').style.display='none'; if(!anyOverlayOpen()) unlock(); }
 $('#searchBox').addEventListener('click',e=>{ if(e.target.id==='searchBox') hideSearch(); });
 $('#btnSearch').onclick=showSearch;
-$('#go').onclick=()=>{ const k=($('#q').value||'').toLowerCase(); hideSearch();
-  if(!k){ fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ALL=j.data;draw();}); return; }
-  const F=a=>(a.title+a.desc+a.city+a.region).toLowerCase().includes(k);
-  const data={hot:(ALL.hot||[]).filter(F), normal:(ALL.normal||[]).filter(F)}; ALL=data; page=10; draw();
+$('#go').onclick=async ()=>{
+  const k=($('#q').value||'').trim();
+  hideSearch();
+  if(!k){
+    const j = await fetch(SERVER+'/api/list').then(r=>r.json()).catch(()=>null);
+    if(j && j.ok){ ALL=j.data; page=1; draw(); }
+    return;
+  }
+  const j = await fetch(SERVER+'/api/search?q='+encodeURIComponent(k)).then(r=>r.json()).catch(()=>null);
+  if(j && j.ok){ ALL=j.data; page=100; draw(); } // показать побольше результатов сразу
 };
 
 /* more */
 $('#btnMore').onclick=()=>{ page++; draw(); };
 
-/* SUPPORT поверх оплати */
+/* SUPPORT */
 function openSupport(fromPay=false){
   $('#supportBox').style.display='flex';
   if(!fromPay && !anyOverlayOpen()) lock();
@@ -491,7 +499,7 @@ $('#s_send').onclick=async ()=>{
   alert('Дякуємо! Звернення надіслано.'); $('#supportBox').style.display='none'; if(!anyOverlayOpen()) unlock();
 };
 
-/* PAY BOX — копіювання номеру картки та призначення по кліку */
+/* PAY BOX — copy on click */
 function openPayBox(kind, code, amount){
   const purp = (kind==='banner'?'Банер ':'') + (kind==='hot'?'HOT ':'Звичайне ') + 'оголошення №'+code;
   $('#purpose').textContent = purp;
@@ -506,11 +514,11 @@ async function copyText(t){ try{ await navigator.clipboard.writeText(t); }catch{
 $('#cardNum').onclick=()=>copyText($('#cardNum').textContent.trim());
 $('#purpose').onclick=()=>copyText($('#purpose').textContent.trim());
 
-/* Приват24 — тільки відкриття та лог замовлення; публікації НЕМАЄ */
+/* Privat24 — only open & log; no publish */
 $('#goPrivat').onclick=async ()=>{
   if(!lastPublished) return;
   await fetch(SERVER+'/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lastPublished)});
-  await copyText($('#cardNum').textContent.trim());  // автокопія номеру картки
+  await copyText($('#cardNum').textContent.trim());
   const url = 'https://www.privat24.ua/send/3g9dp';
   const w = window.open(url,'_blank'); if(!w){ window.location.href = url; }
 };
