@@ -141,7 +141,7 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .chooseBtn.green{background:var(--g);color:#fff}
 .chooseBtn.red{background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff}
 .formBox.scrollable{width:92%;max-width:560px;max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:0 16px 16px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.28)}
-.formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;z-index:1;border-bottom:1px solid #edf3f0}
+.formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;з-index:1;border-bottom:1px solid #edf3f0}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 .badgeSmall.gray{background:#eefaf5;color:#0b1720}
 .imagePh{border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
@@ -329,7 +329,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://snake-exit-performance-headlines.trycloudflare.com';
+const SERVER = 'https://utilities-thumbzilla-visiting-february.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
 /* ======= Глобальний лок фону + дозвіл скролу лише всередині .scrollable ======= */
@@ -425,7 +425,7 @@ function mkCard(ad, i){
   return `<div class="card fade" onclick="openDetail('${ad.id}')">
     <div class="ph">
       ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
-      ${img?`<img src="${img}" ${pr} alt="">`:'КАРТИНКА оголошення'}
+      ${img?`<img src="${img}" ${pr} referrerpolicy="no-referrer" alt="">`:'КАРТИНКА оголошення'}
       <div class="priceTag">${(ad.price||0).toLocaleString('uk-UA')} ₴</div>
     </div>
     <div class="ttl">${(ad.title||'Оголошення').toUpperCase()}</div>
@@ -451,7 +451,7 @@ function draw(first=false){
 }
 
 /* preload для каруселі */
-function preloadImages(urls){ urls.forEach(u=>{ const im=new Image(); im.decoding='async'; im.loading='eager'; im.src=u; }); }
+function preloadImages(urls){ urls.forEach(u=>{ const im=new Image(); im.decoding='async'; im.loading='eager'; im.referrerPolicy='no-referrer'; im.src=u; }); }
 
 /* detail */
 window.openDetail = (id)=>{
@@ -484,9 +484,9 @@ $('#closeDetail').onclick=()=>{ $('#dlgDetail').close(); if(!anyOverlayOpen()) u
 function renderCar(initial=false){
   const st = $('#carStage');
   if(initial){
-    st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" loading="eager" decoding="async">`).join('');
+    st.innerHTML = CAR.map((u,i)=>`<img src="${u}" class="${i===0?'show':''}" alt="" referrerpolicy="no-referrer" loading="eager" decoding="async">`).join('');
   } else {
-    [...st.querySelectorAll('img')].forEach((im,i)=>im.classList.toggle('show', i===idx));
+    [...st.querySelectorAll('img')).forEach((im,i)=>im.classList.toggle('show', i===idx));
   }
   $('#carCount').textContent = `${idx+1}/${CAR.length}`;
   $('#navLeft').style.display = $('#navRight').style.display = (CAR.length>1)?'flex':'none';
@@ -613,8 +613,8 @@ function openPayBox(kind, code, amount){
   $('#payBox').style.display='flex'; lock();
 }
 async function copyText(t){ try{ await navigator.clipboard.writeText(t); }catch{} }
-$('#cardNum').onclick=()=>copyText($('#cardNum').textContent.trim());   // <-- fixed
-$('#purpose').onclick=()=>copyText($('#purpose').textContent.trim());   // <-- fixed
+$('#cardNum').onclick=()=>copyText($('#cardNum').textContent.trim());
+$('#purpose').onclick=()=>copyText($('#purpose').textContent.trim());
 $('#closePay').onclick=()=>{ $('#payBox').style.display='none'; if(!anyOverlayOpen()) unlock(); };
 $('#btnSupportPay').onclick=()=>openSupport(true);
 
