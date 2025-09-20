@@ -1,4 +1,4 @@
-<!-- index.html — OG теги з авто-URL, повний лок на фоні, плавні оверлеї, стабільні прев’ю -->
+<!-- index.html — OG стабільні, швидше завантаження зображень, плавні вставки, лок скролу -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -9,7 +9,7 @@
 <meta name="description" content="Дошка оголошень №1 в Україні. Швидко та зручно додай оголошення.">
 <link rel="canonical" href="{{CANONICAL}}">
 
-<!-- Open Graph (сервер підставляє абсолютні BASE/URL) -->
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KOLO — дошка оголошень">
 <meta property="og:title" content="KOLO — дошка оголошень">
@@ -39,11 +39,8 @@ html,body{margin:0;padding:0;font-family:'Russo One',Arial,system-ui;background:
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1140px;margin:0 auto;padding:10px 14px}
 
-/* Жёсткий лок фоновой прокрутки без скачков */
-body.locked{
-  position:fixed; inset:auto 0 0 0; width:100%;
-  overflow:hidden; overscroll-behavior:none;
-}
+/* блокування фону */
+body.locked{position:fixed;inset:auto 0 0 0;width:100%;overflow:hidden;overscroll-behavior:none}
 
 /* splash */
 #splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60}
@@ -62,7 +59,7 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .btn.plus{background:#fff;color:var(--g);border:3px solid var(--g);width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:none}
 .btn.ghost{background:#fff;color:#10b981;border:3px solid #10b981}
 
-/* banner (резерв місця, щоб не «стрибало») */
+/* banner */
 .banner{margin:8px 0;position:relative;overflow:hidden;transition:max-height .35s ease, opacity .35s ease, margin .35s ease;max-height:180px;will-change:max-height,opacity,margin}
 .banner a{display:block}
 .banner img{display:block;width:100%;height:170px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
@@ -71,21 +68,15 @@ header{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 2px 10px rg
 .ad-under{display:flex;justify-content:flex-end;margin-top:6px}
 .ad-under a{font-size:12px;background:#fff;border-radius:8px;padding:4px 8px;box-shadow:0 6px 12px rgba(0,0,0,.06)}
 
-/* sections */
-.hsec{display:flex;align-items:center;gap:8px;color:#fff;padding:8px 14px;border-radius:12px;margin:12px 0;box-shadow:0 6px 14px rgba(0,0,0,.06)}
-.hsec svg{width:18px;height:18px;fill:#fff}
-.hsec.top{background:linear-gradient(90deg,#ff4d4d,#ff7a1a)}
-.hsec.new{background:var(--g)}
-
 /* cards */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transition:transform .12s ease, box-shadow .2s ease}
-.card:hover{transform:translateY(-2px);box-shadow:0 12px 22px rgba(0,0,0,.08)}
+.card{background:#fff;border-radius:16px;padding:12px;position:relative;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.06);transform:translateY(6px);opacity:0;transition:opacity .25s ease, transform .25s ease}
+.card.ready{transform:none;opacity:1}
 .card .ph{position:relative;border-radius:10px;min-height:150px;display:flex;align-items:center;justify-content:center;background:#eefaf5;color:#6cc8a8;overflow:hidden}
 .card .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .badge-hot{position:absolute;right:12px;top:12px;background:linear-gradient(90deg,#ff4d4d,#ff2d6f);color:#fff;border-radius:12px;padding:4px 10px;font-size:12px;z-index:3}
-.card .ttl{margin-top:10px;line-height:1.1;font-size:14px}
+.card .ttl{margin-top:10px;line-height:1.1;font-size:14px;word-break:break-word;overflow-wrap:anywhere}
 .priceTag{position:absolute;right:10px;bottom:10px;background:var(--g);color:#fff;border:none;border-radius:16px;padding:6px 12px;box-shadow:0 8px 18px rgba(16,185,129,.25);font-family:inherit;z-index:3;pointer-events:none}
 
 /* modal */
@@ -101,20 +92,20 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 #carStage{position:relative;height:520px;max-height:52vh}
 #carStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;pointer-events:none}
 #carStage img.show{opacity:1}
-.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;width:auto;height:auto;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none;z-index:5}
+.navbtn{position:absolute;top:50%;transform:translateY(-50%);background:transparent;color:#fff;border:none;font-size:34px;font-weight:800;line-height:1;padding:6px 10px;user-select:none;z-index:5}
 .navbtn.left{left:10px}.navbtn.right{right:10px}
 #carCount{position:absolute;right:10px;bottom:10px;background:#000b;color:#fff;border-radius:10px;padding:4px 8px;font-size:12px;z-index:4}
 .statOverlay{position:absolute;right:10px;top:10px;display:flex;gap:8px;z-index:6}
 .statLeft{position:absolute;left:10px;top:10px;display:flex;gap:8px;z-index:6}
 .pillStat{display:inline-flex;align-items:center;gap:8px;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.25);font-family:'Russo One',Arial,system-ui;background:var(--g);color:#fff}
 .pillStat svg{width:16px;height:16px;fill:#fff}
-.pillStat b{font-family:'Russo One',Arial,system-ui;font-size:14px}
+.pillStat b{font-size:14px}
 
 .modBody{padding:14px}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{background:#eefaf5;color:#0b1720;border-radius:12px;padding:10px 12px}
 
-/* overlays (всі в єдиній схемі, scroll/touch заблоковані) */
+/* overlays */
 #chooser,#addForm,#searchBox,#supportBox,#payBox{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;touch-action:none}
 #chooser,#addForm,#searchBox,#payBox{z-index:50}
 #supportBox{z-index:70}
@@ -126,11 +117,12 @@ dialog::backdrop{background:rgba(0,0,0,.68)}
 .formTop{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;margin-bottom:10px;z-index:1;border-bottom:1px solid #edf3f0}
 .badgeSmall{background:var(--g);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 .badgeSmall.gray{background:#eefaf5;color:#0b1720}
-.imagePh{border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0;overflow:hidden;background:#eefaf5}
-.imagePh.bannerPh{min-height:200px}
-.imagePh img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.inp{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 14px;width:100%;margin-top:10px;caret-color:#fff;font-family:inherit}
+.imagePh{border-radius:12px;min-height:120px;display:flex;align-items:center;gap:8px;margin:8px 0;overflow:auto;background:#eefaf5;padding:8px}
+.imagePh.bannerPh{min-height:200px;justify-content:center}
+.imagePh img{max-height:160px;max-width:100%;object-fit:contain;display:block;border-radius:8px}
+.inp{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 14px;width:100%;margin-top:10px;caret-color:#fff;font-family:inherit;word-break:break-word;overflow-wrap:anywhere}
 .inprow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea.inp{white-space:pre-wrap}
 ::placeholder{color:#fff;opacity:.9}
 .btnPub{width:100%;margin-top:14px;border-radius:12px;font-family:inherit}
 
@@ -232,7 +224,7 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
       <button class="navbtn right" id="navRight" aria-label="Наступне">›</button>
     </div>
     <div class="modBody">
-      <div id="modDesc" style="margin-bottom:12px;white-space:pre-wrap"></div>
+      <div id="modDesc" style="margin-bottom:12px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere"></div>
       <div class="chips" id="chips"></div>
     </div>
   </div>
@@ -311,45 +303,33 @@ footer{padding:18px 0;margin-top:20px;color:#0b1720a0;text-align:center}
 
 <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
 <script>
-const SERVER = 'https://eden-restrictions-forest-salt.trycloudflare.com';
+const SERVER = 'https://polar-practice-disciplines-acrobat.trycloudflare.com';
 const $ = s=>document.querySelector(s);
 
-/* ======= Жёсткая блокировка фоновой прокрутки для ВСЕХ вікон ======= */
+/* ======= блокування фону ======= */
 let LOCKY=0;
 function anyOverlayOpen(){
   return ['chooser','addForm','searchBox','supportBox','payBox'].some(id=>document.getElementById(id).style.display==='flex') || $('#dlgDetail').open;
 }
-function preventScroll(e){
-  if(anyOverlayOpen()){
-    e.preventDefault();
-  }
-}
+function preventScroll(e){ if(anyOverlayOpen()){ e.preventDefault(); } }
 function lock(){
-  LOCKY = window.scrollY || 0;
+  LOCKY = window.scrollY||0;
   document.body.style.top = `-${LOCKY}px`;
   document.body.classList.add('locked');
   addEventListener('wheel', preventScroll, {passive:false});
   addEventListener('touchmove', preventScroll, {passive:false});
-  addEventListener('keydown', (e)=>{
-    if(anyOverlayOpen() && ['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key)){ e.preventDefault(); }
-  }, {passive:false, once:true});
 }
 function unlock(){
   document.body.classList.remove('locked');
   removeEventListener('wheel', preventScroll);
   removeEventListener('touchmove', preventScroll);
-  const y = LOCKY||0;
-  document.body.style.top = '';
-  window.scrollTo(0, y);
+  const y = LOCKY||0; document.body.style.top=''; window.scrollTo(0,y);
 }
 document.documentElement.style.overscrollBehavior='none';
 
 /* Splash */
 lock();
-setTimeout(()=>{
-  const sp=document.getElementById('splash');
-  if(sp){ sp.style.display='none'; if(!anyOverlayOpen()) unlock(); }
-}, 1200);
+setTimeout(()=>{ const sp=$('#splash'); if(sp){ sp.style.display='none'; if(!anyOverlayOpen()) unlock(); } }, 1200);
 
 /* socket */
 const uidLocal = localStorage.getItem('kolo_uid') || (localStorage.setItem('kolo_uid','u_'+Math.random().toString(36).slice(2)), localStorage.getItem('kolo_uid'));
@@ -358,16 +338,8 @@ const socket = io(SERVER,{transports:['websocket'],auth:{uid:uidLocal}});
 /* banner collapse */
 const bannerEl = $('#banner');
 let lastY=0, ticking=false;
-addEventListener('scroll', ()=>{
-  lastY = window.scrollY||0;
-  if(!ticking){
-    requestAnimationFrame(()=>{
-      if(lastY>80) bannerEl.classList.add('min');
-      else bannerEl.classList.remove('min');
-      ticking=false;
-    });
-    ticking=true;
-  }
+addEventListener('scroll', ()=>{ lastY = window.scrollY||0;
+  if(!ticking){ requestAnimationFrame(()=>{ (lastY>80?bannerEl.classList.add('min'):bannerEl.classList.remove('min')); ticking=false; }); ticking=true; }
 },{passive:true});
 
 let ALL={hot:[],normal:[]}, page=1, ADD_TYPE='normal', CAR=[], idx=0, CUR=null;
@@ -378,53 +350,83 @@ const PAGE_SIZE = 12;
 /* sockets */
 socket.on('visitors', n=>$('#visitors').textContent=n+' відвідувачів');
 socket.on('banner', b=>{ setBanner(b); });
-socket.on('listings', d=>{ ALL=d; page=1; draw(); });
+socket.on('listings', d=>{ ALL=d; page=1; draw(true); });
 
 /* initial */
-fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ ALL=j.data||ALL; draw(); setBanner(j.banner||{}); });
+fetch(SERVER+'/api/list').then(r=>r.json()).then(j=>{ ALL=j.data||ALL; draw(true); setBanner(j.banner||{}); });
 
 /* banner rotator */
 function setBanner(b){
-  const imgEl = $('#bannerImg');
-  const linkEl = $('#bannerLink');
+  const imgEl = $('#bannerImg'); const linkEl = $('#bannerLink');
   bannerList = (b && b.images && b.images.length)? b.images.slice() : (b && b.image?[b.image]:[]);
   linkEl.href = (b && b.link) ? b.link : '#';
   if(bannerTimer){ clearInterval(bannerTimer); bannerTimer=null; }
   if(!bannerList.length){ imgEl.style.display='none'; return; }
   bannerIdx = 0; imgEl.style.display='block'; imgEl.src = bannerList[bannerIdx];
-  if(bannerList.length>1){
-    bannerTimer = setInterval(()=>{ bannerIdx = (bannerIdx+1)%bannerList.length; imgEl.src = bannerList[bannerIdx]; }, 5000);
-  }
+  if(bannerList.length>1){ bannerTimer = setInterval(()=>{ bannerIdx=(bannerIdx+1)%bannerList.length; imgEl.src=bannerList[bannerIdx]; }, 5000); }
 }
 
-/* cards/draw */
-function mkCard(ad){
+/* preload helper */
+function preloadImages(urls, highCount=6){
+  urls.slice(0,highCount).forEach(u=>{
+    const im = new Image(); im.decoding='async'; im.fetchpriority='high'; im.src=u;
+  });
+  urls.slice(highCount).forEach(u=>{
+    const im = new Image(); im.decoding='async'; im.loading='eager'; im.src=u;
+  });
+}
+
+/* card HTML */
+function mkCard(ad, i){
   const img = (ad.images && ad.images[0]) ? ad.images[0] : '';
-  return `<div class="card" onclick="openDetail('${ad.id}')">
-    <div class="ph">
+  // першим 6 карткам даємо fetchpriority=high
+  const high = i<6 ? ' fetchpriority="high"' : '';
+  return `<div class="card">
+    <div class="ph" onclick="openDetail('${ad.id}')">
       ${ad.type==='hot'?'<div class="badge-hot">HOT</div>':''}
-      ${img?`<img src="${img}" alt="" loading="lazy" decoding="async">`:'КАРТИНКА оголошення'}
+      ${img?`<img src="${img}" alt="" loading="lazy" decoding="async"${high}>`:'КАРТИНКА оголошення'}
       <div class="priceTag">${(ad.price||0).toLocaleString('uk-UA')} ₴</div>
     </div>
     <div class="ttl">${(ad.title||'Оголошення').toUpperCase()}</div>
   </div>`;
 }
-function draw(){
-  $('#hotGrid').innerHTML = (ALL.hot||[]).map(mkCard).join('');
-  const slice = (ALL.normal||[]).slice(0,page*PAGE_SIZE);
-  $('#listGrid').innerHTML = slice.map(mkCard).join('');
-  $('#btnMore').style.display = (ALL.normal||[]).length>slice.length ? 'inline-block':'none';
+
+/* draw with smooth reveal + preload */
+function draw(preload=false){
+  const hot = (ALL.hot||[]);
+  const norm = (ALL.normal||[]);
+  const slice = norm.slice(0,page*PAGE_SIZE);
+
+  // HOT
+  $('#hotGrid').innerHTML = hot.map((a,i)=>mkCard(a,i)).join('');
+  // NORMAL
+  const grid = $('#listGrid');
+  grid.innerHTML = slice.map((a,i)=>mkCard(a,i)).join('');
+  // плавна поява
+  requestAnimationFrame(()=>{ grid.querySelectorAll('.card').forEach(c=>c.classList.add('ready')); $('#hotGrid').querySelectorAll('.card').forEach(c=>c.classList.add('ready')); });
+
+  $('#btnMore').style.display = norm.length>slice.length ? 'inline-block':'none';
+
+  if(preload){
+    const urls = [...hot, ...slice].map(a=> (a.images&&a.images[0]) ? a.images[0] : null).filter(Boolean);
+    preloadImages(urls);
+  }
 }
 
-/* preload helper */
-function preloadImages(urls){
-  urls.forEach(u=>{
-    const im = new Image();
-    im.decoding='async';
-    im.loading='eager';
-    im.src = u;
-  });
-}
+/* more (плавне додавання лише нової порції) */
+$('#btnMore').onclick=()=>{
+  const oldCount = page*PAGE_SIZE; page++;
+  const norm = (ALL.normal||[]);
+  const next = norm.slice(0,page*PAGE_SIZE);
+  const add = next.slice(oldCount);
+  const frag = document.createElement('div');
+  frag.innerHTML = add.map((a,i)=>mkCard(a,i)).join('');
+  const nodes = [...frag.children];
+  nodes.forEach(n=>$('#listGrid').appendChild(n));
+  requestAnimationFrame(()=>{ nodes.forEach(n=>n.classList.add('ready')); });
+  if(next.length>=norm.length) $('#btnMore').style.display='none';
+  preloadImages(add.map(a=>a.images&&a.images[0]).filter(Boolean), 3);
+};
 
 /* detail */
 window.openDetail = (id)=>{
@@ -443,7 +445,7 @@ window.openDetail = (id)=>{
   ].map(t=>`<div class="chip">${t}</div>`).join('');
 
   CAR=(CUR.images&&CUR.images.length)?CUR.images.slice(0,5):['https://picsum.photos/seed/1/1200/800'];
-  preloadImages(CAR);
+  preloadImages(CAR, 2);
   idx=0; renderCar(true);
 
   const dlg=$('#dlgDetail'); dlg.showModal(); lock();
@@ -507,17 +509,16 @@ $('#chooseNormal').onclick=()=>{ADD_TYPE='normal'; hideChooser(); resetAddForm()
 $('#chooseHot').onclick=()=>{ADD_TYPE='hot'; hideChooser(); resetAddForm(); showAdd();}
 $('#bannerOrder').onclick=(e)=>{ e.preventDefault(); ADD_TYPE='banner'; resetAddForm(); showAdd(); };
 
-/* photos preview */
+/* photos preview (показує ВСІ до ліміту) */
 let chosenFiles=[];
 const fInput = $('#f_imgs');
 const imgPh = $('#imgPh');
 const phCnt = $('#phCnt');
 function redrawPreview(){
   const limit = (ADD_TYPE==='banner')?1:5;
-  imgPh.innerHTML = chosenFiles.length
-    ? chosenFiles.slice(0,limit).map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).slice(0,1).join('')
-    : '';
-  phCnt.textContent = `${Math.min(chosenFiles.length,limit)}/${limit}`;
+  const files = chosenFiles.slice(0,limit);
+  imgPh.innerHTML = files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join('');
+  phCnt.textContent = `${files.length}/${limit}`;
 }
 $('#btnAddPhoto').onclick=()=>fInput.click();
 imgPh.onclick=()=>fInput.click();
@@ -554,21 +555,15 @@ $('#go').onclick=async ()=>{
   hideSearch();
   if(!k){
     const j = await fetch(SERVER+'/api/list').then(r=>r.json()).catch(()=>null);
-    if(j && j.ok){ ALL=j.data; page=1; draw(); }
+    if(j && j.ok){ ALL=j.data; page=1; draw(true); }
     return;
   }
   const j = await fetch(SERVER+'/api/search?q='+encodeURIComponent(k)).then(r=>r.json()).catch(()=>null);
-  if(j && j.ok){ ALL=j.data; page=100; draw(); }
+  if(j && j.ok){ ALL=j.data; page=100; draw(true); }
 };
 
-/* more */
-$('#btnMore').onclick=()=>{ page++; draw(); };
-
 /* SUPPORT */
-function openSupport(fromPay=false){
-  $('#supportBox').style.display='flex';
-  if(!fromPay) lock();
-}
+function openSupport(fromPay=false){ $('#supportBox').style.display='flex'; if(!fromPay) lock(); }
 $('#closeSupport').onclick=()=>{ $('#supportBox').style.display='none'; if(!anyOverlayOpen()) unlock(); };
 $('#s_send').onclick=async ()=>{
   const payload = {name:$('#s_name').value||'', phone:$('#s_phone').value||'', msg:$('#s_msg').value||''};
